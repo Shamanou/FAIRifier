@@ -2,7 +2,7 @@ package org.deri.grefine.reconcile.commands;
 
 
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
@@ -68,7 +68,7 @@ public class UploadFileAndAddServiceCommand extends AbstractAddServiceCommand{
 		ServletFileUpload upload = new ServletFileUpload(factory);
 
 		// Parse the request
-		OutputStream in = null;
+		InputStream in = null;
 		String name=null, id = null, props = null, format=null, filename = null;
 		Model model = null;
 		try{
@@ -84,7 +84,7 @@ public class UploadFileAndAddServiceCommand extends AbstractAddServiceCommand{
 					format = item.getString();
 				}else if(item.getFieldName().equals("file_upload")){
 					filename = item.getName();
-					in = item.getOutputStream();
+					in = item.getInputStream();
 				}
 			}
 			model = ModelFactory.createDefaultModel();
@@ -92,7 +92,7 @@ public class UploadFileAndAddServiceCommand extends AbstractAddServiceCommand{
 				format = guessFormat(filename);
 			}
 			System.out.println(format + " " + filename);
-			model.write(in, format);
+			model.read(in, null ,format);
 			
 			ImmutableList<String> propUris = asImmutableList(props);
 		

@@ -3,14 +3,13 @@ package org.deri.grefine.reconcile.rdf.executors;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
+import com.hp.hpl.jena.query.ReadWrite;
 import org.apache.jena.query.text.EntityDefinition;
 import org.apache.jena.query.text.TextDatasetFactory;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 import org.json.JSONException;
 import org.json.JSONWriter;
-
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.DatasetFactory;
 import com.hp.hpl.jena.query.Query;
@@ -21,7 +20,7 @@ import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.Syntax;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
-
+import com.hp.hpl.jena.query.Syntax;
 /**
  * @author fadmaa
  * execute SPARQL queries agains Dump RDF and supports LARQ for
@@ -65,7 +64,7 @@ public class DumpQueryExecutor implements QueryExecutor {
         // Join together into a dataset
         this.index = TextDatasetFactory.createLucene(ds1, dir, entDef) ;
         this.index.getDefaultModel().add(m);
-        //this.index.commit();
+        this.index.commit();
 	}
 	
 	@Override
@@ -73,8 +72,8 @@ public class DumpQueryExecutor implements QueryExecutor {
 		if(!loaded){
 			throw new RuntimeException("Model is not loaded");
 		}
-		//this.index.begin(ReadWrite.READ) ;
-		Query query = QueryFactory.create(sparql, Syntax.DEFAULT);
+		this.index.begin(ReadWrite.READ) ;
+		Query query = QueryFactory.create(sparql, Syntax.syntaxSPARQL_11);
 		QueryExecution qExec = QueryExecutionFactory.create(query, this.index);
 		ResultSet result =  qExec.execSelect();
 		return result;
@@ -113,6 +112,7 @@ public class DumpQueryExecutor implements QueryExecutor {
         
         // Join together into a dataset
         this.index = TextDatasetFactory.createLucene(ds1, dir, entDef) ;
+        this.index.begin(ReadWrite.WRITE) ;
         this.index.getDefaultModel().add(model);
         this.index.commit();
 	}

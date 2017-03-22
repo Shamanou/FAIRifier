@@ -108,7 +108,7 @@ public class PreviewResourceCannedQuery {
 	
 	private String getString(RDFNode node){
 		if(node.canAs(Literal.class)){
-			return node.asLiteral().getString();
+			return node.asLiteral();
 		}else if (node.canAs(Resource.class)){
 			return node.asResource().getURI();
 		}
