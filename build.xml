@@ -168,7 +168,6 @@
     	<copy overwrite="true" file="extensions/fairifier-rdf-extension/scripts/fairDatapointPost-dataset.js" tofile="extensions/grefine-rdf-extension/module/scripts/fairDatapointPost-dataset.js" />
     	<copy overwrite="true" file="extensions/fairifier-rdf-extension/scripts/fairDatapointPost-distribution.js" tofile="extensions/grefine-rdf-extension/module/scripts/fairDatapointPost-distribution.js" />
     	<copy overwrite="true" file="extensions/fairifier-rdf-extension/scripts/fairDatapointPost.js" tofile="extensions/grefine-rdf-extension/module/scripts/fairDatapointPost.js" />
-       	<copy overwrite="true" file="extensions/fairifier-rdf-extension/scripts/fairDatapointPost.js" tofile="extensions/grefine-rdf-extension/module/scripts/fairDatapointPost.js" />
     	<copy overwrite="true" file="extensions/fairifier-rdf-extension/scripts/rdf-schema-alignment.js" tofile="extensions/grefine-rdf-extension/module/scripts/rdf-schema-alignment.js" />
         <copy overwrite="true" todir="extensions/grefine-rdf-extension/src/org">
             <fileset dir="extensions/fairifier-rdf-extension/dtls"/>
@@ -180,6 +179,7 @@
     	<copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/reconcile/commands/UploadFileAndAddServiceCommand.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/reconcile/commands/UploadFileAndAddServiceCommand.java" />
     	<copy overwrite="true" file="extensions/fairifier-rdf-extension/HttpUtils.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/rdf/utils/HttpUtils.java" />
     	<copy overwrite="true" file="extensions/fairifier-rdf-extension/menu-bar-extensions.js" tofile="extensions/grefine-rdf-extension/module/scripts/menu-bar-extensions.js" />
+    	<copy overwrite="true" file="extensions/fairifier-rdf-extension/controller.js" tofile="extensions/grefine-rdf-extension/module/MOD-INF/controller.js" />
     	<copy overwrite="true" file="extensions/fairifier-rdf-extension/scripts/rdf-service-dialog.html" tofile="extensions/grefine-rdf-extension/module/scripts/rdf-service-dialog.html" />
 
     	<ant dir="extensions/" target="build" />

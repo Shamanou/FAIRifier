@@ -161,10 +161,6 @@ function init() {
         "project/scripts",
         module,
         [
-            "scripts/fairDatapointPost.js",
-            "scripts/fairDatapointPost-catalog.js",
-            "scripts/fairDatapointPost-dataset.js",
-            "scripts/fairDatapointPost-distribution.js",
             "scripts/externals/rdfstore_min.js",
             "scripts/externals/bootstrap.js",
             "scripts/externals/angular.min.js",
@@ -186,7 +182,11 @@ function init() {
             "scripts/rdf-schema-new-prefix-widget.js",
             "scripts/externals/jquery.form.js",
             "scripts/sindice/sindice-dialog.js",
-            "scripts/common.js"
+            "scripts/common.js",
+            "scripts/fairDatapointPost.js",
+            "scripts/fairDatapointPost-catalog.js",
+            "scripts/fairDatapointPost-dataset.js",
+            "scripts/fairDatapointPost-distribution.js"
 		]
     );
 
