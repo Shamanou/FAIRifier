@@ -18,7 +18,7 @@ function RdfSchemaAlignmentDialog(schema){
 	//initialize vocabularyManager
     this._prefixesManager = new RdfPrefixesManager(this,this._schema.prefixes);
     
-    this._replaceBaseUri(RdfSchemaAlignment._defaultNamespace ||window.location.protocol + window.location.host + "/",true);
+    this._replaceBaseUri(RdfSchemaAlignment._defaultNamespace || window.location.protocol + window.location.host + "/",true);
 };
 
 RdfSchemaAlignmentDialog.prototype._createDialog = function() {
@@ -67,15 +67,15 @@ RdfSchemaAlignmentDialog.prototype._constructFooter = function(footer) {
 RdfSchemaAlignmentDialog.prototype._constructBody = function(body) {
 	var self = this;
     $('<p>' +
-        'The RDF schema alignment skeleton below specifies how the RDF data that will get generated from your grid-shaped data. ' +
-        'The cells in each record of your data will get placed into nodes within the skeleton. Configure the skeleton by specifying which column to substitute into which node.' +
+        'The Semantic model below specifies how the RDF data that will get generated from your grid-shaped data. ' +
+        'The cells in each record of your data will get placed into nodes within the model. Configure the model by specifying which column to substitute into which node.' +
     '</p>').appendTo(body);
     
     var html = $(
     	'<p class="base-uri-space"><span class="emphasized">Base URI:</span> <span bind="baseUriSpan" ></span> <a href="#" bind="editBaseUriLink">edit</a></p>'+
         '<div id="rdf-schema-alignment-tabs" class="refine-tabs">' +
             '<ul>' +
-                '<li><a href="#rdf-schema-alignment-tabs-schema">RDF Skeleton</a></li>' +
+                '<li><a href="#rdf-schema-alignment-tabs-schema">Semantic model</a></li>' +
                 '<li><a href="#rdf-schema-alignment-tabs-preview">RDF Preview</a></li>' +
             '</ul>' +
             '<div id="rdf-schema-alignment-tabs-schema">' +
