@@ -177,6 +177,7 @@
         </copy>
 
     	<copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/reconcile/commands/UploadFileAndAddServiceCommand.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/reconcile/commands/UploadFileAndAddServiceCommand.java" />
+        <copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/rdf/RdfSchema.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/rdf/RdfSchema.java" />
     	<copy overwrite="true" file="extensions/fairifier-rdf-extension/HttpUtils.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/rdf/utils/HttpUtils.java" />
     	<copy overwrite="true" file="extensions/fairifier-rdf-extension/menu-bar-extensions.js" tofile="extensions/grefine-rdf-extension/module/scripts/menu-bar-extensions.js" />
     	<copy overwrite="true" file="extensions/fairifier-rdf-extension/controller.js" tofile="extensions/grefine-rdf-extension/module/MOD-INF/controller.js" />

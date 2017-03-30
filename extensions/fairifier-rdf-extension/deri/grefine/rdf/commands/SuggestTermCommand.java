@@ -92,7 +92,6 @@ public class SuggestTermCommand extends RdfCommand{
     
     private List<SearchResultItem> search(RdfSchema schema, String query){
     	List<SearchResultItem> result = new ArrayList<SearchResultItem>();
-    	
     	if(isPrefixedQName(query)){
     		int index = query.indexOf(":");
     		String prefix = query.substring(0,index);
