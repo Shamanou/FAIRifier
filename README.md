@@ -60,20 +60,20 @@ You also need to have upload rights to a FDP. To push the data you need access
 to a tripple store or a FTP.
 Afterwards press the POST to FAIRDataPoint option in the Export menu.
 
-![alt tag](https://github.com/Shamanou/FAIRifier/development/git_tutorial_images/tutorial-1.png "Press the POST to FAIRDataPoint option in the Export menu")
+![alt tag](https://raw.githubusercontent.com/Shamanou/FAIRifier/development/git_tutorial_images/tutorial-1.png "Press the POST to FAIRDataPoint option in the Export menu")
 
 Clicking the POST to FAIRDataPoint option will open the POST to Fair Data Point dialog.
 In the Base URI field requires you to fill in a the URL of the FDP where you want
 to store the metadata. Please fill in the complete url to the root of the FDP API.
 
-![alt tag](https://github.com/Shamanou/FAIRifier/development/git_tutorial_images/tutorial-2.png "Please fill in the complete url to the root of the FDP API.")
+![alt tag](https://raw.githubusercontent.com/Shamanou/FAIRifier/development/git_tutorial_images/tutorial-2.png "Please fill in the complete url to the root of the FDP API.")
 
 When you click on the Apply button the catalogs menu will show up in the dialog.
 It will show a + with the text add catalog and a drop down menu which, when using 
 a non-empty FDP, will show all the catalogs in the FDP. If the FDP is empty the
 drop down menu will be empty. Click on the + to add a new catalog.
 
-![alt tag](https://github.com/Shamanou/FAIRifier/development/git_tutorial_images/tutorial-3.png "Click on the + to add a new catalog.")
+![alt tag](https://raw.githubusercontent.com/Shamanou/FAIRifier/development/git_tutorial_images/tutorial-3.png "Click on the + to add a new catalog.")
 
 
 
