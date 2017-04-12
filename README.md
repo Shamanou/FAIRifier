@@ -53,8 +53,7 @@ Because the FAIRifier is based on OpenRefine it has all the functionalities of
 OpenRefine. The main added functionality is to add the FAIRified data as RDF to 
 a data resource (FTP or virtuoso tripple store - more to be added later). 
 This allows the user to push FAIR data to a resource and metadata to a FAIRDataPoint(FDP)
-with one application. The forms used to specify the metadata are the same as the 
-metadata-editor ([metadata editor](https://github.com/DTL-FAIRData/FAIR-metadata-editor/tree/develop)).
+with one application. The forms used to specify the metadata are the same as ([the metadata editor](https://github.com/DTL-FAIRData/FAIR-metadata-editor/tree/develop)).
 To access this new function first prepare the dataset to contain the RDF you want.
 You also need to have upload rights to a FDP. To push the data you need access 
 to a tripple store or a FTP.
