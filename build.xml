@@ -183,6 +183,9 @@
     	<copy overwrite="true" file="extensions/fairifier-rdf-extension/controller.js" tofile="extensions/grefine-rdf-extension/module/MOD-INF/controller.js" />
     	<copy overwrite="true" file="extensions/fairifier-rdf-extension/scripts/rdf-service-dialog.html" tofile="extensions/grefine-rdf-extension/module/scripts/rdf-service-dialog.html" />
 
+        <copy overwrite="true" file="extensions/fairifier-rdf-extension/scripts/rdf-schema-new-prefix-widget.js" tofile="extensions/grefine-rdf-extension/module/scripts/rdf-schema-new-prefix-widget.js" />
+
+
     	<ant dir="extensions/" target="build" />
     </target>
 
