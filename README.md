@@ -74,6 +74,50 @@ drop down menu will be empty. Click on the + to add a new catalog.
 
 ![alt tag](https://raw.githubusercontent.com/Shamanou/FAIRifier/development/git_tutorial_images/tutorial-3.png "Click on the + to add a new catalog.")
 
+This will open the add new catalog dialog. Fill in this form, to add the metadata to the new catalog
+layer to the FDP.
 
+![alt tag](https://raw.githubusercontent.com/Shamanou/FAIRifier/development/git_tutorial_images/tutorial-4.png "This will open the add new catalog dialog.")
 
+When you click save You will return to the POST to FAIR Data Point dialog and a new 
+field will apear. This field will show a + add dataset and a dropdown menu. 
+The dropdown menu will list the datasets within the selected catalog, if the 
+catalog is empty or new the dropdown menu will be empty.
+
+![alt tag](https://raw.githubusercontent.com/Shamanou/FAIRifier/development/git_tutorial_images/tutorial-5.png "When you click save You will return to the POST to FAIR Data Point dialog and a new field will apear.")
+
+When you click the + button the Add new dataset to FAIR Data Point will apear. Fill in this form, to add the metadata to the new dataset layer to the FDP.
+
+![alt tag](https://raw.githubusercontent.com/Shamanou/FAIRifier/development/git_tutorial_images/tutorial-6.png "When you click the + button the Add new dataset to FAIR Data Point will apear.")
+
+When you click save You will return to the POST to FAIR Data Point dialog and a new 
+field will apear. This field will show a + add distribution and a dropdown menu. 
+The dropdown menu will list the distributions within the selected catalog, if the dataset 
+doesnt have any distributions the dropdown menu will be empty.
+
+![alt tag](https://raw.githubusercontent.com/Shamanou/FAIRifier/development/git_tutorial_images/tutorial-7.png "When you click save You will return to the POST to FAIR Data Point dialog and a new field will apear.")
+
+This will open the add new distribution dialog. Fill in this form, to add the metadata to the new distribution layer to the FDP.
+
+![alt tag](https://raw.githubusercontent.com/Shamanou/FAIRifier/development/git_tutorial_images/tutorial-8.png "This will open the add new distribution dialog.")
+
+When you click save You will return to the POST to FAIR Data Point dialog and a new 
+field will apear. This field contains the data resource options. For now FAIR data can be directly put on a FTP or on a Virtuoso
+tripplestore. 
+
+![alt tag](https://raw.githubusercontent.com/Shamanou/FAIRifier/development/git_tutorial_images/tutorial-9.png "When you click save You will return to the POST to FAIR Data Point dialog and a new field will apear.")
+
+To upload the FAIR data to Virtuoso select the radio button push FAIRIfied data to Virtuoso.
+
+![alt tag](https://raw.githubusercontent.com/Shamanou/FAIRifier/development/git_tutorial_images/tutorial-10.png "To upload the FAIR data to Virtuoso select the radio button push FAIRIfied data to Virtuoso.")
+
+The host should be the Virtuso hostname and the path.
+Usually this is: <hostname>/DAV/home/<username>
+
+NOTE: localhost as a string is not accepted. Please use 127.0.0.1
+
+If everything is filled in correctly then you should see the uploading animation and when uploading
+is done a dialog should apear with the text FAIR data pushed.
+
+![alt tag](https://raw.githubusercontent.com/Shamanou/FAIRifier/development/git_tutorial_images/tutorial-11.png "If everything is filled in correctly then you should see the uploading animation and when uploading is done a dialog should apear with the text FAIR data pushed.")
 

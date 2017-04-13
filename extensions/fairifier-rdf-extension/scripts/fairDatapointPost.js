@@ -206,8 +206,8 @@ getFairCatalogs = function(rootUrl, self){
                data.content.forEach(function(element){
 	               self.fairDataPointPost.catalog = {
 	                      // 'http://rdf.biosemantics.org/ontologies/fdp-o#metadataIdentifier': element.uri.namespace + element.uri.localName,
-	                      // 'http://purl.org/dc/terms/title': element.title.label,
-	                      // 'http://purl.org/dc/terms/hasVersion': element.version.label,
+	                      'http://purl.org/dc/terms/title': element.title.label,
+	                      'http://purl.org/dc/terms/hasVersion': element.version.label,
 	                      // 'http://purl.org/dc/terms/publisher': element.publisher,
 	                      // 'http://www.w3.org/ns/dcat#themeTaxonomy': element.themeTaxonomy,
 	                      // 'http://xmlns.com/foaf/0.1/homepage': element.homepage,
