@@ -158,9 +158,9 @@
     	<exec dir="metadata-form" executable="gulp">
     		<arg value="--allow-root"/>
         </exec>
- 		<copy overwrite="true" todir="extensions/grefine-rdf-extension/module/scripts">
-            <fileset dir="metadata-form/dist"/>
-        </copy>
+ 		<copy overwrite="true" file="metadata-form/dist/metadata-form.min.js" todir="extensions/grefine-rdf-extension/module/scripts"/>
+        <copy overwrite="true" file="metadata-form/dist/metadata-form.min.css" todir="extensions/grefine-rdf-extension/module/styles"/>
+
     	<copy overwrite="true" todir="extensions/grefine-rdf-extension/module/scripts/externals">
             <fileset dir="extensions/fairifier-rdf-extension/scripts/externals"/>
         </copy>
