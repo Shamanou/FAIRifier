@@ -195,9 +195,10 @@ function init() {
         module,
         [
             "styles/rdf-schema-alignment-dialog.css",
-			"styles/rdf-reconcile-service.css",
-            "styles/sindice/recon-dialog.css"
-        ]
+	    "styles/rdf-reconcile-service.css",
+            "styles/sindice/recon-dialog.css",
+	    "styles/metadata-form.min.css"
+	]
     );
     
 }
