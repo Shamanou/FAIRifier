@@ -51,12 +51,12 @@ Instructions
 
 Because the FAIRifier is based on OpenRefine it has all the functionalities of 
 OpenRefine. The main added functionality is to add the FAIRified data as RDF to 
-a data resource (FTP or virtuoso tripple store - more to be added later). 
+a data resource (FTP or virtuoso triple store - more to be added later). 
 This allows the user to push FAIR data to a resource and metadata to a FAIRDataPoint(FDP)
 with one application. The forms used to specify the metadata are the same as [the metadata editor](https://github.com/DTL-FAIRData/FAIR-metadata-editor/tree/develop).
 To access this new function first prepare the dataset to contain the RDF you want.
 You also need to have upload rights to a FDP. To push the data you need access 
-to a tripple store or a FTP.
+to a triple store or a FTP.
 Afterwards press the POST to FAIRDataPoint option in the Export menu.
 
 ![alt tag](https://raw.githubusercontent.com/Shamanou/FAIRifier/development/git_tutorial_images/tutorial-1.png "Press the POST to FAIRDataPoint option in the Export menu")
@@ -103,7 +103,7 @@ This will open the add new distribution dialog. Fill in this form, to add the me
 
 When you click save You will return to the POST to FAIR Data Point dialog and a new 
 field will apear. This field contains the data resource options. For now FAIR data can be directly put on a FTP or on a Virtuoso
-tripplestore. 
+triplestore. 
 
 ![alt tag](https://raw.githubusercontent.com/Shamanou/FAIRifier/development/git_tutorial_images/tutorial-9.png "When you click save You will return to the POST to FAIR Data Point dialog and a new field will apear.")
 

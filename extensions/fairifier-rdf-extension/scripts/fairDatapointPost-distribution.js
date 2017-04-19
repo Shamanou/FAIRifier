@@ -18,7 +18,7 @@ FairDataPointPostDistributionDialog.prototype._createDialog = function() {
     $('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>').prependTo("head");
     var header = $('<div class="dialog-header">Add new distribution to FAIR Data Point<p style="float:right;font-size:1em" bind="close">[close]</p></div>').appendTo(frame);    
 
-    var body = $('<div id="metadata-target"><metadata-form view="distribution" hide-fields="dcat-accessurl,dcat-downloadurl"></metadata-form></div>').appendTo(frame);
+    var body = $('<div id="metadata-target"><metadata-form view="distribution" hide-fields="dcat-accessurl,dcat-downloadurl,dcat-mediatype"></metadata-form></div>').appendTo(frame);
 
     $('<script>\n' +
         '(function() {\n'+

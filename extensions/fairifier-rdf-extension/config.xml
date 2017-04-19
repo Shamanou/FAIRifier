@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<pushToFtp>
+		<enabled>1</enabled>
+		<username></username>
+		<password></password>
+		<host></host>
+		<directory></directory>
+	</pushToFtp>
+	<pushToVirtoso>
+		<enabled>1</enabled>
+		<username></username>
+		<password></password>
+		<host></host>
+		<directory></directory>
+	</pushToVirtoso>
+</xml>

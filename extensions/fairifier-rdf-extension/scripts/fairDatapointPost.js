@@ -300,6 +300,9 @@ getFairDatasets = function(url, self){
 };
 
 addFairDistribution = function(self){
+    $.get("command/rdf-extension/get-push-configuration",function(conf){
+      console.log(conf);
+    });
     $('<h2>distribution</h2>').appendTo(self._distributionDiv);
     var add_dist_html = $('<p><a href="#" bind="addDistribution">+ </a><span>add distribution</span><br><span id="distribution" bind="distribution"></span></p>').appendTo(self._distributionDiv);
     var elmts = DOM.bind(add_dist_html);

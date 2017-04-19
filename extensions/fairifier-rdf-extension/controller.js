@@ -131,6 +131,7 @@ function init() {
     RefineServlet.registerCommand(module, "get-fdp-info", new GetFairDataPointInfoCommand());
     RefineServlet.registerCommand(module, "post-fdp-info", new PostFairDataToFairDataPoint());
     RefineServlet.registerCommand(module, "get-project-rdf", new GetRDFCommand());
+    RefineServlet.registerCommand(module, "get-push-configuration", new GetMetadataPushConfigurationCommand());
     //Vocabs commands
     RefineServlet.registerCommand(module, "save-prefixes", new SavePrefixesCommand(ctxt));
     RefineServlet.registerCommand(module, "get-default-prefixes", new GetDefaultPrefixesCommand(ctxt));
