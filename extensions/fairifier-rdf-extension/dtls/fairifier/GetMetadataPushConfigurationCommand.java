@@ -34,9 +34,8 @@ public class GetMetadataPushConfigurationCommand extends Command{
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         StringBuilder contentBuilder = new StringBuilder();
-         System.getProperty("user.dir");
         try {
-            BufferedReader in = new BufferedReader(new FileReader("FAIRIfier/extensions/grefine-rdf-extension/config.xml"));
+            BufferedReader in = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/extensions/grefine-rdf-extension/config.xml"));
             String str;
             while ((str = in.readLine()) != null) {
                 contentBuilder.append(str);

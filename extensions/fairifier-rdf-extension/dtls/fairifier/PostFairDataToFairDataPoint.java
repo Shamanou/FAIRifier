@@ -215,10 +215,11 @@ public class PostFairDataToFairDataPoint extends Command{
             String distributionPost = IOUtils.toString(HttpUtils.post(fdp.getString("baseUri") + "/distribution?id=" +  distribution.getString("http://purl.org/dc/terms/title".replace(" ","_"))+"_"+distribution.getString("http://purl.org/dc/terms/hasVersion").replace(" ","_"), distributionString, "text/turtle").getContent(),"UTF-8");
             
             String data = new JSONObject(jb.toString()).getString("data");
+            JSONObject uploadConfiguration = fdp.getJSONObject("uploadConfiguration");
             PushFairDataToResourceAdapter adapter = new PushFairDataToResourceAdapter();
             if (fdp.getString("uploadtype").equals("ftp")){
                 r = new FtpResource(
-                    fdp.getString("ftpHost"), 
+                    fdp.getString("host"), 
                     fdp.getString("username"), 
                     fdp.getString("password"), 
                     fdp.getString("directory"),
@@ -226,10 +227,11 @@ public class PostFairDataToFairDataPoint extends Command{
                 );
             } else if (fdp.getString("uploadtype").equals("virtuoso")){
                 r = new VirtuosoResource(
-                    fdp.getString("virtuosoHost"), 
-                    "/rdf_sink/FAIRdistribution_" + distribution.getString("http://purl.org/dc/terms/title").replace(" ","_")+"_"+distribution.getString("http://purl.org/dc/terms/hasVersion").replace(" ","_") + ".ttl",
-                    fdp.getString("virtuosoUsername"),
-                    fdp.getString("virtuosoPassword")
+                    fdp.getString("host"), 
+                    "FAIRdistribution_" + distribution.getString("http://purl.org/dc/terms/title").replace(" ","_")+"_"+distribution.getString("http://purl.org/dc/terms/hasVersion").replace(" ","_") + ".ttl",
+                    fdp.getString("username"),
+                    fdp.getString("password"),
+                    fdp.getString("directory")
                 );
             }
             r.setFairData(data);

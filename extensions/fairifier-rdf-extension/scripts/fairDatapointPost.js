@@ -301,261 +301,40 @@ getFairDatasets = function(url, self){
 
 addFairDistribution = function(self){
     $.get("command/rdf-extension/get-push-configuration",function(conf){
-      console.log(conf);
+      conf = JSON.parse(conf.data).xml;
+      $('<br><br>').appendTo(self._datasetDiv);
+      if (conf.pushToFtp.enabled){
+        var ftp_html = $('<input type="radio" value="ftp" class="ftpRadio" bind="ftp"><span>push FAIRified data to FTP</span><br>').appendTo(self._datasetDiv); 
+        var ftp_elmts = DOM.bind(ftp_html);        
+      } 
+      if (conf.pushToVirtuoso.enabled){
+        var virtuoso_html = $('<input type="radio" value="virtuoso" class="virtuosoRadio" bind="virtuoso"><span>push FAIRified data to Virtuoso</span><br>').appendTo(self._datasetDiv);
+        var virtuoso_elmts = DOM.bind(virtuoso_html);
+      }
+      var ftpshown = false;
+      var virtuososhown = false;
+      ftp_elmts.ftp.click(function(){
+        self.fairDataPointPost.uploadtype = "ftp";
+        self.fairDataPointPost.uploadConfiguration = conf.pushToFtp;
+        $('input.virtuosoRadio').removeAttr('checked');
+      });
+      virtuoso_elmts.virtuoso.click(function(){
+        self.fairDataPointPost.uploadtype = "virtuoso";
+        self.fairDataPointPost.uploadConfiguration = conf.pushToVirtuoso;
+        $('input.ftpRadio').removeAttr('checked');
+      });
     });
     $('<h2>distribution</h2>').appendTo(self._distributionDiv);
     var add_dist_html = $('<p><a href="#" bind="addDistribution">+ </a><span>add distribution</span><br><span id="distribution" bind="distribution"></span></p>').appendTo(self._distributionDiv);
     var elmts = DOM.bind(add_dist_html);
     elmts.addDistribution.click(function(evt){
         evt.preventDefault();
-        self._pushtoResourceDiv.html('');
         fairDataPointPostDistributionDialog = new FairDataPointPostDistributionDialog(function(distribution){
-			var virtuoso_html = $('<input type="radio" value="virtuoso" class="virtuosoRadio" bind="virtuoso"><span>push FAIRified data to Virtuoso</span><br>').appendTo(self._pushtoResourceDiv);
-			self.virtuoso_form = $("<div class='virtuoso'></div>").appendTo(self._pushtoResourceDiv);
-			var virtuoso_elmts = DOM.bind(virtuoso_html);
-			self.fairDataPointPost.distribution = distribution;
-			var ftp_html = $('<input type="radio" value="ftp" class="ftpRadio" bind="ftp"><span>push FAIRified data to FTP</span><br>').appendTo(self._pushtoResourceDiv); 
-			self.ftp_form = $("<div class='ftp'></div>").appendTo(self._pushtoResourceDiv);
-			var ftp_elmts = DOM.bind(ftp_html);
-
-			var ftp_host_html = $('<p><span>host</span> <span bind="hostSpan" ></span> <a href="#" bind="editFtpHost">edit</a></p>').appendTo(self.ftp_form);
-			var elmts = DOM.bind(ftp_host_html);
-			self._ftpHostSpan = elmts.hostSpan;
-			elmts.editFtpHost.click(function(evt){
-			    evt.preventDefault();
-			    self._editFtpHost($(evt.target));
-			});
-
-			var ftp_directory_html = $('<p><span>directory</span> <span bind="directorySpan" ></span> <a href="#" bind="editDirectory">edit</a></p>').appendTo(self.ftp_form);
-			var elmts = DOM.bind(ftp_directory_html);
-			self._directorySpan = elmts.directorySpan;
-			elmts.editDirectory.click(function(evt){
-				evt.preventDefault();
-				self._editDirectory($(evt.target));
-			});
-
-			var ftp_host_html = $('<p><span>username</span> <span bind="usernameSpan" ></span> <a href="#" bind="editUsername">edit</a></p>').appendTo(self.ftp_form);
-			var elmts = DOM.bind(ftp_host_html);
-			self._usernameSpan = elmts.usernameSpan;
-			elmts.editUsername.click(function(evt){
-				evt.preventDefault();
-				self._editUsername($(evt.target));
-			});
-
-			var ftp_host_html = $('<p><span>password</span> <span bind="passwordSpan" ></span> <a href="#" bind="editPassword">edit</a></p>').appendTo(self.ftp_form);
-			var elmts = DOM.bind(ftp_host_html);
-			self._passwordSpan = elmts.passwordSpan;
-			elmts.editPassword.click(function(evt){
-				evt.preventDefault();
-				self._editPassword($(evt.target));
-			});
-
-			self._pushtoResourceDiv.appendTo(self._body);
-
-			var virtuoso_host_html = $('<p><span>host</span> <span bind="hostSpan" ></span> <a href="#" bind="editVirtuosoHost">edit</a></p>').appendTo(self.virtuoso_form);
-			self.fairDataPointPost.uploadtype = "virtuoso";
-			var elmts = DOM.bind(virtuoso_host_html);
-			self._virtuosoHostSpan = elmts.hostSpan;
-			elmts.editVirtuosoHost.click(function(evt){
-				evt.preventDefault();
-				self._editVirtuosoHost($(evt.target));
-			});
-
-			var virtuoso_host_html = $('<p><span>username</span> <span bind="usernameSpan" ></span> <a href="#" bind="editVirtuosoUsername">edit</a></p>').appendTo(self.virtuoso_form);
-			var elmts = DOM.bind(virtuoso_host_html);
-			self._virtuosoUsernameSpan = elmts.usernameSpan;
-			elmts.editVirtuosoUsername.click(function(evt){
-				evt.preventDefault();
-				self._editVirtuosoUsername($(evt.target));
-			});
-
-			var virtuoso_host_html = $('<p><span>password</span> <span bind="passwordSpan" ></span> <a href="#" bind="editVirtuosoPassword">edit</a></p>').appendTo(self.virtuoso_form);
-			var elmts = DOM.bind(virtuoso_host_html);
-			self._virtuosoPasswordSpan = elmts.passwordSpan;
-			elmts.editVirtuosoPassword.click(function(evt){
-				evt.preventDefault();
-				self._editVirtuosoPassword($(evt.target));
-			});
+  			self.fairDataPointPost.distribution = distribution;
 
 			$("#distribution").text(self.fairDataPointPost.distribution['http://rdf.biosemantics.org/ontologies/fdp-o#metadataIdentifier'].url + " - " + self.fairDataPointPost.distribution['http://purl.org/dc/terms/title']);
-			var ftpshown = false;
-			var virtuososhown = false;
-			ftp_elmts.ftp.click(function(){
-				$(".virtuoso").hide();
-				$(".ftp").show();
-				self.fairDataPointPost.uploadtype = "ftp";
-			  	$('input.virtuosoRadio').removeAttr('checked');
-			});
-			virtuoso_elmts.virtuoso.click(function(){
-				$(".ftp").hide();
-				$(".virtuoso").show();
-				self.fairDataPointPost.uploadtype = "virtuoso";
-				$('input.ftpRadio').removeAttr('checked');
-			});
-	    });
-   	});
-    add_dist_html.appendTo(self._distributionDiv);
-    self._distributionDiv.appendTo(self._body);
-};
-
-fairDataPointPostDialog.prototype._editVirtuosoHost = function(src){
-    var self = this;
-    var menu = MenuSystem.createMenu().width('400px');
-    menu.html('<div class="schema-alignment-link-menu-type-search"><input type="text" bind="newVirtuosoHost" size="50"><br/>'+
-        '<button class="button" bind="applyButton">Apply</button>' + 
-        '<button class="button" bind="cancelButton">Cancel</button></div>'
-    );
-    MenuSystem.showMenu(menu,function(){});
-    MenuSystem.positionMenuLeftRight(menu, src);
-    var elmts = DOM.bind(menu);
-    elmts.newVirtuosoHost.val(self._newVirtuosoost).focus().select();
-    elmts.applyButton.click(function() {
-        var newVirtuosoHost = elmts.newVirtuosoHost.val();
-        self._virtuosoHost = newVirtuosoHost;
-        self._virtuosoHostSpan.empty().text(newVirtuosoHost);
-        self.fairDataPointPost.virtuosoHost = newVirtuosoHost.replace(/(^\w+:|^)\/\//, '');
-        MenuSystem.dismissAll();
-    });
-    elmts.cancelButton.click(function() {
-            MenuSystem.dismissAll();
-    });
-};
-
-fairDataPointPostDialog.prototype._editVirtuosoPassword = function(src){
-    var self = this;
-    var menu = MenuSystem.createMenu().width('400px');
-    menu.html('<div class="schema-alignment-link-menu-type-search"><input type="password" bind="newVirtuosoPassword" size="50"><br/>'+
-        '<button class="button" bind="applyButton">Apply</button>' + 
-        '<button class="button" bind="cancelButton">Cancel</button></div>'
-    );
-    MenuSystem.showMenu(menu,function(){});
-    MenuSystem.positionMenuLeftRight(menu, src);
-    var elmts = DOM.bind(menu);
-    elmts.newVirtuosoPassword.val(self._newVirtuosoPassword).focus().select();
-    elmts.applyButton.click(function() {
-        var newVirtuosoPassword = elmts.newVirtuosoPassword.val();
-        self._virtuosoPassword = newVirtuosoPassword;
-        self._virtuosoPasswordSpan.empty().text("******");
-        self.fairDataPointPost.virtuosoPassword = newVirtuosoPassword;
-        MenuSystem.dismissAll();
-    });
-    elmts.cancelButton.click(function() {
-            MenuSystem.dismissAll();
-    });
-};
-
-fairDataPointPostDialog.prototype._editVirtuosoUsername = function(src){
-    var self = this;
-    var menu = MenuSystem.createMenu().width('400px');
-    menu.html('<div class="schema-alignment-link-menu-type-search"><input type="text" bind="newVirtuosoUsername" size="50"><br/>'+
-        '<button class="button" bind="applyButton">Apply</button>' + 
-        '<button class="button" bind="cancelButton">Cancel</button></div>'
-    );
-    MenuSystem.showMenu(menu,function(){});
-    MenuSystem.positionMenuLeftRight(menu, src);
-    var elmts = DOM.bind(menu);
-    elmts.newVirtuosoUsername.val(self._newVirtuosoUsername).focus().select();
-    elmts.applyButton.click(function() {
-        var newVirtuosoUsername = elmts.newVirtuosoUsername.val();
-        self._virtuosoUsername = newVirtuosoUsername;
-        self._virtuosoUsernameSpan.empty().text(newVirtuosoUsername);
-        self.fairDataPointPost.virtuosoUsername = newVirtuosoUsername;
-        MenuSystem.dismissAll();
-    });
-    elmts.cancelButton.click(function() {
-            MenuSystem.dismissAll();
-    });
-};
-
-fairDataPointPostDialog.prototype._editFtpHost = function(src){
-    var self = this;
-    var menu = MenuSystem.createMenu().width('400px');
-    menu.html('<div class="schema-alignment-link-menu-type-search"><input type="text" bind="newFtpHost" size="50"><br/>'+
-        '<button class="button" bind="applyButton">Apply</button>' + 
-        '<button class="button" bind="cancelButton">Cancel</button></div>'
-    );
-    MenuSystem.showMenu(menu,function(){});
-    MenuSystem.positionMenuLeftRight(menu, src);
-    var elmts = DOM.bind(menu);
-    elmts.newFtpHost.val(self._newFtpHost).focus().select();
-    elmts.applyButton.click(function() {
-        var newFtpHost = elmts.newFtpHost.val();
-        self._ftpHost = newFtpHost;
-        self._ftpHostSpan.empty().text(newFtpHost);
-        self.fairDataPointPost.ftpHost = newFtpHost.replace(/(^\w+:|^)\/\//, '');
-        MenuSystem.dismissAll();
-    });
-    elmts.cancelButton.click(function() {
-            MenuSystem.dismissAll();
-    });
-};
-
-fairDataPointPostDialog.prototype._editDirectory = function(src){
-    var self = this;
-    var menu = MenuSystem.createMenu().width('400px');
-    menu.html('<div class="schema-alignment-link-menu-type-search"><input type="text" bind="newDirectory" size="50"><br/>'+
-                    '<button class="button" bind="applyButton">Apply</button>' + 
-                    '<button class="button" bind="cancelButton">Cancel</button></div>'
-            );
-    MenuSystem.showMenu(menu,function(){});
-    MenuSystem.positionMenuLeftRight(menu, src);
-    var elmts = DOM.bind(menu);
-    elmts.newDirectory.val(self._directory).focus().select();
-    elmts.applyButton.click(function() {
-        var newDirectory = elmts.newDirectory.val();
-        self._directory = newDirectory;
-        self._directorySpan.empty().text(newDirectory);
-        self.fairDataPointPost.directory = newDirectory;
-        MenuSystem.dismissAll();
-    });
-    elmts.cancelButton.click(function() {
-            MenuSystem.dismissAll();
-    });
-};
-
-fairDataPointPostDialog.prototype._editUsername = function(src){
-    var self = this;
-    var menu = MenuSystem.createMenu().width('400px');
-    menu.html('<div class="schema-alignment-link-menu-type-search"><input type="text" bind="newUsername" size="50"><br/>'+
-                    '<button class="button" bind="applyButton">Apply</button>' + 
-                    '<button class="button" bind="cancelButton">Cancel</button></div>'
-            );
-    MenuSystem.showMenu(menu,function(){});
-    MenuSystem.positionMenuLeftRight(menu, src);
-    var elmts = DOM.bind(menu);
-    elmts.newUsername.val(self._username).focus().select();
-    elmts.applyButton.click(function() {
-        var newUsername = elmts.newUsername.val();
-        self._username = newUsername;
-        self._usernameSpan.empty().text(newUsername);
-        self.fairDataPointPost.username = newUsername;
-        MenuSystem.dismissAll();
-    });
-    elmts.cancelButton.click(function() {
-            MenuSystem.dismissAll();
-    });
-};
-
-
-fairDataPointPostDialog.prototype._editPassword = function(src){
-    var self = this;
-    var menu = MenuSystem.createMenu().width('400px');
-    menu.html('<div class="schema-alignment-link-menu-type-search"><input type="password" bind="newPassword" size="50"><br/>'+
-                    '<button class="button" bind="applyButton">Apply</button>' + 
-                    '<button class="button" bind="cancelButton">Cancel</button></div>'
-            );
-    MenuSystem.showMenu(menu,function(){});
-    MenuSystem.positionMenuLeftRight(menu, src);
-    var elmts = DOM.bind(menu);
-    elmts.newPassword.val(self._password).focus().select();
-    elmts.applyButton.click(function() {
-        var newPassword = elmts.newPassword.val();
-        self._password = newPassword;
-        self._passwordSpan.empty().text("*****");
-        self.fairDataPointPost.password = newPassword;
-        MenuSystem.dismissAll();
-    });
-    elmts.cancelButton.click(function() {
-            MenuSystem.dismissAll();
-    });
+	 });
+  });
+  add_dist_html.appendTo(self._distributionDiv);
+  self._distributionDiv.appendTo(self._body);
 };

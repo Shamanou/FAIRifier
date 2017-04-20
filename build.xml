@@ -167,8 +167,6 @@
 
     	<copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/reconcile/commands/UploadFileAndAddServiceCommand.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/reconcile/commands/UploadFileAndAddServiceCommand.java" />
 
-        <copy overwrite="true" file="extensions/fairifier-rdf-extension/dtls/fairifier/GetMetadataPushConfigurationCommand.java" tofile="extensions/grefine-rdf-extension/src/org/fairifier/GetMetadataPushConfigurationCommand.java" />
-
         <copy overwrite="true" file="extensions/fairifier-rdf-extension/config.xml" tofile="extensions/grefine-rdf-extension/config.xml" />
 
 

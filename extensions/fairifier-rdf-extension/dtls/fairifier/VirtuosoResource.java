@@ -18,17 +18,19 @@ import org.slf4j.Logger;
 public class VirtuosoResource extends Resource{
     private String out;
     private String host;
-    private String location;
+    private String filename;
+    private String directory;
     private String username;
     private String password;
     private static Logger log = LoggerFactory.getLogger(VirtuosoResource.class);
 
 
-    public VirtuosoResource(String host, String location, String username, String password){
+    public VirtuosoResource(String host, String filename, String username, String password, String directory){
         this.host = host;
-        this.location = location;
+        this.filename = filename;
         this.username = username;
         this.password = password;
+        this.directory = directory;
     }
     
     public void push(){
@@ -37,7 +39,7 @@ public class VirtuosoResource extends Resource{
         }else{
             try{
                 this.out = this.getModelString();
-                HttpUtils.put("http://" + this.host + this.location, this.out, this.username, this.password);
+                HttpUtils.put("http://" + this.host + this.directory + this.filename, this.out, this.username, this.password);
             }catch(Exception e){ log.error(e.getMessage()); }
         }
     }
