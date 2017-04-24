@@ -169,7 +169,6 @@ function init() {
             "scripts/externals/ui-bootstrap-tpls.min.js",
             "scripts/metadata-form.min.js",
             
-            
             "scripts/rdf-data-table-view.js",
             "scripts/menu-bar-extensions.js",
             "scripts/rdf-schema-alignment.js",
