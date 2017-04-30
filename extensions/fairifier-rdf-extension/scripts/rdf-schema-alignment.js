@@ -216,17 +216,13 @@ RdfSchemaAlignmentDialog.prototype._editBaseUri = function(src){
 	menu.html('<div class="schema-alignment-link-menu-type-search"><input type="text" bind="newBaseUri" size="50"><br/>'+
 			'<button class="button" bind="applyButton">Apply</button>' + 
 			'<button class="button" bind="cancelButton">Cancel</button></div>'
-			);
+    );
 	MenuSystem.showMenu(menu,function(){});
 	MenuSystem.positionMenuLeftRight(menu, src);
 	var elmts = DOM.bind(menu);
 	elmts.newBaseUri.val(RdfSchemaAlignment._defaultNamespace).focus().select();
 	elmts.applyButton.click(function() {
-		var newBaseUri = elmts.newBaseUri.val();
-		/*if(!newBaseUri || !newBaseUri.substring(7)=='http://'){
-			alert('Base URI should start with http://');
-			return;
-		}*/
+        var newBaseUri = elmts.newBaseUri.val();
         MenuSystem.dismissAll();
         self._replaceBaseUri(newBaseUri);
     });
@@ -238,6 +234,11 @@ RdfSchemaAlignmentDialog.prototype._editBaseUri = function(src){
 RdfSchemaAlignmentDialog.prototype._replaceBaseUri = function(newBaseUri,doNotSave){
 	var self = this;
 	RdfSchemaAlignment._defaultNamespace = newBaseUri;
+    console.log(newBaseUri.substring(0,7));
+    if(!newBaseUri || newBaseUri.substring(0,7)!='http://'){
+        alert('Base URI should start with http://');
+        return;
+    }
 	if(!doNotSave){
 		$.post("command/rdf-extension/save-baseURI?" + $.param({project: theProject.id }),{baseURI:newBaseUri},function(data){
 			if (data.code === "error"){

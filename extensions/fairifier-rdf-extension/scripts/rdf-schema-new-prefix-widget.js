@@ -6,7 +6,7 @@ NewPrefixWidget.prototype.show = function(msg,def_prefix,onDone){
 	var self = this;
     var frame = DialogSystem.createDialog();
     
-    frame.width("350px");
+    frame.width("400px");
 
     var html = $(DOM.loadHTML("rdf-extension","scripts/new-prefix-widget.html"));
     
