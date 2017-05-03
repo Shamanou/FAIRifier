@@ -26,7 +26,7 @@ import com.google.refine.model.Project;
 
 public class RdfSchema implements OverlayModel {
 
-	final static Logger logger = LoggerFactory.getLogger("RdfSchema");
+	final Logger logger = LoggerFactory.getLogger(RdfSchema.class);
 	
     final protected List<Node> _rootNodes = new ArrayList<Node>();
     final protected List<ConstantBlankNode> _blanks = new ArrayList<ConstantBlankNode>();

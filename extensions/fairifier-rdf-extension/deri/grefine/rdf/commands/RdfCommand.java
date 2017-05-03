@@ -32,4 +32,14 @@ public abstract class RdfCommand extends Command{
 			throw new ServletException("Unable to create index for RDF schema",e);
 		}
 	}
+
+	public RdfSchema getRdfSchema(String projectid) throws ServletException{
+		try {
+			return Util.getProjectSchema(getRdfContext(), getProject(projectid));
+		} catch (VocabularyIndexException e) {
+			throw new ServletException("Unable to create index for RDF schema",e);
+		} catch (IOException e) {
+			throw new ServletException("Unable to create index for RDF schema",e);
+		}
+	}
 }
