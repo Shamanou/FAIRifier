@@ -58,29 +58,29 @@ public class AddPrefixFromFileCommand extends RdfCommand{
 					in = item.getInputStream();
 				}
 			}
-			
-			Repository repository = new SailRepository(
-					new ForwardChainingRDFSInferencer(new MemoryStore()));
+
+			Repository repository = new SailRepository(new ForwardChainingRDFSInferencer(new MemoryStore()));
 			repository.initialize();
 			RepositoryConnection con = repository.getConnection();
-			RDFFormat rdfFromat;
+			RDFFormat rdfFormat;
 			if(format.equals("auto-detect")){
-				rdfFromat = guessFormat(filename);
+				rdfFormat = guessFormat(filename);
 			}else if(format.equals("TTL")){
-				rdfFromat = RDFFormat.TURTLE;
+				rdfFormat = RDFFormat.TURTLE;
 			}else if(format.equals("N3")){
-				rdfFromat = RDFFormat.N3;
+				rdfFormat = RDFFormat.N3;
 			}else if(format.equals("NTRIPLE")) {
-				rdfFromat = RDFFormat.NTRIPLES;
+				rdfFormat = RDFFormat.NTRIPLES;
 			}else{
-				rdfFromat = RDFFormat.RDFXML;
+				rdfFormat = RDFFormat.RDFXML;
 			}
-			con.add(in, "", rdfFromat);
+			con.add(in, "", rdfFormat);
 			con.close();
-			
-			getRdfSchema(request).addPrefix(prefix, uri);
+
+			getRdfSchema(projectId).addPrefix(prefix, uri);
+
         	getRdfContext().getVocabularySearcher().importAndIndexVocabulary(prefix, uri, repository, projectId, new VocabularyImporter());
-        	//success
+        	        	//success
         	PrintWriter out = response.getWriter();
 			out.print("<html><body><textarea>\n{\"code\":\"ok\"}\n</textarea></body></html>");
 			out.flush();

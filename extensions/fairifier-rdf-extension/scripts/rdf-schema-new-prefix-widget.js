@@ -37,23 +37,30 @@ NewPrefixWidget.prototype.show = function(msg,def_prefix,onDone){
     		$('#vocab-hidden-prefix').val(name);
     		$('#vocab-hidden-uri').val(uri);
     		$('#vocab-hidden-project').val(theProject.id);
+            var data = new FormData($("form")[0]);
     		dismissBusy = DialogSystem.showBusy('Uploading vocabulary ');
-    		self._elmts.file_upload_form.ajaxSubmit({
-    				dataType:  'json',
-    				success:    function(data) {
-    					if (data.code === "error"){
-    		    			alert('Error:' + data.message)
-    		    		}else{
-    		    			DialogSystem.dismissUntil(level - 1);
-    		    			if(onDone){
-    		    				onDone(name,uri);
-    		    			}
-    		    		}
-    					dismissBusy();
-    				}
-    		});
-    		return;
-    	}
+            $.ajax({
+                url : "command/rdf-extension/upload-file-add-prefix", 
+                data: data,
+                cache: true,
+                contentType: false,
+                processData: false,
+                enctype: 'multipart/form-data',
+                type: 'POST',
+                success: function(result){
+                    if (result.code === "error"){
+                        alert('Error:' + result.message)
+                    }else{
+                        DialogSystem.dismissUntil(level - 1);
+                        if(onDone){
+                            onDone(name,uri);
+                        }
+                    }
+                    dismissBusy();
+                }
+            });
+            return ;
+        }
 		dismissBusy = DialogSystem.showBusy('Trying to import vocabulary from ' + uri);
     	$.post("command/rdf-extension/add-prefix",{name:name,uri:uri,"fetch-url":uri,project: theProject.id,fetch:fetchOption},function(data){
     		if (data.code === "error"){
@@ -77,9 +84,9 @@ NewPrefixWidget.prototype.show = function(msg,def_prefix,onDone){
         DialogSystem.dismissUntil(level - 1);
     }).appendTo(footer);
     
-    $('<button></button>').attr('id','advanced_options_button').attr("disabled","").attr("style","float:right").text("Advanced...").click(function() {
+    $('<button></button>').attr('id','advanced_options_button').attr("style","float:right").text("Advanced...").click(function() {
         self._elmts.fetching_options_table.show();
-        $('#advanced_options_button').attr("disabled", "disabled");
+        // $('#advanced_options_button').attr("disabled", "disabled");
     }).appendTo(footer);
     
     

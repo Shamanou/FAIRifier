@@ -302,6 +302,7 @@ getFairDatasets = function(url, self){
 addFairDistribution = function(self){
     $.get("command/rdf-extension/get-push-configuration",function(conf){
       conf = JSON.parse(conf.data).xml;
+      console.log(conf);
       $('<br><br>').appendTo(self._datasetDiv);
       if (conf.pushToFtp.enabled){
         var ftp_html = $('<input type="radio" value="ftp" class="ftpRadio" bind="ftp"><span>push FAIRified data to FTP</span><br>').appendTo(self._datasetDiv); 
@@ -313,12 +314,12 @@ addFairDistribution = function(self){
       }
       var ftpshown = false;
       var virtuososhown = false;
-      ftp_elmts.ftp.click(function(){
+     $(".ftpRadio").click(function(){
         self.fairDataPointPost.uploadtype = "ftp";
         self.fairDataPointPost.uploadConfiguration = conf.pushToFtp;
         $('input.virtuosoRadio').removeAttr('checked');
       });
-      virtuoso_elmts.virtuoso.click(function(){
+      $(".virtuosoRadio").click(function(){
         self.fairDataPointPost.uploadtype = "virtuoso";
         self.fairDataPointPost.uploadConfiguration = conf.pushToVirtuoso;
         $('input.ftpRadio').removeAttr('checked');

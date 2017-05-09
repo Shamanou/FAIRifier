@@ -1,6 +1,6 @@
 <xml>
 	<pushToFtp>
-		<enabled>true</enabled>
+		<enabled>false</enabled>
 		<username>demo</username>
 		<password>demo</password>
 		<host>127.0.0.1</host>

@@ -36,7 +36,7 @@ public class SuggestTermCommand extends RdfCommand{
 
     	//type will hold the project Id. parameters names are defined by the JavaScript library. 
         String projectId = request.getParameter("type");
-        
+
         response.setHeader("Content-Type", "application/json");
         
         JSONWriter writer = new JSONWriter(response.getWriter());

@@ -77,15 +77,14 @@ public class Util {
 
 	public static RdfSchema getProjectSchema(ApplicationContext ctxt, Project project) throws VocabularyIndexException, IOException {
 		synchronized (project) {
-			RdfSchema rdfSchema = (RdfSchema) project.overlayModels
-					.get("rdfSchema");
+			RdfSchema rdfSchema = (RdfSchema) project.overlayModels.get("rdfSchema");
 			if (rdfSchema == null) {
+
 				rdfSchema = new RdfSchema(ctxt,project);
 
 				project.overlayModels.put("rdfSchema", rdfSchema);
 				project.getMetadata().updateModified();
 			}
-
 			return rdfSchema;
 		}
 	}

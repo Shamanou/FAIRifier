@@ -22,9 +22,14 @@ import org.openrdf.repository.sail.SailRepository;
 import org.openrdf.sail.inferencer.fc.ForwardChainingRDFSInferencer;
 import org.openrdf.sail.memory.MemoryStore;
 
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 public class VocabularyImporter {
 	
+    final static Logger logger = LoggerFactory.getLogger(VocabularyImporter.class);
+
+
 	public void importVocabulary(String name, String uri, String fetchUrl, List<RDFSClass> classes, List<RDFSProperty> properties) throws VocabularyImportException{
 		boolean strictlyRdf = faultyContentNegotiation(uri);
 		Repository repos = getModel(fetchUrl, strictlyRdf);
@@ -32,6 +37,7 @@ public class VocabularyImporter {
 	}
 	
 	public void importVocabulary(String name, String uri,Repository repository, List<RDFSClass> classes, List<RDFSProperty> properties) throws VocabularyImportException{
+		logger.debug("test");
 		getTerms(repository, name, uri, classes, properties);
 	}
 	
@@ -66,6 +72,7 @@ public class VocabularyImporter {
 
 	private Repository getModel(String url,boolean strictlyRdf) throws VocabularyImportException {
 		try {
+			logger.debug("test");
 			Any23 runner;
 			if(strictlyRdf){
 				runner = new Any23("rdf-xml");
@@ -75,14 +82,13 @@ public class VocabularyImporter {
 			runner.setHTTPUserAgent("google-refine-rdf-extension");
 			HTTPClient client = runner.getHTTPClient();
 			DocumentSource source = new HTTPDocumentSource(client, url);
-			Repository repository = new SailRepository(
-					new ForwardChainingRDFSInferencer(new MemoryStore()));
+			Repository repository = new SailRepository(new ForwardChainingRDFSInferencer(new MemoryStore()));
 			repository.initialize();
 			RepositoryConnection con = repository.getConnection();
 			RepositoryWriter w = new RepositoryWriter(con);
 			ReportingTripleHandler reporter = new ReportingTripleHandler(w);
 			runner.extract(source, reporter);
-			
+			logger.debug("return");
 			return repository;
 		} catch (Exception e) {
 			throw new VocabularyImportException(
@@ -92,7 +98,9 @@ public class VocabularyImporter {
 
 	protected void getTerms(Repository repos, String name, String uri, List<RDFSClass> classes, List<RDFSProperty> properties) throws VocabularyImportException {
 		try {
+			logger.info("tes");
 			RepositoryConnection con = repos.getConnection();
+			logger.info("test");
 			try {
 
 				TupleQuery query = con.prepareTupleQuery(QueryLanguage.SPARQL,CLASSES_QUERY_P1 + uri + CLASSES_QUERY_P2);
@@ -102,6 +110,7 @@ public class VocabularyImporter {
 				while (res.hasNext()) {
 					BindingSet solution = res.next();
 					String clazzURI = solution.getValue("resource").stringValue();
+					System.out.println(clazzURI);
 					if (seen.contains(clazzURI)) {
 						continue;
 					}
@@ -125,10 +134,11 @@ public class VocabularyImporter {
 				while (res.hasNext()) {
 					BindingSet solution = res.next();
 					String propertyUri = solution.getValue("resource").stringValue();
+					seen.add(propertyUri);
 					if (seen.contains(propertyUri)) {
 						continue;
 					}
-					seen.add(propertyUri);
+					System.out.println(propertyUri);
 					String label = getFirstNotNull(new Value[] {
 							solution.getValue("en_label"),
 							solution.getValue("label") });
