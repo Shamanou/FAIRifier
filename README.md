@@ -1,10 +1,5 @@
-#FAIRifier
-
-Depenencies:
+Dependencies:
   - Java 8
-  - npm
-  - gulp
-  - bower
   - Apache Ant
 
 
