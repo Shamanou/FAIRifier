@@ -1,10 +1,5 @@
-#FAIRifier
-
-Depenencies:
+Dependencies:
   - Java 8
-  - npm
-  - gulp
-  - bower
   - Apache Ant
 
 
@@ -13,19 +8,9 @@ Building
 install depedencies (assuming Java 8 is installed)
 
 ```
-sudo apt-get install nodejs-legacy npm ant
+sudo apt-get install ant
+```
 
-```
-install gulp
-```
-sudo npm install -g gulp
-
-```
-install bower
-```
-sudo npm install -g bower
-
-```
 download the git repository
 ```
 git clone --recursive -b development https://github.com/DTL-FAIRData/FAIRifier.git
@@ -36,7 +21,7 @@ cd FAIRifier/
 ```
 and now build
 ```
-ant build
+./refine build
 ```
 
 Running
@@ -93,31 +78,11 @@ When you click the + button the Add new dataset to FAIR Data Point will apear. F
 When you click save You will return to the POST to FAIR Data Point dialog and a new 
 field will apear. This field will show a + add distribution and a dropdown menu. 
 The dropdown menu will list the distributions within the selected catalog, if the dataset 
-doesnt have any distributions the dropdown menu will be empty.
+doesnt have any distributions the dropdown menu will be empty. You also have to select where to upload your distribution. All the resources that are set enabled in the XML configuration file, located at FAIRifier/extensions/grefine-rdf-extension/config.xml,  will be shown.
 
 ![alt tag](https://raw.githubusercontent.com/Shamanou/FAIRifier/development/git_tutorial_images/tutorial-7.png "When you click save You will return to the POST to FAIR Data Point dialog and a new field will apear.")
 
 This will open the add new distribution dialog. Fill in this form, to add the metadata to the new distribution layer to the FDP.
 
-![alt tag](https://raw.githubusercontent.com/Shamanou/FAIRifier/development/git_tutorial_images/tutorial-8.png "This will open the add new distribution dialog.")
-
-When you click save You will return to the POST to FAIR Data Point dialog and a new 
-field will apear. This field contains the data resource options. For now FAIR data can be directly put on a FTP or on a Virtuoso
-triplestore. 
-
-![alt tag](https://raw.githubusercontent.com/Shamanou/FAIRifier/development/git_tutorial_images/tutorial-9.png "When you click save You will return to the POST to FAIR Data Point dialog and a new field will apear.")
-
-To upload the FAIR data to Virtuoso select the radio button push FAIRIfied data to Virtuoso.
-
-![alt tag](https://raw.githubusercontent.com/Shamanou/FAIRifier/development/git_tutorial_images/tutorial-10.png "To upload the FAIR data to Virtuoso select the radio button push FAIRIfied data to Virtuoso.")
-
-The host should be the Virtuso hostname and the path.
-Usually this is: <hostname>/DAV/home/<username>
-
-NOTE: localhost as a string is not accepted. Please use 127.0.0.1
-
 If everything is filled in correctly then you should see the uploading animation and when uploading
 is done a dialog should apear with the text FAIR data pushed.
-
-![alt tag](https://raw.githubusercontent.com/Shamanou/FAIRifier/development/git_tutorial_images/tutorial-11.png "If everything is filled in correctly then you should see the uploading animation and when uploading is done a dialog should apear with the text FAIR data pushed.")
-
