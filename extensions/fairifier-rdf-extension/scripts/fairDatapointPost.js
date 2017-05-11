@@ -134,7 +134,7 @@ fairDataPointPostDialog.prototype._editBaseUri = function(src){
   elmts.newBaseUri.val(fairDataPointPost.baseUri).focus().select();
   elmts.applyButton.click(function() {
       var newBaseUri = elmts.newBaseUri.val();
-            if(!newBaseUri || newBaseUri.match('(http|https):\/\/')){
+            if(!newBaseUri || !newBaseUri.match('(http|https):\/\/')){
                 alert('Base URI should start with http://');
                 return;
             } if(self.fairDataPointPost.baseUri.length > 7){
