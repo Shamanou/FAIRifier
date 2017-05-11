@@ -37,7 +37,6 @@ public class VocabularyImporter {
 	}
 	
 	public void importVocabulary(String name, String uri,Repository repository, List<RDFSClass> classes, List<RDFSProperty> properties) throws VocabularyImportException{
-		logger.debug("test");
 		getTerms(repository, name, uri, classes, properties);
 	}
 	
@@ -98,9 +97,7 @@ public class VocabularyImporter {
 
 	protected void getTerms(Repository repos, String name, String uri, List<RDFSClass> classes, List<RDFSProperty> properties) throws VocabularyImportException {
 		try {
-			logger.info("tes");
 			RepositoryConnection con = repos.getConnection();
-			logger.info("test");
 			try {
 
 				TupleQuery query = con.prepareTupleQuery(QueryLanguage.SPARQL,CLASSES_QUERY_P1 + uri + CLASSES_QUERY_P2);
@@ -110,7 +107,6 @@ public class VocabularyImporter {
 				while (res.hasNext()) {
 					BindingSet solution = res.next();
 					String clazzURI = solution.getValue("resource").stringValue();
-					System.out.println(clazzURI);
 					if (seen.contains(clazzURI)) {
 						continue;
 					}
@@ -134,22 +130,20 @@ public class VocabularyImporter {
 				while (res.hasNext()) {
 					BindingSet solution = res.next();
 					String propertyUri = solution.getValue("resource").stringValue();
-					seen.add(propertyUri);
-					if (seen.contains(propertyUri)) {
-						continue;
+					
+					if (!seen.contains(propertyUri)) {
+						seen.add(propertyUri);
+						String label = getFirstNotNull(new Value[] {
+								solution.getValue("en_label"),
+								solution.getValue("label") });
+						String description = getFirstNotNull(new Value[] {
+								solution.getValue("en_definition"),
+								solution.getValue("definition"),
+								solution.getValue("en_description"),
+								solution.getValue("description") });
+						RDFSProperty prop = new RDFSProperty(propertyUri, label, description, name, uri);
+						properties.add(prop);
 					}
-					System.out.println(propertyUri);
-					String label = getFirstNotNull(new Value[] {
-							solution.getValue("en_label"),
-							solution.getValue("label") });
-					String description = getFirstNotNull(new Value[] {
-							solution.getValue("en_definition"),
-							solution.getValue("definition"),
-							solution.getValue("en_description"),
-							solution.getValue("description") });
-					RDFSProperty prop = new RDFSProperty(propertyUri, label,
-							description, name, uri);
-					properties.add(prop);
 				}
 
 			} catch (Exception ex) {

@@ -179,7 +179,13 @@
 
         <copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/rdf/vocab/VocabularyImporter.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/rdf/vocab/VocabularyImporter.java" />
 
+        <copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/rdf/vocab/imp/VocabularySearcher.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/rdf/vocab/imp/VocabularySearcher.java" />
+
+
         <copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/rdf/commands/AddPrefixFromFileCommand.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/rdf/commands/AddPrefixFromFileCommand.java" />
+
+        <copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/rdf/commands/SuggestTermCommand.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/rdf/commands/SuggestTermCommand.java" />
+
 
         <copy overwrite="true" file="extensions/fairifier-rdf-extension/config.xml" tofile="extensions/grefine-rdf-extension/config.xml" />
 
@@ -190,6 +196,12 @@
 
     	<copy overwrite="true" file="extensions/fairifier-rdf-extension/HttpUtils.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/rdf/utils/HttpUtils.java" />
     	<copy overwrite="true" file="extensions/fairifier-rdf-extension/scripts/menu-bar-extensions.js" tofile="extensions/grefine-rdf-extension/module/scripts/menu-bar-extensions.js" />
+
+        <copy overwrite="true" file="extensions/fairifier-rdf-extension/scripts/rdf-schema-alignment-ui-link.js" tofile="extensions/grefine-rdf-extension/module/scripts/rdf-schema-alignment-ui-link.js" />
+
+
+        <copy overwrite="true" file="extensions/fairifier-rdf-extension/scripts/suggestterm.suggest.js" tofile="extensions/grefine-rdf-extension/module/scripts/suggestterm.suggest.js" />
+
     	<copy overwrite="true" file="extensions/fairifier-rdf-extension/controller.js" tofile="extensions/grefine-rdf-extension/module/MOD-INF/controller.js" />
     	<copy overwrite="true" file="extensions/fairifier-rdf-extension/scripts/rdf-service-dialog.html" tofile="extensions/grefine-rdf-extension/module/scripts/rdf-service-dialog.html" />
 

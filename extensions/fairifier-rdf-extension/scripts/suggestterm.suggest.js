@@ -1,4 +1,4 @@
-;(function($) {
+(function($) {
         if (!$.suggest) {
             alert("$.suggest required");
         }
@@ -39,6 +39,7 @@
                     	    	 data["type_strict"] = o.type_strict;
                     	    	 data["type"] = theProject.id;
 	                            
+
                     	    	 var url = o.service_url + o.service_path + "?" + $.param(data, true);
 	                             var ajax_options = {
 	                            		 url: o.service_url + o.service_path,
