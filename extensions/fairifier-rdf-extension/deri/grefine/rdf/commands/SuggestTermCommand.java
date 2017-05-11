@@ -55,7 +55,7 @@ public class SuggestTermCommand extends RdfCommand{
             writer.key("result");
             writer.array();
             List<SearchResultItem> nodes;
-            if(type!=null && type.trim().equals("property")){
+            if(type.trim().equals("property")){
                 nodes = getRdfContext().getVocabularySearcher().searchProperties(query,projectId);
             }else{
                 nodes = getRdfContext().getVocabularySearcher().searchClasses(query,projectId);

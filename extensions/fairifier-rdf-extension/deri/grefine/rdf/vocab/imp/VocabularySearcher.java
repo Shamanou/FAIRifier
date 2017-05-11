@@ -332,8 +332,7 @@ public class VocabularySearcher implements IVocabularySearcher {
 
 	}
 
-	private List<SearchResultItem> prepareSearchResults(TopDocs docs)
-			throws CorruptIndexException, IOException {
+	private List<SearchResultItem> prepareSearchResults(TopDocs docs) throws CorruptIndexException, IOException {
 		List<SearchResultItem> res = new ArrayList<SearchResultItem>();
 		for (int i = 0; i < docs.totalHits; i++) {
 			Document doc = searcher.doc(docs.scoreDocs[i].doc);
@@ -347,9 +346,7 @@ public class VocabularySearcher implements IVocabularySearcher {
 					label, description);
 			res.add(item);
 		}
-
 		return res;
-
 	}
 	
 	private void addDocumentsToProject(TopDocs docs,String projectId) throws CorruptIndexException, IOException{

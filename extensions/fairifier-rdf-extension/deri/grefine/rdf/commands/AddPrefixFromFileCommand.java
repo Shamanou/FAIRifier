@@ -80,7 +80,7 @@ public class AddPrefixFromFileCommand extends RdfCommand{
 			getRdfSchema(projectId).addPrefix(prefix, uri);
 
         	getRdfContext().getVocabularySearcher().importAndIndexVocabulary(prefix, uri, repository, projectId, new VocabularyImporter());
-        	        	//success
+        	//success
         	PrintWriter out = response.getWriter();
 			out.print("<html><body><textarea>\n{\"code\":\"ok\"}\n</textarea></body></html>");
 			out.flush();

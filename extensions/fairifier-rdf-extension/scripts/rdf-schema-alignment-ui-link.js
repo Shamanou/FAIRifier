@@ -51,7 +51,6 @@ RdfSchemaAlignmentDialog.UILink.prototype._renderMain = function() {
     $(this._tdMain).empty();
     var l = this._getTypeName(this._link);
     var label =  l || "property?";
-    
     var self = this;
     
     $('<img />')
@@ -101,8 +100,7 @@ RdfSchemaAlignmentDialog.UILink.prototype._startEditProperty = function(elmt) {
 			self._link.uri = obj.id;
 			self._link.curie = obj.name;
 			self._renderMain();
-	}
-	);
+	});
 };
 
 RdfSchemaAlignmentDialog.UILink.prototype._getTypeName = function(t){
