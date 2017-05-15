@@ -144,7 +144,7 @@ public class PostFairDataToFairDataPoint extends Command{
                 }catch(Exception ex){}      
                 datasetMetadata.setTitle(f.createLiteral(dataset.getString("http://purl.org/dc/terms/title")));
                 identifier = new Identifier();
-                identifier.setIdentifier(f.createLiteral(dataset.getString("http://purl.org/dc/terms/title")+"_"+dataset.getString("http://purl.org/dc/terms/hasVersion")));
+                identifier.setIdentifier(f.createLiteral(dataset.getString("http://purl.org/dc/terms/title").replace(" ","_")+"_"+dataset.getString("http://purl.org/dc/terms/hasVersion").replace(" ","_")));
                 identifier.setUri( f.createIRI( fdp.getString("baseUri") + "/dataset/" + catalog.getString("http://purl.org/dc/terms/title").replace(" ","_")+"_"+catalog.getString("http://purl.org/dc/terms/hasVersion").replace(" ","_") ));
                 datasetMetadata.setIdentifier(identifier);
                 datasetMetadata.setIssued( f.createLiteral(date));
@@ -160,7 +160,7 @@ public class PostFairDataToFairDataPoint extends Command{
                 try{
                     datasetMetadata.setDescription(f.createLiteral(dataset.getString("http://purl.org/dc/terms/description")) );
                 }catch(Exception ex){}
-                datasetMetadata.setParentURI( f.createIRI(fdp.getString("baseUri") + "/catalog/" + catalog.getString("http://purl.org/dc/terms/title")+"_"+catalog.getString("http://purl.org/dc/terms/hasVersion")) );
+                datasetMetadata.setParentURI( f.createIRI(fdp.getString("baseUri") + "/catalog/" + catalog.getString("http://purl.org/dc/terms/title").replace(" ","_")+"_"+catalog.getString("http://purl.org/dc/terms/hasVersion").replace(" ","_")) );
                 agent = new Agent();
                 agent.setUri( f.createIRI(fdp.getString("baseUri") + "/datasetAgent/" + dataset.getString("http://purl.org/dc/terms/title").replace(" ","_")+"_"+dataset.getString("http://purl.org/dc/terms/hasVersion").replace(" ","_")));
                 agent.setName( f.createLiteral(dataset.getJSONObject("http://purl.org/dc/terms/publisher").getString("url")));
