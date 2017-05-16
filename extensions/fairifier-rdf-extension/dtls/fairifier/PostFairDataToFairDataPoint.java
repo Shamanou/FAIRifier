@@ -59,8 +59,6 @@ public class PostFairDataToFairDataPoint extends Command{
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         f = SimpleValueFactory.getInstance();
         
-        ArrayList<IRI> datasetUris = new ArrayList<IRI>();
-        ArrayList<IRI> distributionUris = new ArrayList<IRI>();
         ArrayList<IRI> datasetThemes = new ArrayList<IRI>();
         ArrayList<IRI> catalogThemes = new ArrayList<IRI>();
 
