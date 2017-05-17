@@ -161,7 +161,7 @@ public class PostFairDataToFairDataPoint extends Command{
                 datasetMetadata.setParentURI( f.createIRI(fdp.getString("baseUri") + "/catalog/" + catalog.getString("http://purl.org/dc/terms/title").replace(" ","_")+"_"+catalog.getString("http://purl.org/dc/terms/hasVersion").replace(" ","_")));
                 agent = new Agent();
                 agent.setUri( f.createIRI(fdp.getString("baseUri") + "/datasetAgent/" + dataset.getString("http://purl.org/dc/terms/title").replace(" ","_")+"_"+dataset.getString("http://purl.org/dc/terms/hasVersion").replace(" ","_")));
-                agent.setName( f.createLitel(dataset.getJSONObject("http://purl.org/dc/terms/publisher").getString("url")));
+                agent.setName( f.createLiteral(dataset.getJSONObject("http://purl.org/dc/terms/publisher").getString("url")));
                 datasetMetadata.setPublisher(agent);
                 datasetMetadata.setUri(f.createIRI( "http://base/catalog/dataset" ));
                 datasetString = MetadataUtils.getString(datasetMetadata, RDFFormat.TURTLE).replaceAll("\\<" + datasetMetadata.getUri() + "\\>","<>");
