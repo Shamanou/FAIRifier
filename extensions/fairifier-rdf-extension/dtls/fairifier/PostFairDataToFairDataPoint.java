@@ -172,12 +172,12 @@ public class PostFairDataToFairDataPoint extends Command{
                 distributionMetadata.setAccessURL(f.createIRI("ftp://" + uploadConfiguration.getString("host") + uploadConfiguration.getString("directory") + "FAIRdistribution_" + distribution.getString("http://purl.org/dc/terms/title").replace(" ","_")+"_"+distribution.getString("http://purl.org/dc/terms/hasVersion").replace(" ","_") + ".ttl") );
                 //          optional
                 try{
-                    distributionMetadata.setMediaType(f.createLiteral("application/rdf-turtle"));
+                    distributionMetadata.setMediaType(f.createLiteral("text/turtle"));
                 }catch(Exception ex){}
                 distributionMetadata.setByteSize(f.createLiteral(datasetString.getBytes("UTF-8").length));
             } else if(fdp.getString("uploadtype").equals("virtuoso")){
                 try{
-                    distributionMetadata.setMediaType(f.createLiteral("application/rdf-turtle"));
+                    distributionMetadata.setMediaType(f.createLiteral("text/turtle"));
                 }catch(Exception ex){}
                 distributionMetadata.setAccessURL(f.createIRI("http://" + uploadConfiguration.getString("host") + uploadConfiguration.getString("directory") + "FAIRdistribution_" + distribution.getString("http://purl.org/dc/terms/title").replace(" ","_")+"_"+distribution.getString("http://purl.org/dc/terms/hasVersion").replace(" ","_") + ".ttl"));
             }
