@@ -144,7 +144,7 @@ public class PostFairDataToFairDataPoint extends Command{
                 identifier = new Identifier();
                 identifier.setIdentifier(f.createLiteral(dataset.getString("http://purl.org/dc/terms/title").replace(" ","_")+"_"+dataset.getString("http://purl.org/dc/terms/hasVersion").replace(" ","_") + "/identifier"));
                 identifier.setUri( f.createIRI( fdp.getString("baseUri") + "/dataset/" + catalog.getString("http://purl.org/dc/terms/title").replace(" ","_")+"_"+catalog.getString("http://purl.org/dc/terms/hasVersion").replace(" ","_")  + "/identifier"));
-         ra       datasetMetadata.setIdentifier(identifier);
+                datasetMetadata.setIdentifier(identifier);
                 datasetMetadata.setIssued( f.createLiteral(date));
                 datasetMetadata.setModified( f.createLiteral(date) );
                 datasetMetadata.setVersion(f.createLiteral(dataset.getString("http://purl.org/dc/terms/hasVersion")) );
@@ -155,6 +155,7 @@ public class PostFairDataToFairDataPoint extends Command{
                     datasetMetadata.setRights(f.createIRI(dataset.getString("http://purl.org/dc/terms/rights")));
                 }catch(Exception ex){}
     //          optional
+
                 try{
                     datasetMetadata.setDescription(f.createLiteral(dataset.getString("http://purl.org/dc/terms/description")) );
                 }catch(Exception ex){}
