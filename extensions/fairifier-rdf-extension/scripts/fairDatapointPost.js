@@ -205,7 +205,7 @@ getFairCatalogs = function(rootUrl, self){
            self._pushtoResourceDiv.html('');
            if (self.hasCatalogs){
                data.content.forEach(function(element){
-		       if (e.target.value == element.uri.namespace + element.uri.localName){
+        		       if (e.target.value == element.uri.namespace + element.uri.localName){
          	               self.fairDataPointPost.catalog = {
 	                      // 'http://rdf.biosemantics.org/ontologies/fdp-o#metadataIdentifier': element.uri.namespace + element.uri.localName,
 	                      'http://purl.org/dc/terms/title': element.title.label,
@@ -226,6 +226,7 @@ getFairCatalogs = function(rootUrl, self){
                });
            }
            getFairDatasets($('select.catalogs option:selected').val(), self);
+           console.log($('select.catalogs option:selected').val());
        }).change();
        
        add_cat_available_html.appendTo(self._catalogDiv);
@@ -242,7 +243,7 @@ getFairCatalogs = function(rootUrl, self){
 getFairDatasets = function(url, self){
     $.post('command/rdf-extension/get-fdp-info', {"uri" : url, "layer": "dataset"},function(data){
 
-	if ( $('select.datasets').length ){
+	      if ( $('select.datasets').length ){
              self._datasetDiv.html('');
         }
         $('<h2>datasets</var idh2>').appendTo(self._datasetDiv);
@@ -266,8 +267,7 @@ getFairDatasets = function(url, self){
               dataset._exists = false;
               self.fairDataPointPost.dataset = dataset;
               addFairDistribution(self);
-	      add_dat_available_html.click();
-          });
+	        });
       });
 
       add_dat_available_html.click(function(e){
@@ -275,7 +275,7 @@ getFairDatasets = function(url, self){
             self._pushtoResourceDiv.html('');
             if(self.hasDatasets){
                 data.content.forEach(function(element){
-      		if (e.target.value == element.uri.namespace + element.uri.localName){
+      		      if (e.target.value == element.uri.namespace + element.uri.localName){
                       self.fairDataPointPost.dataset = {
                       // 'http://rdf.biosemantics.org/ontologies/fdp-o#metadataIdentifier': element.uri.namespace + element.uri.localName,
                       'http://purl.org/dc/terms/title' : element.title.label,
@@ -302,10 +302,6 @@ getFairDatasets = function(url, self){
     
         add_dat_available_html.appendTo(self._datasetDiv);
         self._datasetDiv.appendTo(self._body);
-        
-        if (self.hasDatasets){
-            add_dat_available_html.click();
-        }
     
     }).fail(function(xhr, status, error) {});
 };
@@ -314,11 +310,11 @@ addFairDistribution = function(self){
     $.get("command/rdf-extension/get-push-configuration",function(conf){
       conf = JSON.parse(conf.data).xml;
       $('<br><br>').appendTo(self._datasetDiv);
-      if (conf.pushToFtp.enabled && ! ($( "input.ftpRadio" ).length) ){
+      if (conf.pushToFtp.enabled && ! ($(".ftpRadio").length) ){
         var ftp_html = $('<input type="radio" value="ftp" class="ftpRadio" bind="ftp"><span>push FAIRified data to FTP</span><br>').appendTo(self._datasetDiv); 
         var ftp_elmts = DOM.bind(ftp_html);        
       } 
-      if (conf.pushToVirtuoso.enabled && ! ($( "input.virtuosoRadio" ).length)){
+      if (conf.pushToVirtuoso.enabled && !($(".virtuosoRadio").length)){
         var virtuoso_html = $('<input type="radio" value="virtuoso" class="virtuosoRadio" bind="virtuoso"><span>push FAIRified data to Virtuoso</span><br>').appendTo(self._datasetDiv);
         var virtuoso_elmts = DOM.bind(virtuoso_html);
       }
@@ -342,10 +338,10 @@ addFairDistribution = function(self){
         evt.preventDefault();
         fairDataPointPostDistributionDialog = new FairDataPointPostDistributionDialog(function(distribution){
   			self.fairDataPointPost.distribution = distribution;
-
 			$("#distribution").text(self.fairDataPointPost.distribution['http://rdf.biosemantics.org/ontologies/fdp-o#metadataIdentifier'].url + " - " + self.fairDataPointPost.distribution['http://purl.org/dc/terms/title']);
 	 });
   });
+  console.log(self.fairDataPointPost);
   add_dist_html.appendTo(self._distributionDiv);
   self._distributionDiv.appendTo(self._body);
 };
