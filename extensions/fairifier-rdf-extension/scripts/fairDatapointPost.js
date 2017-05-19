@@ -195,7 +195,6 @@ getFairCatalogs = function(rootUrl, self){
                 catalog._exists = false;
                 self.fairDataPointPost.catalog = catalog;
                 getFairDatasets(catalog['http://rdf.biosemantics.org/ontologies/fdp-o#metadataIdentifier'].url, self);
-		add_cat_available_html.click();
             });
         });
         
