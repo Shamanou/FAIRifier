@@ -214,7 +214,7 @@ public class PostFairDataToFairDataPoint extends Command{
             if (!dataset.getBoolean("_exists")){
                 datasetPost = IOUtils.toString(HttpUtils.post(fdp.getString("baseUri") + "/dataset?id=" + dataset.getString("http://purl.org/dc/terms/title").replace(" ","_")+"_"+dataset.getString("http://purl.org/dc/terms/hasVersion").replace(" ","_")+"_"+uuid_dataset, datasetString, "text/turtle").getContent(),"UTF-8");
             }
-            String distributionPost = IOUtils.toString(HttpUtils.post(fdp.getString("baseUri") + "/distribution?id=" +  distribution.getString("http://purl.org/dc/terms/title".replace(" ","_"))+"_"+distribution.getString("http://purl.org/dc/terms/hasVersion").replace(" ","_")+"_"+uuid_distribution, distributionString, "text/turtle").getContent(),"UTF-8");
+            String distributionPost = IOUtils.toString(HttpUtils.post(fdp.getString("baseUri") + "/distribution?id=" +  distribution.getString("http://purl.org/dc/terms/title").replace(" ","_")+"_"+distribution.getString("http://purl.org/dc/terms/hasVersion").replace(" ","_")+"_"+uuid_distribution, distributionString, "text/turtle").getContent(),"UTF-8");
             
             String data = new JSONObject(jb.toString()).getString("data");
             PushFairDataToResourceAdapter adapter = new PushFairDataToResourceAdapter();
