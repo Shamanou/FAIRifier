@@ -53,6 +53,17 @@ public class AddPrefixFromFileCommand extends RdfCommand{
 					format = item.getString();
 				}else if(item.getFieldName().equals("project")){
 					projectId = item.getString();
+				}else if(item.getFieldName().equals("file_format")){
+					format = item.getString();
+					if(format.equals("text/turtle")){
+						format = "TTL";
+					}else if(format.equals("application/rdf+xml")){
+						format = "RDF/XML";
+					}else if(format.equals("text/rdf+n3")){
+						format = "N3";
+					}else if(format.equals("application/n-triples")){
+						format = "NTRIPLE";
+					}
 				}else{
 					filename = item.getName();
 					in = item.getInputStream();
@@ -63,9 +74,7 @@ public class AddPrefixFromFileCommand extends RdfCommand{
 			repository.initialize();
 			RepositoryConnection con = repository.getConnection();
 			RDFFormat rdfFormat;
-			if(format.equals("auto-detect")){
-				rdfFormat = guessFormat(filename);
-			}else if(format.equals("TTL")){
+			if(format.equals("TTL")){
 				rdfFormat = RDFFormat.TURTLE;
 			}else if(format.equals("N3")){
 				rdfFormat = RDFFormat.N3;
@@ -105,23 +114,4 @@ public class AddPrefixFromFileCommand extends RdfCommand{
 	        }
 		}
 	}
-    
-	private RDFFormat guessFormat(String filename){
-		if(filename.lastIndexOf('.')!=-1){
-			String extension = filename.substring(filename.lastIndexOf('.')).toLowerCase();
-			if(extension.equals(".ttl")){
-				return RDFFormat.TURTLE;
-			}else if(extension.equals(".rdf")){
-				return RDFFormat.RDFXML;
-			}else if(extension.equals(".owl")){
-				return RDFFormat.RDFXML;
-			}else if(extension.equals(".nt")){
-				return RDFFormat.NTRIPLES;
-			}else if(extension.equals(".n3")){
-				return RDFFormat.N3;
-			}
-		}
-		return RDFFormat.RDFXML;
-	}
-
 }

@@ -17,7 +17,6 @@ import org.eclipse.rdf4j.rio.nquads.NQuadsParser;
 import org.eclipse.rdf4j.rio.turtle.TurtleParser;
 import org.eclipse.rdf4j.rio.rdfxml.RDFXMLParser;
 import org.eclipse.rdf4j.rio.trig.TriGParser;
-import org.eclipse.rdf4j.rio.trix.TriXParser;
 import org.eclipse.rdf4j.rio.ntriples.NTriplesParser;
 import java.lang.System;
 import java.lang.Exception;
@@ -34,7 +33,8 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import java.util.List;
 import org.apache.commons.fileupload.FileUploadException;
-
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
 
 /**
  * 
@@ -52,6 +52,7 @@ public class DetectFileFormatCommand extends Command{
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        System.setProperty("org.xml.sax.driver", "org.apache.xerces.parsers.SAXParser");
         FileItemFactory factory = new DiskFileItemFactory();
 
         // Create a new file upload handler
@@ -64,8 +65,6 @@ public class DetectFileFormatCommand extends Command{
 
         try{
             items = upload.parseRequest(req);
-        
-
             for(FileItem item:items){
                 if(item.getFieldName().equals("baseuri")){
                     baseuri = item.getString();
@@ -77,12 +76,20 @@ public class DetectFileFormatCommand extends Command{
         }catch(FileUploadException ex){
             respondException(res, ex);
         }
+
         for (RDFParser parser: parsers){
             try{
+                BufferedReader reader =  new BufferedReader(new InputStreamReader(in));
+                String firstLine = reader.readLine();
+                if ( firstLine.substring(0,5).equals("<?xml") ){
+                    format = "application/rdf+xml";
+                    break;
+                }
                 parser.parse(in, baseuri);
                 format = parser.getRDFFormat().getDefaultMIMEType();
                 break;
             }catch(Exception e){
+                System.out.println(e.toString());
                 continue;
             }
         }

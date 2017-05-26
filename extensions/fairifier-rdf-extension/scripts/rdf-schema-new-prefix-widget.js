@@ -39,40 +39,59 @@ NewPrefixWidget.prototype.show = function(msg,def_prefix,onDone){
     		$('#vocab-hidden-project').val(theProject.id);
             var data = new FormData($("form")[0]);
     		dismissBusy = DialogSystem.showBusy('Uploading vocabulary ');
-            $.ajax({
-                url : "command/rdf-extension/upload-file-add-prefix", 
-                data: data,
-                cache: true,
-                contentType: false,
-                processData: false,
-                enctype: 'multipart/form-data',
-                type: 'POST',
-                success: function(result){
-                    if (result.code === "error"){
-                        alert('Error:' + result.message)
+
+
+            $('<input>').attr('type','hidden').attr('name','baseuri').val("").appendTo("#file-upload-form");
+
+            self._elmts.file_upload_form.ajaxSubmit({
+                dataType: 'json',
+                type: 'post',
+                url: "command/rdf-extension/detect-format-service",
+                success: function(format){
+                    data.append('file_format',format['RDFFormat']);
+                    console.log(format);
+                    if(!format['RDFFormat']){
+                        dismissBusy();
+                        alert('file format could not be detected, only turtle, rdfxml and ntripple are supported')
+                        return;
                     }else{
-                        DialogSystem.dismissUntil(level - 1);
-                        if(onDone){
-                            onDone(name,uri);
-                        }
+                          $.ajax({
+                            url : "command/rdf-extension/upload-file-add-prefix", 
+                            data: data,
+                            cache: true,
+                            contentType: false,
+                            processData: false,
+                            enctype: 'multipart/form-data',
+                            type: 'POST',
+                            success: function(result){
+                                if (result.code === "error"){
+                                    alert('Error:' + result.message)
+                                }else{
+                                    DialogSystem.dismissUntil(level - 1);
+                                    if(onDone){
+                                        onDone(name,uri);
+                                    }
+                                }
+                                dismissBusy();
+                            }
+                        });
+                        return ;
+                        dismissBusy = DialogSystem.showBusy('Trying to import vocabulary from ' + uri);
+                        $.post("command/rdf-extension/add-prefix",{name:name,uri:uri,"fetch-url":uri,project: theProject.id,fetch:fetchOption},function(data){
+                            if (data.code === "error"){
+                                alert('Error:' + data.message)
+                            }else{
+                                DialogSystem.dismissUntil(level - 1);
+                                if(onDone){
+                                    onDone(name,uri);
+                                }
+                            }
+                            dismissBusy();
+                        });
                     }
-                    dismissBusy();
                 }
             });
-            return ;
         }
-		dismissBusy = DialogSystem.showBusy('Trying to import vocabulary from ' + uri);
-    	$.post("command/rdf-extension/add-prefix",{name:name,uri:uri,"fetch-url":uri,project: theProject.id,fetch:fetchOption},function(data){
-    		if (data.code === "error"){
-    			alert('Error:' + data.message)
-    		}else{
-    			DialogSystem.dismissUntil(level - 1);
-    			if(onDone){
-    				onDone(name,uri);
-    			}
-    		}
-			dismissBusy();
-    	});
     };
     
     $('<button></button>').addClass('button').html("&nbsp;&nbsp;OK&nbsp;&nbsp;").click(function() {

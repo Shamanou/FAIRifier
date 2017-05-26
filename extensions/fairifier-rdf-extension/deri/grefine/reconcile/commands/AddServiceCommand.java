@@ -54,9 +54,6 @@ public class AddServiceCommand extends AbstractAddServiceCommand{
 			GRefineServiceManager.singleton.addService(service);
 		}else{
 			String format = request.getParameter("file_format");
-			if(format.equals("autodetect")){
-				format = null;
-			}
 			service = getRdfService(name,id,url,format,propUris,request);
 			GRefineServiceManager.singleton.addAndSaveService(service);
 		}

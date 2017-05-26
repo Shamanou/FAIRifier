@@ -336,7 +336,7 @@ ReconciliationRdfServiceDialog.prototype._footer = function(footer){
 	    	url: "command/rdf-extension/detect-format-service",
 	    	success: function(format){
 	    		$("<input>").attr('type','hidden').attr('name','file_format').val(format['RDFFormat']).appendTo('#file-upload-form');
-	    		if(format['RDFFormat']){
+	    		if(!format['RDFFormat']){
 	    			self._dismissBusy();
 	    			alert('file format could not be detected, only turtle, rdfxml and ntripple are supported')
 	    			return;
