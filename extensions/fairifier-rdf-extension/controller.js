@@ -171,7 +171,6 @@ function init() {
             "scripts/externals/ui-bootstrap-tpls.min.js",
             "scripts/metadata-form.min.js",
             
-            
             "scripts/rdf-data-table-view.js",
             "scripts/menu-bar-extensions.js",
             "scripts/rdf-schema-alignment.js",
@@ -197,11 +196,11 @@ function init() {
         "project/styles",
         module,
         [
-            "styles/rdf-schema-alignment-dialog.css",
-	    "styles/rdf-reconcile-service.css",
-            "styles/sindice/recon-dialog.css",
-	    "styles/metadata-form.min.css"
-	]
+           "styles/rdf-schema-alignment-dialog.css",
+	       "styles/rdf-reconcile-service.css",
+           "styles/sindice/recon-dialog.css",
+	       "styles/metadata-form.min.css"
+	    ]
     );
     
 }

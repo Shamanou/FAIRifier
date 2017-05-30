@@ -159,10 +159,21 @@
     	<copy overwrite="true" file="extensions/fairifier-rdf-extension/scripts/fairDatapointPost.js" tofile="extensions/grefine-rdf-extension/module/scripts/fairDatapointPost.js" />
     	<copy overwrite="true" file="extensions/fairifier-rdf-extension/scripts/rdf-schema-alignment.js" tofile="extensions/grefine-rdf-extension/module/scripts/rdf-schema-alignment.js" />
 
+    	<copy overwrite="true" file="extensions/fairifier-rdf-extension/scripts/rdf-data-table-view.js" tofile="extensions/grefine-rdf-extension/module/scripts/rdf-data-table-view.js" />
+
         <copy overwrite="true" file="extensions/fairifier-rdf-extension/scripts/rdf-schema-vocabulary-manager.js" tofile="extensions/grefine-rdf-extension/module/scripts/rdf-schema-vocabulary-manager.js" />
 
-
         <copy overwrite="true" file="extensions/fairifier-rdf-extension/scripts/rdf-schema-alignment-ui-node.js" tofile="extensions/grefine-rdf-extension/module/scripts/rdf-schema-alignment-ui-node.js" />
+
+
+        <copy overwrite="true" file="extensions/fairifier-rdf-extension/scripts/rdf-data-table-view.js" tofile="module/scripts/rdf-data-table-view.js" />
+
+        <copy overwrite="true" file="extensions/fairifier-rdf-extension/scripts/rdf-schema-vocabulary-manager.js" tofile="module/scripts/rdf-schema-vocabulary-manager.js" />
+
+        <copy overwrite="true" file="extensions/fairifier-rdf-extension/scripts/rdf-schema-alignment-ui-node.js" tofile="module/scripts/rdf-schema-alignment-ui-node.js" />
+
+        <copy overwrite="true" file="extensions/fairifier-rdf-extension/scripts/rdf-schema-alignment.js" tofile="module/scripts/rdf-schema-alignment.js" />
+
 
         <copy overwrite="true" todir="extensions/grefine-rdf-extension/src/org">
             <fileset dir="extensions/fairifier-rdf-extension/dtls"/>
