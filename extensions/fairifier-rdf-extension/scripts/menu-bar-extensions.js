@@ -328,14 +328,30 @@ ReconciliationRdfServiceDialog.prototype._footer = function(footer){
 	    	}
 	    }
 
+	    $('<input>').attr('type','hidden').attr('name','baseuri').val(window.location.href.match(/^.*\//)).appendTo('#file-upload-form');
+
 	    self._elmts.file_upload_form.ajaxSubmit({
-	    	dataType:  'json',
-	    	type:'post',
-	    	success: function(data) {
-	    		self._dismissBusy();
-	    		RdfReconciliationManager.registerService(data,self._level);
-			}
-		});
+	    	dataType: 'json',
+	    	type: 'post',
+	    	url: "command/rdf-extension/detect-format-service",
+	    	success: function(format){
+	    		$("<input>").attr('type','hidden').attr('name','file_format').val(format['RDFFormat']).appendTo('#file-upload-form');
+	    		if(!format['RDFFormat']){
+	    			self._dismissBusy();
+	    			alert('file format could not be detected, only turtle, rdfxml and ntripple are supported')
+	    			return;
+	    		}
+	    		self._elmts.file_upload_form.ajaxSubmit({
+	    			dataType:  'json',
+	    			type:'post',
+	    			url: "command/rdf-extension/uploadFileAndAddService",
+	    			success: function(data) {
+	    				self._dismissBusy();
+	    				RdfReconciliationManager.registerService(data,self._level);
+					}
+				});
+	    	}
+	    });
 	    
 	}).appendTo(footer);
 	

@@ -92,7 +92,11 @@ RdfSchemaAlignmentDialog.UINode.prototype._renderMain = function() {
     		for(var i=0;i<self._node.rdfTypes.length;i++){
     			//var f = func(i);
     			var tr = typesTable.insertRow(typesTable.rows.length);
-    			var img = $('<img />').attr("title", "remove type").attr("src", "images/close.png").css("cursor", "pointer").click(func(i));
+    			var img = $('<img />').attr("title", "remove type").attr("src", "images/close.png").css("cursor", "pointer").click(
+    				
+    						func(i)
+    	           
+    			);
     			$(tr).append($('<td>').append(img));
     			$(tr).append($('<td>').text(RdfSchemaAlignmentDialog.UINode._shortenResource(self._getTypeName(self._node.rdfTypes[i]))));
     		}

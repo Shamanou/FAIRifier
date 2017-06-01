@@ -82,15 +82,22 @@ public class UploadFileAndAddServiceCommand extends AbstractAddServiceCommand{
 					props = item.getString();
 				}else if(item.getFieldName().equals("file_format")){
 					format = item.getString();
+					if(format.equals("text/turtle")){
+						format = "TURTLE";
+					}else if(format.equals("application/rdf+xml")){
+						format = "RDF/XML";
+					}else if(format.equals("text/rdf+n3")){
+						format = "N3";
+					}else if(format.equals(" application/n-triples")){
+						format = "N-TRIPLE";
+					}
 				}else if(item.getFieldName().equals("file_upload")){
 					filename = item.getName();
 					in = item.getInputStream();
 				}
 			}
 			model = ModelFactory.createDefaultModel();
-			if(format.equals("autodetect")){
-				format = guessFormat(filename);
-			}
+
 			System.out.println(format + " " + filename);
 			model.read(in, null ,format);
 			
@@ -141,23 +148,4 @@ public class UploadFileAndAddServiceCommand extends AbstractAddServiceCommand{
             e1.printStackTrace(response.getWriter());
         }
 	}
-	
-	private String guessFormat(String filename){
-		if(filename.lastIndexOf('.')!=-1){
-			String extension = filename.substring(filename.lastIndexOf('.')).toLowerCase();
-			if(extension.equals(".ttl")){
-				return "TTL";
-			}else if(extension.equals(".rdf")){
-				return "RDF/XML";
-			}else if(extension.equals(".owl")){
-				return "RDF/XML";
-			}else if(extension.equals(".nt")){
-				return "N-TRIPLE";
-			}else if(extension.equals(".n3")){
-				return "N3";
-			}
-		}
-		return "RDF/XML";
-	}
-
 }

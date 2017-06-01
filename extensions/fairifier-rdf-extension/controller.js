@@ -132,6 +132,8 @@ function init() {
     RefineServlet.registerCommand(module, "post-fdp-info", new PostFairDataToFairDataPoint());
     RefineServlet.registerCommand(module, "get-project-rdf", new GetRDFCommand());
     RefineServlet.registerCommand(module, "get-push-configuration", new GetMetadataPushConfigurationCommand());
+    RefineServlet.registerCommand(module, "detect-format-service", new DetectFileFormatCommand());
+    
     //Vocabs commands
     RefineServlet.registerCommand(module, "save-prefixes", new SavePrefixesCommand(ctxt));
     RefineServlet.registerCommand(module, "get-default-prefixes", new GetDefaultPrefixesCommand(ctxt));
@@ -169,7 +171,6 @@ function init() {
             "scripts/externals/ui-bootstrap-tpls.min.js",
             "scripts/metadata-form.min.js",
             
-            
             "scripts/rdf-data-table-view.js",
             "scripts/menu-bar-extensions.js",
             "scripts/rdf-schema-alignment.js",
@@ -195,11 +196,11 @@ function init() {
         "project/styles",
         module,
         [
-            "styles/rdf-schema-alignment-dialog.css",
-	    "styles/rdf-reconcile-service.css",
-            "styles/sindice/recon-dialog.css",
-	    "styles/metadata-form.min.css"
-	]
+           "styles/rdf-schema-alignment-dialog.css",
+	       "styles/rdf-reconcile-service.css",
+           "styles/sindice/recon-dialog.css",
+	       "styles/metadata-form.min.css"
+	    ]
     );
     
 }
