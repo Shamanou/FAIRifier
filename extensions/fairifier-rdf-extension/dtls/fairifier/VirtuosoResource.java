@@ -39,7 +39,7 @@ public class VirtuosoResource extends Resource{
         }else{
             try{
                 this.out = this.getModelString();
-                HttpUtils.put("http://" + this.host + this.directory + this.filename, this.out, this.username, this.password);
+                HttpUtils.put(this.host + this.directory + this.filename, this.out, this.username, this.password);
             }catch(Exception e){ log.error(e.getMessage()); }
         }
     }
