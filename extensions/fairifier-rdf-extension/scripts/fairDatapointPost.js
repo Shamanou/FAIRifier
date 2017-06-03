@@ -110,8 +110,9 @@ fairDataPointPostDialog.prototype._constructFooter = function(footer) {
 	          alert("upload error");
 	        }
 	      }, false);
+        console.log(fairDataPointPost);
 	      xhr.open('post', "command/rdf-extension/post-fdp-info", true);
-	      xhr.send(JSON.stringify({'metadata':self.fairDataPointPost, 'data':rdf}));
+	      xhr.send(JSON.stringify({'metadata':fairDataPointPost, 'data':rdf}));
     }).appendTo(footer);
     
     
@@ -204,9 +205,10 @@ getFairCatalogs = function(rootUrl, self){
            self._pushtoResourceDiv.html('');
            if (self.hasCatalogs){
                data.content.forEach(function(element){
-        		       if (e.target.value == element.uri.namespace + element.uri.localName){
+        		       if (e.target.value == (element.uri.namespace + element.uri.localName)){
+                      console.log(element);
          	               self.fairDataPointPost.catalog = {
-	                      // 'http://rdf.biosemantics.org/ontologies/fdp-o#metadataIdentifier': element.uri.namespace + element.uri.localName,
+	                      'http://rdf.biosemantics.org/ontologies/fdp-o#metadataIdentifier': element.uri.namespace + element.uri.localName,
 	                      'http://purl.org/dc/terms/title': element.title.label,
 	                      'http://purl.org/dc/terms/hasVersion': element.version.label,
 	                      // 'http://purl.org/dc/terms/publisher': element.publisher,
@@ -274,9 +276,9 @@ getFairDatasets = function(url, self){
             self._pushtoResourceDiv.html('');
             if(self.hasDatasets){
                 data.content.forEach(function(element){
-      		      if (e.target.value == element.uri.namespace + element.uri.localName){
+      		      if (e.target.value == (element.uri.namespace + element.uri.localName)){
                       self.fairDataPointPost.dataset = {
-                      // 'http://rdf.biosemantics.org/ontologies/fdp-o#metadataIdentifier': element.uri.namespace + element.uri.localName,
+                      'http://rdf.biosemantics.org/ontologies/fdp-o#metadataIdentifier': element.uri.namespace + element.uri.localName,
                       'http://purl.org/dc/terms/title' : element.title.label,
                       'http://purl.org/dc/terms/hasVersion' : element.version.label,
                       // 'http://purl.org/dc/terms/description' : element.description,
@@ -300,6 +302,7 @@ getFairDatasets = function(url, self){
         }).change();
     
         add_dat_available_html.appendTo(self._datasetDiv);
+
         self._datasetDiv.appendTo(self._body);
     
     }).fail(function(xhr, status, error) {});
@@ -337,10 +340,11 @@ addFairDistribution = function(self){
         evt.preventDefault();
         fairDataPointPostDistributionDialog = new FairDataPointPostDistributionDialog(function(distribution){
   			self.fairDataPointPost.distribution = distribution;
+        fairDataPointPost = self.fairDataPointPost;
+        console.log(fairDataPointPost);
 			$("#distribution").text(self.fairDataPointPost.distribution['http://rdf.biosemantics.org/ontologies/fdp-o#metadataIdentifier'].url + " - " + self.fairDataPointPost.distribution['http://purl.org/dc/terms/title']);
 	 });
   });
-  console.log(self.fairDataPointPost);
   add_dist_html.appendTo(self._distributionDiv);
   self._distributionDiv.appendTo(self._body);
 };
