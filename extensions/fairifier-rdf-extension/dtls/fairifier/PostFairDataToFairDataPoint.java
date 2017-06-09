@@ -160,7 +160,6 @@ public class PostFairDataToFairDataPoint extends Command{
                     datasetMetadata.setDescription(f.createLiteral(dataset.getString("http://purl.org/dc/terms/description")) );
                 }catch(Exception ex){}
                 if (catalog.getBoolean("_exists")){
-                    System.out.println(catalog.getString("http://rdf.biosemantics.org/ontologies/fdp-o#metadataIdentifier"));
                     datasetMetadata.setParentURI( f.createIRI(catalog.getString("http://rdf.biosemantics.org/ontologies/fdp-o#metadataIdentifier") ));
                 }else{
                     datasetMetadata.setParentURI( f.createIRI(fdp.getString("baseUri") + "/catalog/" + catalog.getString("http://purl.org/dc/terms/title").replace(" ","_")+"_"+catalog.getString("http://purl.org/dc/terms/hasVersion").replace(" ","_")+  "_" + uuid_catalog ));
@@ -190,13 +189,11 @@ public class PostFairDataToFairDataPoint extends Command{
 
             distributionMetadata.setTitle(f.createLiteral(distribution.getString("http://purl.org/dc/terms/title")) );
             if (dataset.getBoolean("_exists")){
-                System.out.println(dataset.getString("http://rdf.biosemantics.org/ontologies/fdp-o#metadataIdentifier"));
                 distributionMetadata.setParentURI( f.createIRI(dataset.getString("http://rdf.biosemantics.org/ontologies/fdp-o#metadataIdentifier") ));
             }else{
                 distributionMetadata.setParentURI( f.createIRI(fdp.getString("baseUri") + "/dataset/" + dataset.getString("http://purl.org/dc/terms/title").replace(" ","_")+"_"+dataset.getString("http://purl.org/dc/terms/hasVersion").replace(" ","_")+  "_" + uuid_dataset ));
             }
             identifier = new Identifier();
-            System.out.println(fdp.getString("baseUri") + "/distribution/" + distribution.getString("http://purl.org/dc/terms/title").replace(" ","_")+"_"+distribution.getString("http://purl.org/dc/terms/hasVersion").replace(" ","_")+"_" + uuid_distribution + "/identifier");
             identifier.setIdentifier(f.createLiteral(  fdp.getString("baseUri") + "/distribution/" + distribution.getString("http://purl.org/dc/terms/title").replace(" ","_")+"_"+distribution.getString("http://purl.org/dc/terms/hasVersion").replace(" ","_")+"_" + uuid_distribution + "/identifier"));
             identifier.setUri( f.createIRI(fdp.getString("baseUri") + "/distribution/" + distribution.getString("http://purl.org/dc/terms/title").replace(" ","_")+"_"+distribution.getString("http://purl.org/dc/terms/hasVersion").replace(" ","_") + "_" + uuid_distribution + "/identifier"));
             distributionMetadata.setIdentifier(identifier);
@@ -238,6 +235,7 @@ public class PostFairDataToFairDataPoint extends Command{
                     "FAIRdistribution_" + distribution.getString("http://purl.org/dc/terms/title").replace(" ","_")+"_"+distribution.getString("http://purl.org/dc/terms/hasVersion").replace(" ","_") + ".ttl"
                 );
             } else if (fdp.getString("uploadtype").equals("virtuoso")){
+                System.out.println(uploadConfiguration.getString("host"));
                 r = new VirtuosoResource(
                     uploadConfiguration.getString("host"), 
                     "FAIRdistribution_" + distribution.getString("http://purl.org/dc/terms/title").replace(" ","_")+"_"+distribution.getString("http://purl.org/dc/terms/hasVersion").replace(" ","_") + ".ttl",
