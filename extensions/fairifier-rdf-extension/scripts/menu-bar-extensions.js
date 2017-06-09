@@ -59,7 +59,6 @@ RdfExporterMenuBar.rdfExportRows = function(format, ext) {
 
     document.body.appendChild(form);
 
-    window.open("about:blank", "gridworks-export");
     form.submit();
 
     document.body.removeChild(form);
