@@ -59,6 +59,7 @@ RdfExporterMenuBar.rdfExportRows = function(format, ext) {
 
     document.body.appendChild(form);
 
+    window.open("about:blank", "gridworks-export");
     form.submit();
 
     document.body.removeChild(form);
@@ -102,7 +103,7 @@ RdfReconciliationManager.registerService = function(data,level){
 		}
 	}
 };
-
+/*
 function ReconciliationStanbolServiceDialog() {
 
     var self = this; 
@@ -136,28 +137,25 @@ function ReconciliationStanbolServiceDialog() {
 	                    "project": theProject.id
 				    },
 				    function(data) {
-				    	if (data.code != "error" ){
-					    	var registering = $("dl#stanbol-registering");
-					    	registering.parent().height($("p#stanbol-help").height());
-					    	registering.parent().fadeIn("slow");
-					    	$("p#stanbol-help").hide();
-					    	$.each(data, function(i, obj) {
-					    		//check issue #579: http://code.google.com/p/google-refine/issues/detail?id=579
-					    		if (ReconciliationManager.getServiceFromUrl(obj.uri)) {
-					    			self.printAddedService(registering, obj, false)
-					    		} else {
-						    	    ReconciliationManager.registerStandardService(obj.uri, function(index) {
-						    	    	self.printAddedService(registering, obj, true)
-						    	    });	
-					    		}
-					    	});
-					    	$("img#validation-img").remove();
-					    	//DialogSystem.dismissUntil(self._level - 1);
-					    	dialog.find("button#register").hide();
-					    	dialog.find("button#cancel").text("Close");
-					    }else{
-				           alert('Error:'+data.responseText);
-					    }
+				    	
+				    	var registering = $("dl#stanbol-registering");
+				    	registering.parent().height($("p#stanbol-help").height());
+				    	registering.parent().fadeIn("slow");
+				    	$("p#stanbol-help").hide();
+				    	$.each(data, function(i, obj) {
+				    		//check issue #579: http://code.google.com/p/google-refine/issues/detail?id=579
+				    		if (ReconciliationManager.getServiceFromUrl(obj.uri)) {
+				    			self.printAddedService(registering, obj, false)
+				    		} else {
+					    	    ReconciliationManager.registerStandardService(obj.uri, function(index) {
+					    	    	self.printAddedService(registering, obj, true)
+					    	    });	
+				    		}
+				    	});
+				    	$("img#validation-img").remove();
+				    	//DialogSystem.dismissUntil(self._level - 1);
+				    	dialog.find("button#register").hide();
+				    	dialog.find("button#cancel").text("Close");
 		            },
 	                "json");
     	} else {
@@ -234,7 +232,7 @@ ReconciliationSindiceServiceDialog.prototype._footer= function(footer){
         DialogSystem.dismissUntil(self._level - 1);
     }).appendTo(footer);
 };
-
+*/
 function ReconciliationRdfServiceDialog(){
 	var self = this;
 	var dialog = $(DOM.loadHTML("rdf-extension","scripts/rdf-service-dialog.html"));
@@ -306,16 +304,12 @@ ReconciliationRdfServiceDialog.prototype._footer = function(footer){
 		    }
 	    	
 	    	var services = ReconciliationManager.getAllServices();
-
+	    	
 	    	$.post("command/rdf-extension/addService",
-				{"datasource":"file_url","name":name,"url":file_url,properties:prop_uris, "file_format":file_format},
-				function(data){
-					if (data.code === "error"){
-						alert('Error:'+this.responseText);
-						return;
-					}
-					self._dismissBusy();
-					RdfReconciliationManager.registerService(data,self._level);					
+					{"datasource":"file_url","name":name,"url":file_url,properties:prop_uris, "file_format":file_format},
+					function(data){
+						self._dismissBusy();
+						RdfReconciliationManager.registerService(data,self._level);					
 			},"json");
 	    	return;
 	    }
@@ -323,41 +317,14 @@ ReconciliationRdfServiceDialog.prototype._footer = function(footer){
 	    self._elmts.hidden_service_name.val(name);
 	    self._elmts.hidden_properties.val(prop_uris);
 	    
-
-	    var services = ReconciliationManager.getAllServices();
-
-	    for (var i = 0; i < services.length; i++){
-	    	if (services[i].name == name){
-	    		alert("Service with this name already exists");
-	    		self._dismissBusy();
-	    		return;
-	    	}
-	    }
-
-	    $('<input>').attr('type','hidden').attr('name','baseuri').val(window.location.href.match(/^.*\//)).appendTo('#file-upload-form');
-
 	    self._elmts.file_upload_form.ajaxSubmit({
-	    	dataType: 'json',
-	    	type: 'post',
-	    	url: "command/rdf-extension/detect-format-service",
-	    	success: function(format){
-	    		$("<input>").attr('type','hidden').attr('name','file_format').val(format['RDFFormat']).appendTo('#file-upload-form');
-	    		if(!format['RDFFormat']){
-	    			self._dismissBusy();
-	    			alert('file format could not be detected, only turtle, rdfxml and ntripple are supported')
-	    			return;
-	    		}
-	    		self._elmts.file_upload_form.ajaxSubmit({
-	    			dataType:  'json',
-	    			type:'post',
-	    			url: "command/rdf-extension/uploadFileAndAddService",
-	    			success: function(data) {
-	    				self._dismissBusy();
-	    				RdfReconciliationManager.registerService(data,self._level);
-					}
-				});
-	    	}
-	    });
+	    	dataType:  'json',
+	    	type:'post',
+	    	success: function(data) {
+	    		self._dismissBusy();
+	    		RdfReconciliationManager.registerService(data,self._level);
+			}
+		});
 	    
 	}).appendTo(footer);
 	
@@ -431,10 +398,6 @@ ReconciliationSparqlServiceDialog.prototype._footer = function(footer){
 	    			$.post("command/rdf-extension/addService",
 	    					{"datasource":"sparql","name":name,"url":endpoint,"type":type,"graph":graph_uri,properties:prop_uris},
 	    					function(data){
-	    						if (data.code === "error"){
-									alert('Error:'+this.responseText);
-									return;
-								}
 	    						self._dismissBusy();
 	    						RdfReconciliationManager.registerService(data,self._level);					
 	    					},"json");
@@ -455,12 +418,14 @@ RdfReconciliationManager.synchronizeServices = function(onDone){
 			ids.push(services[i].url);
 		}
 	}
+	/*
 	$.post("command/rdf-extension/initializeServices",{"services":JSON.stringify(ids)},function(data){
 		RdfReconciliationManager.registerService(data);
 		if(onDone){
 			onDone();
 		}
 	},"json");
+	*/
 };
 
 
@@ -497,16 +462,16 @@ $(function(){
 			                    	 label:"Based on RDF file...",
 			                    	 click: function() { RdfReconciliationManager.newRdfService(); }        	 
 			                     },
-			                     {
-			                    	 "id" : "rdf/reconcile/sindice",
-			                    	 label: "Based on a Sindice site search...",
-			                    	 click: function() { RdfReconciliationManager.newSindiceService(); }        	 
-			                     },
-			                     {
-			                    	 "id" : "rdf/reconcile/stanbol",
-			                    	 label: "Based on a Apache Stanbol EntityHub...",
-			                    	 click: function() { RdfReconciliationManager.newStanbolService(); }        	 
-			                     }
+			                     // {
+			                    	//  "id" : "rdf/reconcile/sindice",
+			                    	//  label: "Based on a Sindice site search...",
+			                    	//  click: function() { RdfReconciliationManager.newSindiceService(); }        	 
+			                     // },
+//			                     {
+//			                    	 "id" : "rdf/reconcile/stanbol",
+//			                    	 label: "Based on a Apache Stanbol EntityHub...",
+//			                    	 click: function() { RdfReconciliationManager.newStanbolService(); }        	 
+//			                     }
 						]
 					
 			        }
@@ -516,16 +481,17 @@ $(function(){
 	DataTableColumnHeaderUI.extendMenu(function(column, columnHeaderUI, menu) {
 		MenuSystem.appendTo(menu, [ "core/reconcile" ], [
 		                                             {},
-		                                             {
-		                                                 id: "core/sindice-find-dataset",
-		                                                 label: "Discover related RDF datasets..." ,
-		                                                 click: function() {
-		                                                     var dialog = new SindiceDialog();
-		                                                     dialog.show(column);
-		                                                 }
-		                                             },
+	//	                                             {
+	//	                                                 id: "core/sindice-find-dataset",
+	//	                                                 label: "Discover related RDF datasets..." ,
+	//	                                                 click: function() {
+	//	                                                     var dialog = new SindiceDialog();
+	//	                                                     dialog.show(column);
+	//	                                                 }
+	//	                                             },
 		                                         ]);
 	});
+	
 	
 	RdfReconciliationManager.synchronizeServices();
 });

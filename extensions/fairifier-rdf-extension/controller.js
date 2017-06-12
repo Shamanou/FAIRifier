@@ -146,11 +146,11 @@ function init() {
     //Reconcile commands
 	RefineServlet.registerCommand(module, "addService", new AddServiceCommand());
 	RefineServlet.registerCommand(module, "uploadFileAndAddService", new UploadFileAndAddServiceCommand());
-	RefineServlet.registerCommand(module, "sindiceGuessType", new SindiceGuessTypeCommand());
-	RefineServlet.registerCommand(module, "addSindiceService", new AddSindiceService());
-	RefineServlet.registerCommand(module, "addStanbolService", new AddStanbolServiceCommand());
-	RefineServlet.registerCommand(module, "initializeServices", new InitializeServicesCommand());
-	//RefineServlet.registerCommand(module, "sindiceReconcile", new SindiceReconcileCommand());
+	//RefineServlet.registerCommand(module, "sindiceGuessType", new SindiceGuessTypeCommand());
+	//RefineServlet.registerCommand(module, "addSindiceService", new AddSindiceService());
+	// RefineServlet.registerCommand(module, "addStanbolService", new AddStanbolServiceCommand());
+	//RefineServlet.registerCommand(module, "initializeServices", new InitializeServicesCommand());
+	// RefineServlet.registerCommand(module, "sindiceReconcile", new SindiceReconcileCommand());
 	//this is just to initialize ServiceRegistry
 	RefineServlet.registerCommand(module, "reconcile-initialize", new InitializationCommand());
        
@@ -181,7 +181,7 @@ function init() {
             "scripts/rdf-schema-vocabulary-manager.js",
             "scripts/rdf-schema-new-prefix-widget.js",
             "scripts/externals/jquery.form.js",
-            "scripts/sindice/sindice-dialog.js",
+            //"scripts/sindice/sindice-dialog.js",
             "scripts/common.js",
             "scripts/fairDatapointPost.js",
             "scripts/fairDatapointPost-catalog.js",
@@ -198,7 +198,7 @@ function init() {
         [
            "styles/rdf-schema-alignment-dialog.css",
 	       "styles/rdf-reconcile-service.css",
-           "styles/sindice/recon-dialog.css",
+           // "styles/sindice/recon-dialog.css",
 	       "styles/metadata-form.min.css"
 	    ]
     );

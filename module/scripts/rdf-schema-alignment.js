@@ -1,7 +1,6 @@
 var RdfSchemaAlignment = {};
 
 function RdfSchemaAlignmentDialog(schema){
-    console.log(schema);
 	this._originalSchema = schema || { rootNodes: [] };
     this._schema = cloneDeep(this._originalSchema); // this is what can be munched on
     
