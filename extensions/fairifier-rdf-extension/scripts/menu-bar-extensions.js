@@ -136,25 +136,28 @@ function ReconciliationStanbolServiceDialog() {
 	                    "project": theProject.id
 				    },
 				    function(data) {
-				    	
-				    	var registering = $("dl#stanbol-registering");
-				    	registering.parent().height($("p#stanbol-help").height());
-				    	registering.parent().fadeIn("slow");
-				    	$("p#stanbol-help").hide();
-				    	$.each(data, function(i, obj) {
-				    		//check issue #579: http://code.google.com/p/google-refine/issues/detail?id=579
-				    		if (ReconciliationManager.getServiceFromUrl(obj.uri)) {
-				    			self.printAddedService(registering, obj, false)
-				    		} else {
-					    	    ReconciliationManager.registerStandardService(obj.uri, function(index) {
-					    	    	self.printAddedService(registering, obj, true)
-					    	    });	
-				    		}
-				    	});
-				    	$("img#validation-img").remove();
-				    	//DialogSystem.dismissUntil(self._level - 1);
-				    	dialog.find("button#register").hide();
-				    	dialog.find("button#cancel").text("Close");
+				    	if (data.code != "error" ){
+					    	var registering = $("dl#stanbol-registering");
+					    	registering.parent().height($("p#stanbol-help").height());
+					    	registering.parent().fadeIn("slow");
+					    	$("p#stanbol-help").hide();
+					    	$.each(data, function(i, obj) {
+					    		//check issue #579: http://code.google.com/p/google-refine/issues/detail?id=579
+					    		if (ReconciliationManager.getServiceFromUrl(obj.uri)) {
+					    			self.printAddedService(registering, obj, false)
+					    		} else {
+						    	    ReconciliationManager.registerStandardService(obj.uri, function(index) {
+						    	    	self.printAddedService(registering, obj, true)
+						    	    });	
+					    		}
+					    	});
+					    	$("img#validation-img").remove();
+					    	//DialogSystem.dismissUntil(self._level - 1);
+					    	dialog.find("button#register").hide();
+					    	dialog.find("button#cancel").text("Close");
+					    }else{
+				           alert('Error:'+data.responseText);
+					    }
 		            },
 	                "json");
     	} else {
@@ -307,6 +310,10 @@ ReconciliationRdfServiceDialog.prototype._footer = function(footer){
 	    	$.post("command/rdf-extension/addService",
 				{"datasource":"file_url","name":name,"url":file_url,properties:prop_uris, "file_format":file_format},
 				function(data){
+					if (data.code === "error"){
+						alert('Error:'+this.responseText);
+						return;
+					}
 					self._dismissBusy();
 					RdfReconciliationManager.registerService(data,self._level);					
 			},"json");
@@ -424,6 +431,10 @@ ReconciliationSparqlServiceDialog.prototype._footer = function(footer){
 	    			$.post("command/rdf-extension/addService",
 	    					{"datasource":"sparql","name":name,"url":endpoint,"type":type,"graph":graph_uri,properties:prop_uris},
 	    					function(data){
+	    						if (data.code === "error"){
+									alert('Error:'+this.responseText);
+									return;
+								}
 	    						self._dismissBusy();
 	    						RdfReconciliationManager.registerService(data,self._level);					
 	    					},"json");
