@@ -87,7 +87,9 @@ windmill.macros.asserts.expectedTopFacetValue = function (test, expected_value) 
 // ----------------------- register tests ---------------------------
 
 windmill.jsTest.register([
-  "test_facets"
+  "test_facets",
+  "test_baseuri"
 ]);
 
 windmill.jsTest.require("facets.js");
+windmill.jsTest.require("baseuri.js");

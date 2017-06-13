@@ -43,15 +43,6 @@ var test_facets = new function() {
     assert (test, "rowCount", "457");
     this.test_filter_text_facet = test;
         
-    // var test_baseuri = new function() {
-    //     test = newTest();
-    //     action (test, "click",        { link:    "Food" });
-    //     wait   (test, "forPageLoad",  { timeout: "20000" });
-    //     action (test, 'click',        {link:    "RDF"});
-    //     action (test, 'click',        {link:    "Edit Semantic Model..."});
-    //     action (test, "click",       { jquery: '("span[\"bind\"=baseUriSpan]")' });
-    //     assert (test, "expectedDefaultBaseUri");
-    // }
 
     // create numeric filter from Water column
     // test = newTest();
