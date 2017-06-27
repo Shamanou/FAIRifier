@@ -42,7 +42,25 @@ var test_facets = new function() {
     action (test, "click",      { jquery: '("a.facet-choice-label")[0]' });
     assert (test, "rowCount", "457");
     this.test_filter_text_facet = test;
-        
+
+    //test base uri
+    test = newTest();
+    action (test, 'click',        {link:  'RDF'});
+    wait   (test, "forElement",   {jquery: '("a.menu-item:contains(\'Edit Semantic Model...\')")'});
+    action (test, 'click',        {link: 'Edit Semantic Model...'});
+    assert (test, function(){
+        jum.assertNotUndefined($("span:contains('" + window.location.protocol + "//" + window.location.host + "/')")[0]);
+    });
+    this.test_default_base_uri = test;
+
+    // export turtle file and check if exported as file
+    test = newTest();
+    action (test, 'click',      {jquery: '("button.button")[1]'});
+    wait   (test, "forAjaxEnd");
+    action (test, "click",      {jquery: '("a#export-button.button")[0]' });
+    action (test, "click",      { link: 'RDF as Turtle' });
+    this.test_export_to_file = test;
+
 
     // create numeric filter from Water column
     // test = newTest();
