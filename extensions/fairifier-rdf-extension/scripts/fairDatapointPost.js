@@ -107,7 +107,7 @@ fairDataPointPostDialog.prototype._constructFooter = function(footer) {
 	          DialogSystem.dismissAll();
 	        } else{
 	          $(".progress").hide();
-	          alert("upload error");
+	          alert('Error:'+this.responseText);
 	        }
 	      }, false);
         console.log(fairDataPointPost);

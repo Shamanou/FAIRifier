@@ -1,3 +1,5 @@
+
+/*
 function SindiceDialog(){
 	
 }
@@ -60,5 +62,7 @@ SindiceDialog.prototype._footer = function(footer){
 		$.post("command/rdf-extension/addSindiceService",{"domain":domain},function(data){
 			RdfReconciliationManager.registerService(data,self._level);
 		},"json");
+
     }).appendTo(footer);
 };
+*/

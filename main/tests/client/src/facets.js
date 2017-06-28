@@ -19,10 +19,10 @@ var test_facets = new function() {
 
     // create text facet from 1st word of Short Description column
     test = newTest();
-    action (test, 'click',       { jquery: '(".column-header-layout tr:contains(\'Shrt_Desc\') .column-header-menu")[0]' });
+    action (test, 'click',       { jquery: '("td:contains(\'Shrt_Desc\') .column-header-menu")[0]' });
     action (test, 'mouseOver',   { jquery: '("td:contains(\'Facet\')")[0]' });
-    wait   (test, "forMenuItem", {   name: 'Custom Text Facet' });
-    action (test, "click",       { jquery: '(".menu-item:contains(\'Custom Text Facet\')")[0]' });
+    wait   (test, "forMenuItem", { name: "Custom text facet.."});
+    action (test, "click",       { jquery: '("a.menu-item:contains(\'Custom text facet...\')")[0]' });
     action (test, "type",        { jquery: '(".expression-preview-code")[0]', text: "value.split(',')[0]" });
     wait   (test, "forElement",  { jquery: '("td:contains(\'value.split\')")[0]' });
     action (test, "click",       { jquery: '("button:contains(\'OK\')")[0]' });
@@ -32,8 +32,8 @@ var test_facets = new function() {
         
     // sort the facet by count and test the result
     test = newTest();
-    action (test, "click",      { jquery: '(".ui-button-text:contains(\'count\')")[0]' });
-    wait   (test, "forElement", { jquery: '(".ui-state-active .ui-button-text:contains(\'count\')")[0]' }); // wait til count is the active sort
+    action (test, "click",      { jquery: '("a.action:contains(\'count\')")[0]' });
+    wait   (test, "forElement", { jquery: '("a.selected:contains(\'count\')")[0]' }); // wait til count is the active sort
     assert (test, "expectedTopFacetValue", "BEEF");
     this.test_sort_text_facet = test;
         
@@ -41,27 +41,46 @@ var test_facets = new function() {
     test = newTest();
     action (test, "click",      { jquery: '("a.facet-choice-label")[0]' });
     assert (test, "rowCount", "457");
-    this.test_fitler_text_facet = test;
-        
-    // create numeric filter from Water column
+    this.test_filter_text_facet = test;
+
+    //test base uri
     test = newTest();
-    action (test, "click",       { jquery: '(".column-header-layout tr:contains(\'Water\') .column-header-menu")[0]' });
-    action (test, "mouseOver",   { jquery: '("td:contains(\'Facet\')")[0]' });
-    wait   (test, "forMenuItem", {   name: 'Numeric Facet' });
-    action (test, "click",       { jquery: '(".menu-item:contains(\'Numeric Facet\')")[0]' });
-    wait   (test, "forAjaxEnd");
-    assert (test, function() {
-        jum.assertTrue($(".facet-panel span:contains('Water')").length > 0);
+    action (test, 'click',        {link:  'RDF'});
+    wait   (test, "forElement",   {jquery: '("a.menu-item:contains(\'Edit Semantic Model...\')")'});
+    action (test, 'click',        {link: 'Edit Semantic Model...'});
+    assert (test, function(){
+        jum.assertNotUndefined($("span:contains('" + window.location.protocol + "//" + window.location.host + "/')")[0]);
     });
-    this.test_create_numeric_facet = test;
+    this.test_default_base_uri = test;
+
+    // export turtle file and check if exported as file
+    test = newTest();
+    action (test, 'click',      {jquery: '("button.button")[1]'});
+    wait   (test, "forAjaxEnd");
+    action (test, "click",      {jquery: '("a#export-button.button")[0]' });
+    action (test, "click",      { link: 'RDF as Turtle' });
+    this.test_export_to_file = test;
+
+
+    // create numeric filter from Water column
+    // test = newTest();
+    // action (test, "click",       { jquery: '("td:contains(\'Water\') .column-header-menu")[0]' });
+    // action (test, "mouseOver",   { jquery: '("td:contains(\'Facet\')")[0]' });
+    // wait   (test, "forMenuItem", {   name: 'Numeric facet' });
+    // action (test, "click",       { jquery: '(".menu-item:contains(\'Numeric facet\')")[0]' });
+    // wait   (test, "forAjaxEnd");
+    // assert (test, function() {
+    //     jum.assertTrue($(".facet-panel span:contains('Water')").length > 0);
+    // });
+    // this.test_create_numeric_facet = test;
 
     // filter out BEEF with lower water content
-    test = newTest();
-    wait   (test, "forAjaxEnd"); 
-    wait   (test, "forElement",   { jquery: '((".slider-widget-draggable.left"))[0]' }),
-    action (test, "dragDropElem", { jquery: '((".slider-widget-draggable.left"))[0]', pixels: '150, 0' });
-    wait   (test, "forAjaxEnd"); // <--- FIXME for some reason the range faceting doesn't seem to be triggering that
-    //assert (test, "rowCount", "153");
-    this.test_filter_numeric_facet = test;
+    // test = newTest();
+    // wait   (test, "forAjaxEnd"); 
+    // wait   (test, "forElement",   { jquery: '((".slider-widget-draggable.left"))[0]' }),
+    // action (test, "dragDropElem", { jquery: '((".slider-widget-draggable.left"))[0]', pixels: '150, 0' });
+    // wait   (test, "forAjaxEnd"); // <--- FIXME for some reason the range faceting doesn't seem to be triggering that
+    // assert (test, "rowCount", "153");
+    // this.test_filter_numeric_facet = test;
     
 };
