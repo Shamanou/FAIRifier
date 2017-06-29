@@ -35,6 +35,8 @@ public class PreviewRdfValueExpressionCommand extends PreviewExpressionCommand{
             boolean isUri = uri!=null && uri.equals("1") ? true:false;
             
             String expression = request.getParameter("expression");
+            String language = expression.split(":")[0];
+            String expression = expression.split(":")[0];
             String rowIndicesString = request.getParameter("rowIndices");
             if (rowIndicesString == null) {
                 respond(response, "{ \"code\" : \"error\", \"message\" : \"No row indices specified\" }");

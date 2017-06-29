@@ -156,6 +156,9 @@ ExpressionPreviewDialog.Widget.prototype.getExpression = function(commit) {
     }
     
     s = this._getLanguage() + ":" + s;
+
+    console.log(s);
+
     if (commit) {
         $.post(
             "command/core/log-expression?" + $.param({ project: theProject.id, expression: s }),
