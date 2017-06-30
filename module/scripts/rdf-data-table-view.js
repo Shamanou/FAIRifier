@@ -80,8 +80,12 @@ RdfDataTableView.previewOnVisibleRows = function(isLiteral,column, title, expres
         	$("#expression-preview-tabs").tabs();
         	$("#expression-preview-tabs-history").css("display", "");
         	$("#expression-preview-tabs-help").css("display", "");
-            
-        	uriPreviewWidget._elmts.expressionPreviewLanguageSelect[0].value = "grel";
+                expr = uriPreviewWidget.expression.split(':');
+        	if (expr[0] == "grel" ){
+        	    uriPreviewWidget._elmts.expressionPreviewLanguageSelect[0].value = "grel";
+        	}else{
+        	    uriPreviewWidget._elmts.expressionPreviewLanguageSelect[0].value = "jython";
+        	}
         	uriPreviewWidget._elmts.expressionPreviewLanguageSelect.bind("change", function() {
         		$.cookie("scripting.lang", this.value);
         		self._elmts = uriPreviewWidget._elmts;
@@ -91,7 +95,7 @@ RdfDataTableView.previewOnVisibleRows = function(isLiteral,column, title, expres
         	});
                 
         	uriPreviewWidget._elmts.expressionPreviewTextarea
-        	.attr("value", uriPreviewWidget.expression)
+        	.attr("value", expr.slice(1).join(':'))
             .keyup(function(){
             	uriPreviewWidget._scheduleUpdate();
             })
