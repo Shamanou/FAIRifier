@@ -70,7 +70,7 @@ RdfDataTableView.previewOnVisibleRows = function(isLiteral,column, title, expres
         	uriPreviewWidget._timerID = null;
             
         	if (!(expression)) {
-        		uriPreviewWidget.expression = 'value';
+        		uriPreviewWidget.expression = 'jython:return value';
         	}else{
         		uriPreviewWidget.expression = expression;
         	}
@@ -128,10 +128,9 @@ RdfDataTableView.getUriPreviewWidget = function(isLiteral,isRowNumberCell,baseUr
 				expression: $( "select[bind='expressionPreviewLanguageSelect'] option:selected" ).val() + ":"  + expression,
 				isUri:isLiteral?"0":"1",
 				columnName: isRowNumberCell?"":this._columnName,
-				baseUri:baseUri
+				baseUri:$("span[bind='baseUriSpan']").text()
 		};
 		this._prepareUpdate(params);
-    
 		var cmdUrl = "command/rdf-extension/preview-rdf-expression?" ;
 		$.post(
 				cmdUrl + $.param(params), 
@@ -178,6 +177,7 @@ RdfDataTableView.getUriPreviewWidget = function(isLiteral,isRowNumberCell,baseUr
 		if (this._results !== null) {
 			this._elmts.expressionPreviewParsingStatus.empty().removeClass("error").text("No syntax error.");
 		} else {
+		        console.log(data);
 			var message = (data.type == "parser") ? data.message : "Internal error";
 			this._elmts.expressionPreviewParsingStatus.empty().addClass("error").text(message);
 		}

@@ -204,7 +204,27 @@
         <copy overwrite="true" file="extensions/fairifier-rdf-extension/config.xml" tofile="extensions/grefine-rdf-extension/config.xml" />
 
         <copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/rdf/RdfSchema.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/rdf/RdfSchema.java" />
+       
+    	<copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/rdf/CellLiteralNode.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/rdf/CellLiteralNode.java" />
 
+    	<copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/rdf/CellLiteralNode.java" tofile="src/org/deri/grefine/rdf/CellLiteralNode.java" />
+    	
+    	<copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/rdf/CellBlankNode.java" tofile="src/org/deri/grefine/rdf/CellBlankNode.java" />
+    	
+    	<copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/rdf/CellBlankNode.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/rdf/CellBlankNode.java" />
+    	<copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/rdf/CellBlankNode.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/rdf/CellBlankNode.java" />
+    	<copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/rdf/expr/util/RdfExpressionUtil.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/rdf/expr/util/RdfExpressionUtil.java" />
+
+        <copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/rdf/CellResourceNode.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/rdf/CellResourceNode.java" />
+
+    	
+
+        <copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/rdf/commands/PreviewRdfValueExpressionCommand.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/rdf/commands/PreviewRdfValueExpressionCommand.java" />
+    	<copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/rdf/commands/PreviewRdfValueExpressionCommand.java" tofile="src/org/deri/grefine/rdf/commands/PreviewRdfValueExpressionCommand.java" />
+    	
+        <copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/rdf/expr/RdfBinder.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/rdf/expr/RdfBinder.java" />
+
+    	
         <copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/rdf/Util.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/rdf/Util.java" />
 
 
