@@ -46,22 +46,33 @@ var test_facets = new function() {
     //test base uri
     test = newTest();
     action (test, 'click',        {link:  'RDF'});
-    wait   (test, "forElement",   {jquery: '("a.menu-item:contains(\'Edit Semantic Model...\')")'});
-    action (test, 'click',        {link: 'Edit Semantic Model...'});
+    wait   (test, "forElement",   {jquery: '("a.menu-item:contains(\'Reset Semantic Model...\')")'});
+    action (test, 'click',        {link: 'Reset Semantic Model...'});
     assert (test, function(){
         jum.assertNotUndefined($("span:contains('" + window.location.protocol + "//" + window.location.host + "/')")[0]);
     });
     this.test_default_base_uri = test;
 
+    //test python scripting in semantic model
+    test = newTest();
+    action (test, 'click', {jquery: '("a.schema-alignment-node-tag")[0]'});
+    action (test, 'click', {jquery: '("a:contains(\'preview/edit\')")[0]'});
+    action (test, "type",        { jquery: '("textarea.expression-preview-code")[0]', text: "return baseUri" });
+    assert (test, function(){
+        jum.assertNotUndefined($("td.expression-preview-value:contains(\'"+$("span[bind='baseUriSpan']").text()+"\')").text());
+    });
+    this.test_python_scripting = test;
+    
+
     // export turtle file and check if exported as file
     test = newTest();
     action (test, 'click',      {jquery: '("button.button")[1]'});
-    wait   (test, "forAjaxEnd");
-    action (test, "click",      {jquery: '("a#export-button.button")[0]' });
+    wait   (test, "forElement", {jquery: '("a#export-button")[0]' });
+    action (test, "click",      {jquery: '("a#export-button")[0]' });
+    wait   (test, "forPageLoad",  { timeout: "100000" });
     action (test, "click",      { link: 'RDF as Turtle' });
     this.test_export_to_file = test;
-
-
+    
     // create numeric filter from Water column
     // test = newTest();
     // action (test, "click",       { jquery: '("td:contains(\'Water\') .column-header-menu")[0]' });
