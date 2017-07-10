@@ -35,7 +35,6 @@ NewPrefixWidget.prototype.show = function(msg,def_prefix,onDone){
     	if(fetchOption==='file'){
     		//prepare values
     		$('#vocab-hidden-prefix').val(name);
-    		$('#vocab-hidden-uri').val(uri);
     		$('#vocab-hidden-project').val(theProject.id);
                 var data = new FormData($("form")[0]);
     		dismissBusy = DialogSystem.showBusy('Uploading vocabulary ');
@@ -81,6 +80,8 @@ NewPrefixWidget.prototype.show = function(msg,def_prefix,onDone){
             });
     	}else{
             dismissBusy = DialogSystem.showBusy('Trying to import vocabulary from ' + uri);
+            
+            
             $.post("command/rdf-extension/add-prefix",{name:name,uri:uri,"fetch-url":uri,project: theProject.id,fetch:fetchOption},function(data){
                 if (data.code === "error"){
                     alert('Error:' + data.message)
@@ -92,6 +93,7 @@ NewPrefixWidget.prototype.show = function(msg,def_prefix,onDone){
                 }
                 dismissBusy();
             });
+            return ;
     	}
     };
     

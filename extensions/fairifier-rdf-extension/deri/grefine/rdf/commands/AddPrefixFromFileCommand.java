@@ -47,8 +47,6 @@ public class AddPrefixFromFileCommand extends RdfCommand{
 			for(FileItem item:items){
 				if(item.getFieldName().equals("vocab-prefix")){
 					prefix = item.getString(); 
-				}else if(item.getFieldName().equals("vocab-uri")){
-					uri = item.getString();
 				}else if(item.getFieldName().equals("file_format")){
 					format = item.getString();
 				}else if(item.getFieldName().equals("project")){
