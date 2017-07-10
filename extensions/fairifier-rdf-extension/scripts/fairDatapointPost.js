@@ -181,14 +181,14 @@ getFairCatalogs = function(rootUrl, self){
         self.hasCatalogs = false;
         
         data.content.forEach(function(element){
-            $('<option></option>').attr('value',element.uri.namespace + element.uri.localName).text(element.uri.namespace + element.uri.localName + " - " + element.title.label).appendTo(add_cat_available_html);
+            $('<option></option>').attr('value',element.uri.namespace + element.uri.localName).text(element.uri.localName + " - " + element.title.label).appendTo(add_cat_available_html);
             self.hasCatalogs = true;
         });
         
         elmts.addCatalog.click(function(evt){
             evt.preventDefault();
             fairDataPointPostCatalogDialog = new FairDataPointPostCatalogDialog(function(catalog){
-                $('<option></option>').attr('value',catalog['http://rdf.biosemantics.org/ontologies/fdp-o#metadataIdentifier'].url).prop('selected',true).text(catalog['http://rdf.biosemantics.org/ontologies/fdp-o#metadataIdentifier'].url+" - "+catalog['http://purl.org/dc/terms/title']).appendTo(add_cat_available_html); 
+                $('<option></option>').attr('value',catalog['http://rdf.biosemantics.org/ontologies/fdp-o#metadataIdentifier'].url).prop('selected',true).text(catalog['http://rdf.biosemantics.org/ontologies/fdp-o#metadataIdentifier']+" - "+catalog['http://purl.org/dc/terms/title']).appendTo(add_cat_available_html); 
                 self._datasetDiv.html('');
                 self._distributionDiv.html('');
                 self._pushtoResourceDiv.html('');
@@ -251,7 +251,7 @@ getFairDatasets = function(url, self){
         self.hasDatasets = false;
 
        data.content.forEach(function(element){
-                $('<option></option>').attr('value',element.uri.namespace + element.uri.localName).text(element.uri.namespace + element.uri.localName + " - " + element.title.label).appendTo(add_dat_available_html);
+                $('<option></option>').attr('value',element.uri.namespace + element.uri.localName).text(element.uri.localName + " - " + element.title.label).appendTo(add_dat_available_html);
                 self.hasDatasets = true;
         });
 
@@ -298,10 +298,14 @@ getFairDatasets = function(url, self){
             addFairDistribution(self);            
         }).change();
     
-        add_dat_available_html.appendTo(self._datasetDiv);
-
+        add_dat_available_html.appendTo(self._datasetDiv);        
         self._datasetDiv.appendTo(self._body);
     
+
+        if (self.hasDatasets){
+            add_dat_available_html.click();
+        }
+        
     }).fail(function(xhr, status, error) {});
 };
 

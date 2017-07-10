@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONWriter;
+import org.json.JSONException;
 import com.google.refine.commands.Command;
 import org.eclipse.rdf4j.rio.Rio;
 import org.eclipse.rdf4j.rio.RDFParseException;
@@ -46,7 +47,6 @@ public class GetFairDataPointInfoCommand extends Command{
             res.setHeader("Content-Type", "application/json");
             JSONWriter writer = new JSONWriter(res.getWriter());
             writer.object();
-            writer.key("code"); writer.value("ok");
             if (req.getParameter("layer").equals("catalog")){
                 writer.key("content"); 
                 writer.value(this.getFdpCatalogs(uri));
@@ -54,10 +54,20 @@ public class GetFairDataPointInfoCommand extends Command{
                 writer.key("content"); 
                 writer.value(this.getFdpDatasets(uri));
             }
-            
+            writer.key("code"); writer.value("ok");
             writer.endObject();
         }catch(Exception e){
-            System.out.println(e.getMessage());
+               try {
+                res.setCharacterEncoding("UTF-8");
+                res.setHeader("Content-Type", "application/json");
+                JSONWriter writer = new JSONWriter(res.getWriter());
+                writer.object();
+                writer.key("code"); writer.value("error");
+                writer.key("error"); writer.value(e.getMessage());
+                writer.endObject();
+               }catch (Exception ex) {
+                   System.out.println(ex.getMessage());
+               }
         }
     }
 
