@@ -37,7 +37,7 @@ NewPrefixWidget.prototype.show = function(msg,def_prefix,onDone){
     		$('#vocab-hidden-prefix').val(name);
     		$('#vocab-hidden-uri').val(uri);
     		$('#vocab-hidden-project').val(theProject.id);
-            var data = new FormData($("form")[0]);
+                var data = new FormData($("form")[0]);
     		dismissBusy = DialogSystem.showBusy('Uploading vocabulary ');
 
 
@@ -76,22 +76,23 @@ NewPrefixWidget.prototype.show = function(msg,def_prefix,onDone){
                             }
                         });
                         return ;
-                        dismissBusy = DialogSystem.showBusy('Trying to import vocabulary from ' + uri);
-                        $.post("command/rdf-extension/add-prefix",{name:name,uri:uri,"fetch-url":uri,project: theProject.id,fetch:fetchOption},function(data){
-                            if (data.code === "error"){
-                                alert('Error:' + data.message)
-                            }else{
-                                DialogSystem.dismissUntil(level - 1);
-                                if(onDone){
-                                    onDone(name,uri);
-                                }
-                            }
-                            dismissBusy();
-                        });
                     }
                 }
             });
-        }
+    	}else{
+            dismissBusy = DialogSystem.showBusy('Trying to import vocabulary from ' + uri);
+            $.post("command/rdf-extension/add-prefix",{name:name,uri:uri,"fetch-url":uri,project: theProject.id,fetch:fetchOption},function(data){
+                if (data.code === "error"){
+                    alert('Error:' + data.message)
+                }else{
+                    DialogSystem.dismissUntil(level - 1);
+                    if(onDone){
+                        onDone(name,uri);
+                    }
+                }
+                dismissBusy();
+            });
+    	}
     };
     
     $('<button></button>').addClass('button').html("&nbsp;&nbsp;OK&nbsp;&nbsp;").click(function() {
