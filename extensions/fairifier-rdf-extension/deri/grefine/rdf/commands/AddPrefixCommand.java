@@ -51,9 +51,7 @@ public class AddPrefixCommand extends RdfCommand{
         } catch (PrefixExistException e) {
             respondException(response, e);
         } catch (Exception e){
-        	response.setCharacterEncoding("UTF-8");
-            response.setHeader("Content-Type", "application/json");
-        	respond(response,"{\"code\":\"ok\"}");
+            respondException(response, e);
         }
     }
 }

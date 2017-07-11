@@ -35,6 +35,7 @@ NewPrefixWidget.prototype.show = function(msg,def_prefix,onDone){
     	if(fetchOption==='file'){
     		//prepare values
     		$('#vocab-hidden-prefix').val(name);
+    		$('#vocab-hidden-uri').val(uri);
     		$('#vocab-hidden-project').val(theProject.id);
                 var data = new FormData($("form")[0]);
     		dismissBusy = DialogSystem.showBusy('Uploading vocabulary ');
@@ -80,8 +81,6 @@ NewPrefixWidget.prototype.show = function(msg,def_prefix,onDone){
             });
     	}else{
             dismissBusy = DialogSystem.showBusy('Trying to import vocabulary from ' + uri);
-            
-            
             $.post("command/rdf-extension/add-prefix",{name:name,uri:uri,"fetch-url":uri,project: theProject.id,fetch:fetchOption},function(data){
                 if (data.code === "error"){
                     alert('Error:' + data.message)
@@ -98,7 +97,7 @@ NewPrefixWidget.prototype.show = function(msg,def_prefix,onDone){
     };
     
     $('<button></button>').addClass('button').html("&nbsp;&nbsp;OK&nbsp;&nbsp;").click(function() {
-    	var fetchOption = self._elmts.fetching_options_table.find('input[name="vocab_fetch_method"]:checked').val();
+    	var fetchOption =  $('input[name="vocab_fetch_method"]:checked').val();
     	importVocabulary(fetchOption,onDone);
     }).appendTo(footer);
     
@@ -115,11 +114,18 @@ NewPrefixWidget.prototype.show = function(msg,def_prefix,onDone){
     
     var level = DialogSystem.showDialog(frame);
     
+    
+    self._elmts.fetching_options_table.find('.upload_file_inputs').attr('disabled',true);
+    
     self._elmts.fetching_options_table
 	.hide()
 	.find('input[name="vocab_fetch_method"]').click(function(){
 		var upload = $(this).val()!=='file';
 		self._elmts.fetching_options_table.find('.upload_file_inputs').attr('disabled',upload);
+                $('input[bind="uri"]').attr("disabled", false);
+		if ($(this).val() === 'file'){
+		    $('input[bind="uri"]').attr("disabled", "disabled");
+		}
 	});
     
     self._elmts.prefix.bind('change',function(){

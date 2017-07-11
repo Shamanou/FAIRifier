@@ -63,13 +63,35 @@ var test_facets = new function() {
     });
     this.test_python_scripting = test;
     
-
-    // export turtle file and check if exported as file
     test = newTest();
     action (test, 'click',      {jquery: '("button.button")[1]'});
     wait   (test, "forElement", {jquery: '("a#export-button")[0]' });
+
+    action (test, 'click',        {link:  'RDF'});
+    wait   (test, "forElement",   {jquery: '("a.menu-item:contains(\'Reset Semantic Model...\')")'});
+    action (test, 'click',        {link: 'Reset Semantic Model...'});
+    action (test, 'click',        {link: 'add prefix'});
+    action (test, 'click',        {jquery: '("button#advanced_options_button:contains(\'Advanced...\')")[0]'});
+    action (test, 'type',         {jquery: '("input[bind=\'prefix\']")[0]', text: "dcterms"});
+    action (test, 'type',         {jquery: '("input[bind=\'uri\']")[0]', text: "http://purl.org/dc/terms/"});
+    action (test, 'click',        {jquery: '("button.button:contains(\'OK\')")[1]'});
+    wait   (test, "forAjaxEnd");
+    wait   (test, "forElement", {jquery: '("span.rdf-schema-prefix-box:contains(\'dcterms\')")[0]' });
+    action (test, 'click',        {jquery: '("a.schema-alignment-link-tag")[0]'});
+    action (test, 'type',         {jquery: '("input[bind=\'newResourceUri\']")[0]', text: "dcterms"});
+    wait   (test, "forElement", {jquery: '("li.fbs-item")[0]' });
+    action (test, "click", {jquery: '("li.fbs-item")[0]'});
+
+    assert (test, function(){
+        jum.assertNotUndefined($("a:contains(\'property?\')")[0]);
+    });
+    this.test_uploading_ontology_from_web  = test;
+    
+
+
+    // export turtle file and check if exported as file
+    test = newTest();
     action (test, "click",      {jquery: '("a#export-button")[0]' });
-    wait   (test, "forPageLoad",  { timeout: "100000" });
     action (test, "click",      { link: 'RDF as Turtle' });
     this.test_export_to_file = test;
     
