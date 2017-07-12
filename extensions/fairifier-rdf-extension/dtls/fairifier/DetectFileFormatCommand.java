@@ -19,12 +19,12 @@ import org.eclipse.rdf4j.rio.rdfxml.RDFXMLParser;
 import org.eclipse.rdf4j.rio.trig.TriGParser;
 import org.eclipse.rdf4j.rio.ntriples.NTriplesParser;
 import java.lang.System;
-import java.lang.Exception;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.eclipse.rdf4j.rio.Rio;
 import java.io.ByteArrayInputStream;
-import java.lang.Exception;
 import java.nio.charset.StandardCharsets;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -46,9 +46,9 @@ import java.io.BufferedReader;
 public class DetectFileFormatCommand extends Command{
     RDFParser rdfParserttl = new TurtleParser();
     RDFParser rdfParserrdfxml = new RDFXMLParser();
-    RDFParser rdfParserntripples = new NTriplesParser();
+    RDFParser rdfParserntriples = new NTriplesParser();
 
-    RDFParser[] parsers = {rdfParserttl, rdfParserrdfxml, rdfParserntripples};
+    RDFParser[] parsers = {rdfParserntriples, rdfParserttl, rdfParserrdfxml};
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
@@ -62,12 +62,15 @@ public class DetectFileFormatCommand extends Command{
         String filename = null;
         InputStream in = null;
         String format = null;
-
+        String url = null;
+        
         try{
             items = upload.parseRequest(req);
             for(FileItem item:items){
                 if(item.getFieldName().equals("baseuri")){
                     baseuri = item.getString();
+                }else if (item.getFieldName().equals("file_source")) {
+                    url = item.getString();
                 }else if(item.getFieldName().equals("file_upload")){
                     filename = item.getName();
                     in = item.getInputStream();
@@ -77,23 +80,36 @@ public class DetectFileFormatCommand extends Command{
             respondException(res, ex);
         }
 
-        for (RDFParser parser: parsers){
-            try{
-                BufferedReader reader =  new BufferedReader(new InputStreamReader(in));
-                String firstLine = reader.readLine();
-                if ( firstLine.substring(0,5).equals("<?xml") ){
-                    format = "application/rdf+xml";
-                    break;
-                }
-                parser.parse(in, baseuri);
-                format = parser.getRDFFormat().getDefaultMIMEType();
-                break;
-            }catch(Exception e){
-                System.out.println(e.toString());
-                continue;
-            }
-        }
+        if ((url != null) && !url.trim().equals("") && !url.trim().equals("url")) {
+            URL obj = new URL(url);
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+            BufferedReader inr = new BufferedReader(
+                    new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
 
+            while ((inputLine = inr.readLine()) != null) {
+                    response.append(inputLine);
+            }
+            inr.close();
+            in = new ByteArrayInputStream(response.toString().getBytes());
+        }
+        
+        
+            BufferedReader reader =  new BufferedReader(new InputStreamReader(in));
+            for (RDFParser parser: parsers){
+                try{
+                    if( baseuri == null) {
+                        baseuri = "";
+                    }
+                    parser.parse(reader, baseuri);
+                    format = parser.getRDFFormat().getDefaultMIMEType();
+                    break;
+                }catch(Exception e){
+                    System.out.println(e.toString());
+                    continue;
+                }
+            }
         try{
             res.setCharacterEncoding("UTF-8");
             res.setHeader("Content-Type", "application/json");
