@@ -45,14 +45,14 @@ import java.io.BufferedReader;
 
 public class DetectFileFormatCommand extends Command{
     RDFParser rdfParserttl = new TurtleParser();
-    RDFParser rdfParserrdfxml = new RDFXMLParser();
     RDFParser rdfParserntriples = new NTriplesParser();
 
-    RDFParser[] parsers = {rdfParserntriples, rdfParserttl, rdfParserrdfxml};
+    RDFParser[] parsers;
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        System.setProperty("org.xml.sax.driver", "org.apache.xerces.parsers.SAXParser");
+        
+        this.parsers = new RDFParser[]{this.rdfParserntriples, this.rdfParserttl};
         FileItemFactory factory = new DiskFileItemFactory();
 
         // Create a new file upload handler
@@ -83,8 +83,7 @@ public class DetectFileFormatCommand extends Command{
         if ((url != null) && !url.trim().equals("") && !url.trim().equals("url")) {
             URL obj = new URL(url);
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-            BufferedReader inr = new BufferedReader(
-                    new InputStreamReader(con.getInputStream()));
+            BufferedReader inr = new BufferedReader(new InputStreamReader(con.getInputStream()));
             String inputLine;
             StringBuffer response = new StringBuffer();
 
@@ -94,22 +93,23 @@ public class DetectFileFormatCommand extends Command{
             inr.close();
             in = new ByteArrayInputStream(response.toString().getBytes());
         }
-        
-        
-            BufferedReader reader =  new BufferedReader(new InputStreamReader(in));
-            for (RDFParser parser: parsers){
-                try{
-                    if( baseuri == null) {
-                        baseuri = "";
-                    }
-                    parser.parse(reader, baseuri);
-                    format = parser.getRDFFormat().getDefaultMIMEType();
-                    break;
-                }catch(Exception e){
-                    System.out.println(e.toString());
-                    continue;
+        for (RDFParser parser: parsers){
+            try{
+                if( baseuri == null) {
+                    baseuri = "";
                 }
+                parser.parse(in, baseuri);
+                format = parser.getRDFFormat().getDefaultMIMEType();
+                break;
+            }catch(Exception e){
+                System.out.println(e.toString());    
+                continue;
             }
+        }
+        if (format == null) {
+            format = "application/rdf+xml";
+        }
+        
         try{
             res.setCharacterEncoding("UTF-8");
             res.setHeader("Content-Type", "application/json");
