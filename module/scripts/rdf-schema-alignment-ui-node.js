@@ -257,7 +257,7 @@ RdfSchemaAlignmentDialog.UINode.prototype._showNodeConfigDialog = function(){
 	var self = this;
     var frame = DialogSystem.createDialog();
     
-    frame.width("575px");
+    frame.width("620px");
     
     var header = $('<div></div>').addClass("dialog-header").text("RDF Node").appendTo(frame);
     var body = $('<div class="grid-layout layout-full"></div>').addClass("dialog-body").appendTo(frame);
@@ -649,8 +649,7 @@ RdfSchemaAlignmentDialog.UINode.prototype._preview = function(expr,columnName,is
 				!columnName,
 				RdfSchemaAlignment._defaultNamespace,
 				function(expression){
-					expression = expression.substring(5);//grel:
-					$("#rdf-cell-expr").empty().text(expression);
+				    $("#rdf-cell-expr").empty().text(expression);
 				}
 			);
 	}else{
@@ -663,8 +662,7 @@ RdfSchemaAlignmentDialog.UINode.prototype._preview = function(expr,columnName,is
 				expr,
 				!columnName,
 				function(expression){
-					expression = expression.substring(5);//grel:
-					$("#rdf-cell-expr").empty().text(expression);
+                                    $("#rdf-cell-expr").empty().text(expression);
 				}
 			);
 	}

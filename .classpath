@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="src" path="licenses"/>
+	<classpathentry kind="src" path="extensions/fairifier-rdf-extension"/>
+	<classpathentry kind="src" path="extensions/gdata/src"/>
+	<classpathentry kind="src" path="extensions/grefine-rdf-extension/src"/>
+	<classpathentry kind="src" path="extensions/jython/src"/>
+	<classpathentry kind="src" path="extensions/sample/src"/>
+	<classpathentry kind="src" path="extensions/freebase/src"/>
+	<classpathentry kind="src" path="extensions/pc-axis/src"/>
+	<classpathentry kind="src" path="server/src"/>
+	<classpathentry kind="src" path="main/src"/>
+	<classpathentry kind="src" path="resources"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="build"/>
+	<classpathentry kind="src" path="broker"/>
+	<classpathentry kind="src" path="module"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -234,7 +234,6 @@ RdfSchemaAlignmentDialog.prototype._editBaseUri = function(src){
 RdfSchemaAlignmentDialog.prototype._replaceBaseUri = function(newBaseUri,doNotSave){
 	var self = this;
 	RdfSchemaAlignment._defaultNamespace = newBaseUri;
-    console.log(newBaseUri.substring(0,7));
     if(!newBaseUri || !newBaseUri.match('(http|https):\/\/')){
         alert('Base URI should start with http://');
         return;
