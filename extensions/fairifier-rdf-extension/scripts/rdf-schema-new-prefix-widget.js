@@ -29,9 +29,12 @@ NewPrefixWidget.prototype.show = function(msg,def_prefix,onDone){
     	if(self._prefixesManager._hasPrefix(name)){
     		alert('Prefix "' + name + '" is already defined');
     		return;
-    	}
-    	var dismissBusy;
-
+    	}     	
+        console.log(uri)
+        if (uri.split(":")[0].toLowerCase() === "https"){
+            alert("Error: HTTPS not supported");
+            return;
+        }
     	if(fetchOption==='file'){
     		//prepare values
     		$('#vocab-hidden-prefix').val(name);
@@ -81,7 +84,7 @@ NewPrefixWidget.prototype.show = function(msg,def_prefix,onDone){
             });
     	}else{
             dismissBusy = DialogSystem.showBusy('Trying to import vocabulary from ' + uri);
-            $.post("command/rdf-extension/add-prefix",{name:name,uri:uri,"fetch-url":uri,project: theProject.id,fetch:fetchOption},function(data){
+            $.post("command/rdf-extension/add-prefix",{name:name,uri:uri,"fetch-url":uri,project: theProject.id},function(data){
                 if (data.code === "error"){
                     alert('Error:' + data.message)
                 }else{

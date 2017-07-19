@@ -4,6 +4,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.ClientConnectionManager;
 import org.apache.any23.Any23;
 import org.apache.any23.http.HTTPClient;
 import org.apache.any23.source.DocumentSource;
@@ -21,9 +24,14 @@ import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.sail.SailRepository;
 import org.openrdf.sail.inferencer.fc.ForwardChainingRDFSInferencer;
 import org.openrdf.sail.memory.MemoryStore;
-
+import org.apache.any23.http.DefaultHTTPClient;
+import org.apache.http.client.HttpClient;
+import org.apache.http.conn.scheme.SchemeRegistry;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.apache.http.conn.ssl.TrustStrategy;
+import org.apache.http.impl.conn.PoolingClientConnectionManager;
+
 
 public class VocabularyImporter {
 	
@@ -71,15 +79,14 @@ public class VocabularyImporter {
 
 	private Repository getModel(String url,boolean strictlyRdf) throws VocabularyImportException {
 		try {
-			logger.debug("test");
 			Any23 runner;
 			if(strictlyRdf){
 				runner = new Any23("rdf-xml");
 			}else{
 				runner = new Any23();
 			}
-			runner.setHTTPUserAgent("google-refine-rdf-extension");
-			HTTPClient client = runner.getHTTPClient();
+			runner.setHTTPUserAgent("Openrefine-rdf-extension");
+                        HTTPClient client = runner.getHTTPClient();
 			DocumentSource source = new HTTPDocumentSource(client, url);
 			Repository repository = new SailRepository(new ForwardChainingRDFSInferencer(new MemoryStore()));
 			repository.initialize();
@@ -87,11 +94,9 @@ public class VocabularyImporter {
 			RepositoryWriter w = new RepositoryWriter(con);
 			ReportingTripleHandler reporter = new ReportingTripleHandler(w);
 			runner.extract(source, reporter);
-			logger.debug("return");
 			return repository;
 		} catch (Exception e) {
-			throw new VocabularyImportException(
-					"Unable to import vocabulary from " + url, e);
+			throw new VocabularyImportException("Unable to import vocabulary from " + url, e);
 		}
 	}
 
