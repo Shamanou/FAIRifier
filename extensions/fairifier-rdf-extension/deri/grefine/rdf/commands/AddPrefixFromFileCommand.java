@@ -18,7 +18,7 @@ import org.deri.grefine.rdf.app.ApplicationContext;
 import org.deri.grefine.rdf.vocab.VocabularyImporter;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.openrdf.repository.Repository;
+import org.openrdf.repository.Repository;;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.sail.SailRepository;
 import org.openrdf.rio.RDFFormat;
