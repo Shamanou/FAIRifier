@@ -42,7 +42,7 @@ import org.deri.grefine.rdf.vocab.Vocabulary;
 import org.deri.grefine.rdf.vocab.VocabularyImportException;
 import org.deri.grefine.rdf.vocab.VocabularyImporter;
 import org.deri.grefine.rdf.vocab.VocabularyIndexException;
-import org.openrdf.repository.Repository;
+import org.eclipse.rdf4j.repository.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,7 +83,7 @@ public class VocabularySearcher implements IVocabularySearcher {
 	public void importAndIndexVocabulary(String name, String uri, String fetchUrl, String projectId,VocabularyImporter importer) 
 	        throws VocabularyImportException,VocabularyIndexException, PrefixExistException,CorruptIndexException, IOException {
 	        List<RDFSClass> classes = new ArrayList<RDFSClass>();
-		List<RDFSProperty> properties = new ArrayList<RDFSProperty>();		
+		List<RDFSProperty> properties = new ArrayList<RDFSProperty>();
 	        importer.importVocabulary(name, uri, fetchUrl,classes, properties);
 		indexTerms(name, uri, projectId, classes, properties);
 	}

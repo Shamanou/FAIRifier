@@ -1,5 +1,6 @@
 package org.deri.grefine.rdf.vocab;
 
+import java.net.HttpURLConnection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -13,17 +14,17 @@ import org.apache.any23.source.DocumentSource;
 import org.apache.any23.source.HTTPDocumentSource;
 import org.apache.any23.writer.ReportingTripleHandler;
 import org.apache.any23.writer.RepositoryWriter;
-import org.openrdf.model.Value;
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.QueryLanguage;
-import org.openrdf.query.TupleQuery;
-import org.openrdf.query.TupleQueryResult;
-import org.openrdf.repository.Repository;
-import org.openrdf.repository.RepositoryConnection;
-import org.openrdf.repository.RepositoryException;
-import org.openrdf.repository.sail.SailRepository;
-import org.openrdf.sail.inferencer.fc.ForwardChainingRDFSInferencer;
-import org.openrdf.sail.memory.MemoryStore;
+import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.query.BindingSet;
+import org.eclipse.rdf4j.query.QueryLanguage;
+import org.eclipse.rdf4j.query.TupleQuery;
+import org.eclipse.rdf4j.query.TupleQueryResult;
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.eclipse.rdf4j.repository.RepositoryException;
+import org.eclipse.rdf4j.repository.sail.SailRepository;
+import org.eclipse.rdf4j.sail.inferencer.fc.ForwardChainingRDFSInferencer;
+import org.eclipse.rdf4j.sail.memory.MemoryStore;
 import org.apache.any23.http.DefaultHTTPClient;
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.scheme.SchemeRegistry;
@@ -31,15 +32,19 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
+import java.net.URL;
+import org.jsoup.Jsoup;
+import org.jsoup.Connection;
+import org.jsoup.Connection.Response;
 
 
 public class VocabularyImporter {
 	
     final static Logger logger = LoggerFactory.getLogger(VocabularyImporter.class);
-
-
+    
+    
 	public void importVocabulary(String name, String uri, String fetchUrl, List<RDFSClass> classes, List<RDFSProperty> properties) throws VocabularyImportException{
-		boolean strictlyRdf = faultyContentNegotiation(uri);
+	        boolean strictlyRdf = faultyContentNegotiation(uri);
 		Repository repos = getModel(fetchUrl, strictlyRdf);
 		getTerms(repos, name, uri, classes, properties);
 	}
@@ -79,21 +84,21 @@ public class VocabularyImporter {
 
 	private Repository getModel(String url,boolean strictlyRdf) throws VocabularyImportException {
 		try {
-			Any23 runner;
+		        Any23 runner;
 			if(strictlyRdf){
 				runner = new Any23("rdf-xml");
 			}else{
 				runner = new Any23();
 			}
-			runner.setHTTPUserAgent("Openrefine-rdf-extension");
+			runner.setHTTPUserAgent("google-refine-rdf-extension");
                         HTTPClient client = runner.getHTTPClient();
-			DocumentSource source = new HTTPDocumentSource(client, url);
+			DocumentSource source = new HTTPDocumentSource(client, url);			
 			Repository repository = new SailRepository(new ForwardChainingRDFSInferencer(new MemoryStore()));
 			repository.initialize();
 			RepositoryConnection con = repository.getConnection();
 			RepositoryWriter w = new RepositoryWriter(con);
 			ReportingTripleHandler reporter = new ReportingTripleHandler(w);
-			runner.extract(source, reporter);
+			runner.extract(source, reporter);			
 			return repository;
 		} catch (Exception e) {
 			throw new VocabularyImportException("Unable to import vocabulary from " + url, e);
