@@ -182,16 +182,19 @@
             <fileset dir="extensions/fairifier-rdf-extension/lib"/>
         </copy>
 
+        	<copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/rdf/vocab/imp/VocabularySearcher.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/rdf/vocab/imp/VocabularySearcher.java" />
+    	<copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/rdf/vocab/IVocabularySearcher.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/deri/grefine/rdf/vocab/IVocabularySearcher.java" />
+
+
+    	<copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/rdf/commands/AddPrefixCommand.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/rdf/commands/AddPrefixCommand.java" />
+
+    	
     	<copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/reconcile/commands/UploadFileAndAddServiceCommand.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/reconcile/commands/UploadFileAndAddServiceCommand.java" />
 
         <copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/rdf/commands/RdfCommand.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/rdf/commands/RdfCommand.java" />
 
         <copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/rdf/commands/SuggestTermCommand.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/rdf/commands/SuggestTermCommand.java" />
-
         <copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/rdf/vocab/VocabularyImporter.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/rdf/vocab/VocabularyImporter.java" />
-
-        <copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/rdf/vocab/imp/VocabularySearcher.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/rdf/vocab/imp/VocabularySearcher.java" />
-
 
         <copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/rdf/commands/AddPrefixFromFileCommand.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/rdf/commands/AddPrefixFromFileCommand.java" />
 
