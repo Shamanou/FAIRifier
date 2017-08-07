@@ -3,7 +3,7 @@
 The FAIRifier is a tool to make messy data [FAIR](https://www.dtls.nl/fair-data/).
 
 The FAIRifier is a tool to make data FAIR(Findable, Acessable, Interoperable and Reusable). 
-The FAIRifier is developed at [DTLS](https://www.dtls.nl/)(the Dutch Tech Centre for life sciences) and should be used if a user wants
+The FAIRifier is developed at [DTL](https://www.dtls.nl/)(the Dutch Tech Centre for life sciences) and should be used if a user wants
 to make non-FAIR datasets FAIR and push the metadata to a FDP(Fair Data Point).
 
 Dependencies:
