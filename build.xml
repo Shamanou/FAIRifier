@@ -183,7 +183,7 @@
         </copy>
 
         	<copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/rdf/vocab/imp/VocabularySearcher.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/rdf/vocab/imp/VocabularySearcher.java" />
-    	<copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/rdf/vocab/IVocabularySearcher.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/deri/grefine/rdf/vocab/IVocabularySearcher.java" />
+    	<copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/rdf/vocab/IVocabularySearcher.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/rdf/vocab/IVocabularySearcher.java" />
 
 
     	<copy overwrite="true" file="extensions/fairifier-rdf-extension/deri/grefine/rdf/commands/AddPrefixCommand.java" tofile="extensions/grefine-rdf-extension/src/org/deri/grefine/rdf/commands/AddPrefixCommand.java" />
@@ -249,6 +249,11 @@
 
         <copy overwrite="true" file="extensions/fairifier-rdf-extension/scripts/new-prefix-widget.html" tofile="extensions/grefine-rdf-extension/module/scripts/new-prefix-widget.html" />
 
+    	<delete file="extensions/grefine-rdf-extension/module/MOD-INF/lib/apache-any23-encoding-0.8.0.jar"/>
+    	<delete file="extensions/grefine-rdf-extension/module/MOD-INF/lib/apache-any23-api-0.8.0.jar"/>
+    	<delete file="extensions/grefine-rdf-extension/module/MOD-INF/lib/apache-any23-core-0.8.0.jar"/>
+    	<delete file="extensions/grefine-rdf-extension/module/MOD-INF/lib/apache-any23-mime-0.8.0.jar"/>
+    	
 
     	<ant dir="extensions/" target="build" />
     </target>

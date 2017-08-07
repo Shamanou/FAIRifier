@@ -1,3 +1,5 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d122f3edbb6e4ebfa8c74c4b219ce3a2)](https://www.codacy.com/app/Shamanou/FAIRifier?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Shamanou/FAIRifier&amp;utm_campaign=Badge_Grade)
+
 Dependencies:
   - Java 8
   - Apache Ant
