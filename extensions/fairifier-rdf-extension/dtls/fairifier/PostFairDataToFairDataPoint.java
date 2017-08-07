@@ -210,10 +210,6 @@ public class PostFairDataToFairDataPoint extends Command{
                 distributionMetadata.setDescription(f.createLiteral(distribution.getString("http://purl.org/dc/terms/description")) );
             }catch(Exception ex){}
             distributionString = MetadataUtils.getString(distributionMetadata, RDFFormat.TURTLE).replaceAll("\\<" + distributionMetadata.getUri() + "\\>","<>");
-//            
-//            System.out.println(catalogString);
-//            System.out.println(datasetString);
-//            System.out.println(distributionString);
             String catalogPost = null;
             String datasetPost = null;
             if (!catalog.getBoolean("_exists")){

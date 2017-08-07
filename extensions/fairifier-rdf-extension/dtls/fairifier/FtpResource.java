@@ -1,6 +1,5 @@
 package org.dtls.fairifier;
 
-import java.lang.IllegalArgumentException;
 import java.net.URL;
 import java.io.File;
 import java.io.OutputStream;

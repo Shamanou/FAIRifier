@@ -22,7 +22,7 @@ public class VirtuosoResource extends Resource{
     private String directory;
     private String username;
     private String password;
-    private static Logger log = LoggerFactory.getLogger(VirtuosoResource.class);
+    private static final Logger log = LoggerFactory.getLogger(VirtuosoResource.class);
 
 
     public VirtuosoResource(String host, String filename, String username, String password, String directory){
