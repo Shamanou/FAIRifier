@@ -868,6 +868,7 @@ RdfSchemaAlignmentDialog.RdfResourceDialog = function(elmt,lookFor,projectId,par
 		}
 	}).bind('fb-select-new',function(e,val){
 		MenuSystem.dismissAll();
+		val = val.trim();
 		if(RdfPrefixesManager.isPrefixedQname(val)){
 			//check that the prefix is defined
 			var prefix = RdfPrefixesManager.getPrefix(val);
