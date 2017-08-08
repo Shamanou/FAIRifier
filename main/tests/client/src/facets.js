@@ -76,56 +76,48 @@ var test_facets = new function() {
     action (test, 'type',         {jquery: '("input[bind=\'uri\']")[0]', text: 'http://purl.org/dc/elements/1.1/'});
     action (test, 'click',        {jquery: '("button.button:contains(\'OK\')")[1]'});
     wait   (test, "forAjaxEnd");
-    wait   (test, "forElement", {jquery: '("span.rdf-schema-prefix-box:contains(\'dcterms\')")[0]' });
-    action (test, 'click',        {jquery: '("a.schema-alignment-link-tag")[0]'});
-    action (test, 'type',         {jquery: '("input[bind=\'newResourceUri\']")[0]', text: "dcterms"});
-    wait   (test, "forElement", {jquery: '("li.fbs-item")[0]' });
-    action (test, "click", {jquery: '("li.fbs-item")[0]'});
-
-    assert (test, function(){
-        jum.assertNotUndefined($("a:contains(\'property?\')")[0]);
-    });
+    wait   (test, "forElement", {jquery: '("span.rdf-schema-prefix-box:contains(\'dc\')")[0]' });
+    action (test, "click", {jquery: '("button.button:contains(\'OK\')")[0]'});
     this.test_uploading_ontology_from_web  = test;
     
 
 
-    // export turtle file and check if exported as file
+    // export to FAirDataPoint
     test = newTest();
     action (test, "click",      {jquery: '("a#export-button")[0]' });
     action (test, "click",      { link: 'POST to FAIR Data Point' });
     action (test, "click",      { link: 'edit' });
     action (test, "type",      {jquery: '("input[bind=\'newBaseUri\']")[0]', text: "http://localhost:8080/fdp"});
+    action (test, 'click', {jquery:'("button.button[bind=\'applyButton\']")[0]'});
     wait   (test, "forElement",   {jquery: '("select.catalogs")'});
     action   (test, "click",   {link: '+' });
     wait   (test, "forElement",   {jquery: '("select.catalogs")'});
-    action (test, 'type', {jquery: '("div#dct-title0")', text: "Integration test catalog"})
-    action (test, 'type', {jquery: '("div#dct-hasversion3")', text: "1.0"})
-    action (test, 'type', {jquery: '("div#dct-publisher4")', text: "http://fake-publisher.com"})
-    action (test, 'type', {jquery: '("div#institute-foaf-name0")', text: "fake-publisher"})
-    action (test, 'type', {jquery: '("div#dcat-themetaxonomy12")', text: "http://test.nl"})
-    action   (test, "click",   {link: 'Save' });
+    action (test, 'type', {jquery: '("input#dct-title0")[0]', text: "Integration test catalog"})
+    action (test, 'type', {jquery: '("input#dct-hasversion3")[0]', text: "1.0"})
+    action (test, 'type', {jquery: '("input#dct-publisher4")[0]', text: "http://fake-publisher.com"})
+    action (test, 'type', {jquery: '("input#institute-foaf-name0")[0]', text: "fake-publisher"})
+    action (test, 'type', {jquery: '("input#dcat-themetaxonomy12")[0]', text: "http://test.nl"})
+    action   (test, "click",   {jquery: '("input#submit[value=\'Save\']")[0]' });
     
     action   (test, "click",   {jquery: '("a[bind=\'addDataset\']")[0]' });
-    action (test, 'type', {jquery: '("div#dct-title0")', text: "Intergration test dataset"})
-    action (test, 'type', {jquery: '("div#dct-hasversion3")', text: "1.0"})
-    action (test, 'type', {jquery: '("div#dct-publisher4")', text: "http://fake-publisher.com"})
-    action (test, 'type', {jquery: '("div#institute-foaf-name0")', text: "fake-publisher"})
-    action (test, 'type', {jquery: '("div#dcat-theme0")', text: "test"})
-    action (test, 'click', {jquery: '("li#typeahead-142-7126-option-1 a")'})
-    action   (test, "click",   {link: 'Save' });
+    action (test, 'type', {jquery: '("input#dct-title0")[0]', text: "Intergration test dataset"});
+    action (test, 'type', {jquery: '("input#dct-hasversion3")[0]', text: "1.0"});
+    action (test, 'type', {jquery: '("input#dct-publisher4")[0]', text: "http://fake-publisher.com"});
+    action (test, 'type', {jquery: '("input#institure-foaf-name0")[0]', text: "fake-publisher"});
+    action (test, 'type', {jquery: '("input#dcat-theme0")[0]', text: "http://www.wikidata.org/entity/Q27318"})
+    action   (test, "click",   {jquery: '("input#submit[value=\'Save\']")[0]' });
 
-    action   (test, "click",   {jquery: '("input.virtuosoRadio")' });    
+    action   (test, "click",   {jquery: '("input.virtuosoRadio")[0]' });    
     action   (test, "click",   {jquery: '("a[bind=\'addDistribution\']")[0]' });
-    action (test, 'type', {jquery: '("div#dct-title0")', text: "Intergration test dataset"})
-    action (test, 'type', {jquery: '("div#dct-license3")', text: "open"})
-    action (test, 'click', {jquery: '("div#typeahead-225-8803-option-0 a")'})
-    action (test, 'type', {jquery: '("div#dct-hasversion4")', text: "1.0"})
-    action   (test, "click",   {link: 'Save' });
+    action (test, 'type', {jquery: '("input#dct-title0")[0]', text: "Intergration test dataset"});
+    action (test, 'type', {jquery: '("input#dct-license3")[0]', text: "http://purl.org/NET/rdflicense/ukogl3.0"});
+    action (test, 'type', {jquery: '("input#dct-hasversion4")[0]', text: "1.0"});
+    action   (test, "click",   {jquery: '("input#submit[value=\'Save\']")[0]' });
     
-    action   (test, "click",   {link: 'OK' });
+    action   (test, "click",   {jquery: '("button.button:contains(\'OK\')")[0]' });
     
     
-    this.test_export_to_file = test;
+    this.test_export_to_fdp = test;
     
     // create numeric filter from Water column
     // test = newTest();
