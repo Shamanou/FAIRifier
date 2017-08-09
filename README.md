@@ -9,8 +9,7 @@ To summarize:
 	* Reusable means that metadata contains specification about who and what can reuse it. 
 For more information about FAIR [click here](https://www.dtls.nl/fair-data/).
 
-
-The infrastructure is made up out of three core elements. The FAIR search engine, which indexes all the data in the network. 
+The infrastructure consists of three core elements. The FAIR search engine, which indexes all the data in the network. 
 The FAIR Data Point(FDP), which contains the data every institution should host one or more FDP's. The FAIRifier is meant to convert any data
 for a interoperable resource this can be put on a FDP within the FAIRifier.
 
@@ -53,3 +52,5 @@ Run the ./refine file
 ```
 ./refine
 ```
+
+You can find more information on the [FAIRifier wiki](https://github.com/DTL-FAIRData/FAIRifier/wiki).
