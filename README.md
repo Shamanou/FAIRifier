@@ -1,3 +1,5 @@
+# The FAIRifier
+
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/d122f3edbb6e4ebfa8c74c4b219ce3a2)](https://www.codacy.com/app/Shamanou/FAIRifier?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Shamanou/FAIRifier&amp;utm_campaign=Badge_Grade)
 
 The FAIRifier is a tool to make messy data FAIR.
@@ -20,13 +22,13 @@ The FAIRifier is developed at [The Dutch tech centre for life sciences(DTL)](htt
 DTL’s mission is to establish an interconnected research infrastructure that enables cross-disciplinary life science research in national 
 and international collaboration in a cost-effective manner.
 
+## Getting Started
+
 Dependencies:
   - Java 8
   - Apache Ant
 
-
-Building
-========
+### Prequisites
 install depedencies (assuming Java 8 is installed)
 
 ```
@@ -39,6 +41,8 @@ git clone --recursive -b development https://github.com/DTL-FAIRData/FAIRifier.g
 ```
 cd to the directory of the git repo
 ```
+
+### Building
 cd FAIRifier/
 ```
 and now build
@@ -46,11 +50,14 @@ and now build
 ./refine build
 ```
 
-Running
-==========
+## Deployment
+
 Run the ./refine file
 ```
 ./refine
 ```
 
 You can find more information on the [FAIRifier wiki](https://github.com/DTL-FAIRData/FAIRifier/wiki).
+
+## License
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details 
