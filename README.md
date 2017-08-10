@@ -5,10 +5,10 @@
 The FAIRifier is a tool to make messy data FAIR.
 FAIR stands for Findable, Accessable, Interoperable, Reusable.
 To summarize:
-	* Findable means the data has clearly described metadata, which makes it possible to find the data with a search engine.
-	* Accessable means that the accessability of the data is described in the metadata.
-	* Interoperable means it should be able to connect to other data, for example linked data technology.
-	* Reusable means that metadata contains specification about who and what can reuse it. 
+* Findable means the data has clearly described metadata, which makes it possible to find the data with a search engine.
+* Accessable means that the accessability of the data is described in the metadata.
+* Interoperable means it should be able to connect to other data, for example linked data technology.
+* Reusable means that metadata contains specification about who and what can reuse it. 
 For more information about FAIR [click here](https://www.dtls.nl/fair-data/).
 
 The infrastructure consists of three core elements. The FAIR search engine, which indexes all the data in the network. 
