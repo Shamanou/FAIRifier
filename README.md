@@ -9,7 +9,7 @@ To summarize:
 * Accessable means that the accessability of the data is described in the metadata.
 * Interoperable means it should be able to connect to other data, for example linked data technology.
 * Reusable means that metadata contains specification about who and what can reuse it. 
-For more information about FAIR [click here](https://www.dtls.nl/fair-data/).
+* For more information about FAIR [click here](https://www.dtls.nl/fair-data/).
 
 The infrastructure consists of three core elements. The FAIR search engine, which indexes all the data in the network. 
 The FAIR Data Point(FDP), which contains the data every institution should host one or more FDP's. The FAIRifier is meant to convert any data
