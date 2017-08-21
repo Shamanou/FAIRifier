@@ -75,7 +75,6 @@ var test_facets = new function() {
     wait   (test, "forAjaxEnd");
     action (test, "click", {jquery: '("button.button:contains(\'OK\')")[0]'});
     this.test_uploading_ontology_from_web  = test;
-    
 
     // export to FAirDataPoint
     test = newTest();
@@ -102,6 +101,7 @@ var test_facets = new function() {
     action (test, 'type', {jquery: '("input#dcat-theme0")[0]', text: "http://www.wikidata.org/entity/Q27318"})
     action   (test, "click",   {jquery: '("input#submit[value=\'Save\']")[0]' });
 
+	wait   (test, "forElement",   {jquery: '("a:contains(\'+\')")[2]'});
     action   (test, "click",   {jquery: '("input.virtuosoRadio")[0]' });    
 	action   (test, "click",   {jquery: '("a:contains(\'+\')")[2]' });
     action (test, 'type', {jquery: '("input#dct-title0")[0]', text: "Intergration test dataset"});
@@ -111,8 +111,9 @@ var test_facets = new function() {
     
     action   (test, "click",   {jquery: '("button.button:contains(\'OK\')")[0]' });
     
-    this.test_export_to_fdp = test;
-    
+    this.test_export_to_fdp = test;	
+
+
     // create numeric filter from Water column
     // test = newTest();
     // action (test, "click",       { jquery: '("td:contains(\'Water\') .column-header-menu")[0]' });
