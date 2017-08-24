@@ -64,34 +64,27 @@ var test_facets = new function() {
     this.test_python_scripting = test;
     
     test = newTest();
-    action (test, 'click',      {jquery: '("button.button")[1]'});
-    wait   (test, "forElement", {jquery: '("a#export-button")[0]' });
-
+    action (test, 'click',      {jquery: '("button.button:contains(\'OK\')")[0]'});
     action (test, 'click',        {link:  'RDF'});
-    wait   (test, "forElement",   {jquery: '("a.menu-item:contains(\'Reset Semantic Model...\')")'});
-    action (test, 'click',        {link: 'Reset Semantic Model...'});
+    action (test, 'click',        {link: 'Edit Semantic Model...'});
     action (test, 'click',        {link: 'add prefix'});
-    action (test, 'click',        {jquery: '("button#advanced_options_button:contains(\'Advanced...\')")[0]'});
+    action (test, 'click',        {jquery: '("button#advanced_options_button")[0]'});
     action (test, 'type',         {jquery: '("input[bind=\'prefix\']")[0]', text: "dc"});
     action (test, 'type',         {jquery: '("input[bind=\'uri\']")[0]', text: 'http://purl.org/dc/elements/1.1/'});
     action (test, 'click',        {jquery: '("button.button:contains(\'OK\')")[1]'});
     wait   (test, "forAjaxEnd");
-    wait   (test, "forElement", {jquery: '("span.rdf-schema-prefix-box:contains(\'dc\')")[0]' });
     action (test, "click", {jquery: '("button.button:contains(\'OK\')")[0]'});
     this.test_uploading_ontology_from_web  = test;
-    
-
 
     // export to FAirDataPoint
     test = newTest();
     action (test, "click",      {jquery: '("a#export-button")[0]' });
     action (test, "click",      { link: 'POST to FAIR Data Point' });
-    action (test, "click",      { link: 'edit' });
+    action (test, "click",      { jquery: '("a:contains(\'edit\')")[0]' });
     action (test, "type",      {jquery: '("input[bind=\'newBaseUri\']")[0]', text: "http://localhost:8080/fdp"});
     action (test, 'click', {jquery:'("button.button[bind=\'applyButton\']")[0]'});
     wait   (test, "forElement",   {jquery: '("select.catalogs")'});
     action   (test, "click",   {link: '+' });
-    wait   (test, "forElement",   {jquery: '("select.catalogs")'});
     action (test, 'type', {jquery: '("input#dct-title0")[0]', text: "Integration test catalog"})
     action (test, 'type', {jquery: '("input#dct-hasversion3")[0]', text: "1.0"})
     action (test, 'type', {jquery: '("input#dct-publisher4")[0]', text: "http://fake-publisher.com"})
@@ -99,7 +92,8 @@ var test_facets = new function() {
     action (test, 'type', {jquery: '("input#dcat-themetaxonomy12")[0]', text: "http://test.nl"})
     action   (test, "click",   {jquery: '("input#submit[value=\'Save\']")[0]' });
     
-    action   (test, "click",   {jquery: '("a[bind=\'addDataset\']")[0]' });
+    wait   (test, "forElement",   {jquery: '("a:contains(\'+\')")[1]'});
+    action   (test, "click",   {jquery: '("a:contains(\'+\')")[1]' });
     action (test, 'type', {jquery: '("input#dct-title0")[0]', text: "Intergration test dataset"});
     action (test, 'type', {jquery: '("input#dct-hasversion3")[0]', text: "1.0"});
     action (test, 'type', {jquery: '("input#dct-publisher4")[0]', text: "http://fake-publisher.com"});
@@ -107,8 +101,9 @@ var test_facets = new function() {
     action (test, 'type', {jquery: '("input#dcat-theme0")[0]', text: "http://www.wikidata.org/entity/Q27318"})
     action   (test, "click",   {jquery: '("input#submit[value=\'Save\']")[0]' });
 
+	wait   (test, "forElement",   {jquery: '("a:contains(\'+\')")[2]'});
     action   (test, "click",   {jquery: '("input.virtuosoRadio")[0]' });    
-    action   (test, "click",   {jquery: '("a[bind=\'addDistribution\']")[0]' });
+	action   (test, "click",   {jquery: '("a:contains(\'+\')")[2]' });
     action (test, 'type', {jquery: '("input#dct-title0")[0]', text: "Intergration test dataset"});
     action (test, 'type', {jquery: '("input#dct-license3")[0]', text: "http://purl.org/NET/rdflicense/ukogl3.0"});
     action (test, 'type', {jquery: '("input#dct-hasversion4")[0]', text: "1.0"});
@@ -116,9 +111,9 @@ var test_facets = new function() {
     
     action   (test, "click",   {jquery: '("button.button:contains(\'OK\')")[0]' });
     
-    
-    this.test_export_to_fdp = test;
-    
+    this.test_export_to_fdp = test;	
+
+
     // create numeric filter from Water column
     // test = newTest();
     // action (test, "click",       { jquery: '("td:contains(\'Water\') .column-header-menu")[0]' });
