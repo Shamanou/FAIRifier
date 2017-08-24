@@ -69,12 +69,20 @@ var test_facets = new function() {
     action (test, 'click',        {link: 'Edit Semantic Model...'});
     action (test, 'click',        {link: 'add prefix'});
     action (test, 'click',        {jquery: '("button#advanced_options_button")[0]'});
-    action (test, 'type',         {jquery: '("input[bind=\'prefix\']")[0]', text: "dc"});
-    action (test, 'type',         {jquery: '("input[bind=\'uri\']")[0]', text: 'http://purl.org/dc/elements/1.1/'});
+    action (test, 'type',         {jquery: '("input[bind=\'prefix\']")[0]', text: "yago"});
+    action (test, 'type',         {jquery: '("input[bind=\'uri\']")[0]', text: 'http://dbpedia.org/class/yago/'});
     action (test, 'click',        {jquery: '("button.button:contains(\'OK\')")[1]'});
     wait   (test, "forAjaxEnd");
+    action (test,'click', {link: 'add property'});
+    action (test,'click', {jquery: '("a.schema-alignment-link-tag")[0]'});
+    action (test, "type", {jquery: '("input[bind=\'newResourceUri\']")[0]', text:"rdf"});
+    wait (test, "forElement", {jquery: '("div.fbs-item-type")'})
+    action (test,'click', {jquery: '("div.fbs-item-type:contains(\'http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate\')")[0]'});
+	action (test,'click', {link: 'Configure?'});
+	action (test,'click', {jquery: '("button.button:contains(\'OK\')")[1]'});
+	action (test, 'click', {link:'Save'});
     action (test, "click", {jquery: '("button.button:contains(\'OK\')")[0]'});
-    this.test_uploading_ontology_from_web  = test;
+    this.test_downloading_ontology_from_web  = test;
 
     // export to FAirDataPoint
     test = newTest();
@@ -91,7 +99,6 @@ var test_facets = new function() {
     action (test, 'type', {jquery: '("input#institute-foaf-name0")[0]', text: "fake-publisher"})
     action (test, 'type', {jquery: '("input#dcat-themetaxonomy12")[0]', text: "http://test.nl"})
     action   (test, "click",   {jquery: '("input#submit[value=\'Save\']")[0]' });
-    
     wait   (test, "forElement",   {jquery: '("a:contains(\'+\')")[1]'});
     action   (test, "click",   {jquery: '("a:contains(\'+\')")[1]' });
     action (test, 'type', {jquery: '("input#dct-title0")[0]', text: "Intergration test dataset"});
@@ -100,7 +107,6 @@ var test_facets = new function() {
     action (test, 'type', {jquery: '("input#institure-foaf-name0")[0]', text: "fake-publisher"});
     action (test, 'type', {jquery: '("input#dcat-theme0")[0]', text: "http://www.wikidata.org/entity/Q27318"})
     action   (test, "click",   {jquery: '("input#submit[value=\'Save\']")[0]' });
-
 	wait   (test, "forElement",   {jquery: '("a:contains(\'+\')")[2]'});
     action   (test, "click",   {jquery: '("input.virtuosoRadio")[0]' });    
 	action   (test, "click",   {jquery: '("a:contains(\'+\')")[2]' });
@@ -108,10 +114,11 @@ var test_facets = new function() {
     action (test, 'type', {jquery: '("input#dct-license3")[0]', text: "http://purl.org/NET/rdflicense/ukogl3.0"});
     action (test, 'type', {jquery: '("input#dct-hasversion4")[0]', text: "1.0"});
     action   (test, "click",   {jquery: '("input#submit[value=\'Save\']")[0]' });
-    
     action   (test, "click",   {jquery: '("button.button:contains(\'OK\')")[0]' });
-    
-    this.test_export_to_fdp = test;	
+    action (test,'open',{url:"http://localhost:8080/fdp"});
+    action (test,'click',{jquery: '("a")[1]'})
+
+    this.test_post_and_validate_rdf = test;	
 
 
     // create numeric filter from Water column
