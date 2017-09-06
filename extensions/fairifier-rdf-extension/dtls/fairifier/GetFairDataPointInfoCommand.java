@@ -92,10 +92,10 @@ public class GetFairDataPointInfoCommand extends Command{
      * 
      * @param url
      * @return ArrayList<DatasetMetadata>
-     * @throws IOException
-     * @throws RDFParseException
-     * @throws RDFHandlerException
-     * @throws LayerUnavailableException
+     * @throws IOException is thrown when metadata cannot be read from the URL provided
+     * @throws RDFParseException is thrown when the metadata could not be parsed
+     * @throws RDFHandlerException thrown when a incorrect rdf parser is provided
+     * @throws LayerUnavailableException is thrown when no dataset metadata layer could be found at the provided url
      */
     private ArrayList<DatasetMetadata> getFdpDatasets(String url) throws IOException, RDFParseException, RDFHandlerException, LayerUnavailableException{
         f = SimpleValueFactory.getInstance();
@@ -133,10 +133,10 @@ public class GetFairDataPointInfoCommand extends Command{
      * 
      * @param url
      * @return ArrayList<CatalogMetadata>
-     * @throws IOException
-     * @throws LayerUnavailableException
-     * @throws RDFParseException
-     * @throws RDFHandlerException
+     * @throws IOException is thrown when metadata cannot be read from the URL provided
+     * @throws RDFParseException is thrown when the metadata could not be parsed
+     * @throws RDFHandlerException thrown when a incorrect rdf parser is provided
+     * @throws LayerUnavailableException is thrown when no dataset metadata layer could be found at the provided url
      */
     private ArrayList<CatalogMetadata> getFdpCatalogs(String url) throws IOException, LayerUnavailableException, RDFParseException, RDFHandlerException{
         f = SimpleValueFactory.getInstance();

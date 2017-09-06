@@ -38,17 +38,11 @@ public class FtpResource extends Resource{
      * 
      * A constructor which defines the resource with the necessary parameters for FTP
      * 
-     * host : is the full hostname including the protocol, for example: http://dtls.nl
-     * username : the FTP username
-     * password : the FTP password
-     * location : the path where the file should be store on the FTP server.
-     * filename : the name with which the file will be saved on the FTP server.
-     * 
-     * @param host
-     * @param username
-     * @param password
-     * @param location
-     * @param filename
+     * @param host is the full hostname including the protocol, for example: http://dtls.nl
+     * @param username the FTP username
+     * @param password the FTP password
+     * @param location the path where the file should be store on the FTP server.
+     * @param filename the name with which the file will be saved on the FTP server.
      */
     public FtpResource(String host, String username, String password, String location, String filename){
         this.host = host;

@@ -27,18 +27,12 @@ public class VirtuosoResource extends Resource{
     /**
      * 
      * This constructor takes in the parameters needed to push to a Virtuoso WEBDAV directory.
-     * 
-     * host : is the full hostname including the protocol, for example: http://dtls.nl
-     * username : the Virtuoso username
-     * password : the Virtuoso password
-     * directory : the path where the file should be store on the Virtuoso server.
-     * filename : the name with which the file will be saved on the Virtuoso server.
-     * 
-     * @param host
-     * @param filename
-     * @param username
-     * @param password
-     * @param directory
+     *
+     * @param host the full hostname including the protocol, for example: http://dtls.nl
+     * @param filename the name with which the file will be saved on the Virtuoso server.
+     * @param username the Virtuoso username
+     * @param password the Virtuoso password
+     * @param directory the path where the file should be store on the Virtuoso server.
      */
     public VirtuosoResource(String host, String filename, String username, String password, String directory){
         this.host = host;
