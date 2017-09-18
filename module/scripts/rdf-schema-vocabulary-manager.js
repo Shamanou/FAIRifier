@@ -99,7 +99,11 @@ RdfPrefixesManager.prototype._hasPrefix = function(name){
 * Some utility functions
 */
 RdfPrefixesManager.isPrefixedQname = function(qname){
-	return qname.match(/[_a-zA-Z][-_a-zA-Z0-9]*:($|([_a-zA-Z][-_a-zA-Z0-9]*))$/);
+        if ((qname.split(':').length -1) < 2){
+            return qname.match(/[_a-zA-Z][-_a-zA-Z0-9]*:($|([_a-zA-Z][-_a-zA-Z0-9]*))$/);
+        } else{
+            return qname.split(':')[0].match(/[_a-zA-Z][-_a-zA-Z0-9]*:($|([_a-zA-Z][-_a-zA-Z0-9]*))$/);
+        }
 };
 RdfPrefixesManager.deAssemble = function(qname){
 	var i = qname.indexOf(':');
