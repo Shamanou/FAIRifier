@@ -99,7 +99,11 @@ RdfPrefixesManager.prototype._hasPrefix = function(name){
 * Some utility functions
 */
 RdfPrefixesManager.isPrefixedQname = function(qname){
-        if ((qname.split(':').length -1) < 3){
+        //bugfix for the bug where duplicate colon in url makes url invalidated
+        //the fix is to check if there more then 1 colons and if so apply the 
+        //regex only to the first two strings surounding the first colon.
+    
+        if ((qname.split(':').length -1) <= 1){
             return qname.match(/[_a-zA-Z][-_a-zA-Z0-9]*:($|([_a-zA-Z][-_a-zA-Z0-9]*))$/);
         } else{
             return (qname.split(':')[0]+ ':' +  qname.split(':')[1]).match(/[_a-zA-Z][-_a-zA-Z0-9]*:($|([_a-zA-Z][-_a-zA-Z0-9]*))$/);
