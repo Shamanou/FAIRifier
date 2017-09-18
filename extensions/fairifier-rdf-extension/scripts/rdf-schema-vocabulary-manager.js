@@ -103,10 +103,12 @@ RdfPrefixesManager.isPrefixedQname = function(qname){
         //the fix is to check if there more then 1 colons and if so apply the 
         //regex only to the first two strings surounding the first colon.
     
+        var regex = /[_a-zA-Z][-_a-zA-Z0-9]*:($|([_a-zA-Z][-_a-zA-Z0-9]*))$/;
+    
         if ((qname.split(':').length -1) <= 1){
-            return qname.match(/[_a-zA-Z][-_a-zA-Z0-9]*:($|([_a-zA-Z][-_a-zA-Z0-9]*))$/);
+            return qname.match(regex);
         } else{
-            return (qname.split(':')[0]+ ':' +  qname.split(':')[1]).match(/[_a-zA-Z][-_a-zA-Z0-9]*:($|([_a-zA-Z][-_a-zA-Z0-9]*))$/);
+            return (qname.split(':')[0]+ ':' +  qname.split(':')[1]).match(regex);
         }
 };
 RdfPrefixesManager.deAssemble = function(qname){
