@@ -114,9 +114,13 @@ RdfSchemaAlignmentDialog.prototype._constructBody = function(body) {
                 }
             );
         var fileType = window.prompt("filetype","");
-        $.post("command/rdf-extension/save-rdf-skeleton",{model: JSON.stringify(self.getJSON()), projectId: theProject.id, fileType: fileType},function(data){
-            alert('RDF skeleton saved sucessfully');
-        });
+        $.post("command/rdf-extension/save-rdf-skeleton",
+                {model: JSON.stringify(self.getJSON()), 
+            projectId: theProject.id, fileType: fileType},
+            function(data){
+                alert('RDF skeleton saved sucessfully');
+            }
+        );
     });
     
     elmts.add_another_root_node.click(function(e){

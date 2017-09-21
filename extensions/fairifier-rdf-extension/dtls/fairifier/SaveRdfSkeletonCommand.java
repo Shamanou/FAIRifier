@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.refine.commands.Command;
 
 public class SaveRdfSkeletonCommand extends Command{
-    private static final RdfSkeletonService rdfSkeletonService = new FileSystemRdfSkeletonImp();
+    private static final RdfSkeletonService rdfSkeletonService = new FileSystemRdfSkeletonImpl();
     
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
