@@ -17,8 +17,7 @@ import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 public class FileSystemRdfSkeletonImpl implements RdfSkeletonService {
     private static final Path SAVELOCATION = Paths.get(System.getProperty("user.home") + "/.local/share/openrefine/");
@@ -27,7 +26,11 @@ public class FileSystemRdfSkeletonImpl implements RdfSkeletonService {
     
     @Override
     public List<String> listModels(final String fileType)  throws IOException {
-        List<String[]> files = Files.list(SAVELOCATION).filter(Files::isRegularFile).map(this::getStringAndFiletype).collect(Collectors.toList());;
+        List<String[]> files = Files
+                .list(SAVELOCATION)
+                .filter(Files::isRegularFile)
+                .map(this::getStringAndFiletype)
+                .collect(Collectors.toList());
         ArrayList<String> outList = new ArrayList<String>();
         for (String[] o : files) {
             if (o[0] != null) { 
@@ -36,15 +39,17 @@ public class FileSystemRdfSkeletonImpl implements RdfSkeletonService {
                 }
             }
         }
-        
-        System.out.println(outList.size());
         return outList;
     }
 
     @Override
     public List<String> listModels()  throws IOException {
         ArrayList<String> outList = new ArrayList<String>();
-        List<String[]> files = Files.list(SAVELOCATION).filter(Files::isRegularFile).map(this::getStringAndFiletype).collect(Collectors.toList());;
+        List<String[]> files = Files
+                .list(SAVELOCATION)
+                .filter(Files::isRegularFile)
+                .map(this::getStringAndFiletype)
+                .collect(Collectors.toList());
         for (String[] o : files) {
             if (o != null) { 
                 outList.add(o[0]);
