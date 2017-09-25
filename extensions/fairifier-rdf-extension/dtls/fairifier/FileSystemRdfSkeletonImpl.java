@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -17,16 +18,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.google.common.base.Optional;
+
 public class FileSystemRdfSkeletonImpl implements RdfSkeletonService {
     private static final Path SAVELOCATION = Paths.get(System.getProperty("user.home") + "/.local/share/openrefine/");
+    private static final ObjectMapper mapper = new ObjectMapper();
+
     
     @Override
     public List<String> listModels(final String fileType)  throws IOException {
-        Stream<Path> files = Files.list(SAVELOCATION);
-        
+        List<String[]> files = Files.list(SAVELOCATION).filter(Files::isRegularFile).map(this::getStringAndFiletype).collect(Collectors.toList());;
         ArrayList<String> outList = new ArrayList<String>();
-        List<String[]> out = files.map(element -> getStringAndFiletype(element)).collect(Collectors.toList());
-        for (String[] o : out) {
+        for (String[] o : files) {
             if (o[0] != null) { 
                 if (o[1].equals(fileType)) {
                     outList.add(o[0]);
@@ -40,10 +43,9 @@ public class FileSystemRdfSkeletonImpl implements RdfSkeletonService {
 
     @Override
     public List<String> listModels()  throws IOException {
-        Stream<Path> files = Files.list(SAVELOCATION);
         ArrayList<String> outList = new ArrayList<String>();
-        List<String[]> out = files.map(element -> getStringAndFiletype(element)).collect(Collectors.toList());
-        for (String[] o : out) {
+        List<String[]> files = Files.list(SAVELOCATION).filter(Files::isRegularFile).map(this::getStringAndFiletype).collect(Collectors.toList());;
+        for (String[] o : files) {
             if (o != null) { 
                 outList.add(o[0]);
             }
@@ -53,14 +55,12 @@ public class FileSystemRdfSkeletonImpl implements RdfSkeletonService {
     
     @Override
     public void saveModel(String json, String fileType, String projectId)  throws IOException {
-        try {
-            BufferedWriter out = new BufferedWriter(new FileWriter(SAVELOCATION.toString() + File.separator + projectId + ".skeleton.json"));
-            out.write(json);
-            out.close();
-            ObjectMapper mapper = new ObjectMapper();
+        Path fileLocation = Paths.get(SAVELOCATION.toString() + File.separator + projectId + ".skeleton.json");
+        Files.write(fileLocation, json.getBytes(StandardCharsets.UTF_8));
+        try (BufferedWriter writer = Files.newBufferedWriter(fileLocation)) {
             SkeletonMetadata metadata = new SkeletonMetadata();
             metadata.setFileType(fileType);
-            mapper.writeValue(new File(SAVELOCATION.toString() + File.separator  + projectId + ".metadata.skeleton.json"), metadata);
+            mapper.writeValue(writer, metadata);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
@@ -68,26 +68,21 @@ public class FileSystemRdfSkeletonImpl implements RdfSkeletonService {
 
     @Override
     public String loadModel(String projectId)  throws IOException {
-        Stream<Path> files = Files.list(SAVELOCATION);
-        List<String[]> out = files.map(element -> getStringAndFiletype(element)).collect(Collectors.toList());
-        for (String[] o : out) {
-            if (o != null) { 
-                if(o[0].equals(projectId)) {
-                    try {
-                        return new String(Files.readAllBytes(Paths.get(SAVELOCATION.toString() + File.separator + o[0] + ".skeleton.json")));
-                    } catch (IOException e) {
-                        throw new UncheckedIOException(e);
-                    }
-                }
-            }
-        }
-        return null;
+        java.util.Optional<String[]> selected = Files.list(SAVELOCATION)
+                .filter(Files::isRegularFile)
+                .filter(path -> {
+                    String filename = path.getFileName().toString();
+                    String[] tokens = filename.split("\\.");
+                    return tokens.length == 3 && tokens[0].equals(projectId);
+                })
+                .map(this::getStringAndFiletype)
+                .findFirst();
+        return selected.get()[1];
     }
     
     public String[] getStringAndFiletype(Path element){
         String name = element.getFileName().toString().split("\\.")[0];
         try {
-            ObjectMapper mapper = new ObjectMapper();
             if (new File(element.getParent() + File.separator + element.getFileName().toString()).isFile() && element.getFileName().toString().contains("metadata")) {
                 SkeletonMetadata metadata = mapper.readValue(new File(element.getParent().toString() + File.separator + name + ".metadata.skeleton.json"), SkeletonMetadata.class);
                 String[] out = { name, metadata.getFileType() };
