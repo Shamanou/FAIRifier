@@ -115,6 +115,18 @@ RdfSchemaAlignmentDialog.prototype._constructBody = function(body) {
     elmts._save_skeleton.click(function(e){
     	e.preventDefault();
     	var schema = self.getJSON();
+        var fileType = window.prompt("filetype","");
+        if (fileType != null){
+            $.post("command/rdf-extension/save-rdf-skeleton",
+                    {model: JSON.stringify(self.getJSON()), 
+                projectId: theProject.id, fileType: fileType},
+                function(data){
+                    alert('RDF skeleton saved sucessfully');
+                }
+            );
+        }
+    	
+    	
     	Refine.postProcess(
     	        "rdf-extension",
                 "save-rdf-schema",
@@ -127,16 +139,7 @@ RdfSchemaAlignmentDialog.prototype._constructBody = function(body) {
                     }
                 }
             );
-        var fileType = window.prompt("filetype","");
-        if (fileType != null){
-            $.post("command/rdf-extension/save-rdf-skeleton",
-                    {model: JSON.stringify(self.getJSON()), 
-                projectId: theProject.id, fileType: fileType},
-                function(data){
-                    alert('RDF skeleton saved sucessfully');
-                }
-            );
-        }
+
     });
     
     elmts.add_another_root_node.click(function(e){
