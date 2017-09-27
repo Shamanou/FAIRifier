@@ -29,8 +29,8 @@ public class FileSystemRdfSkeletonImpl implements RdfSkeletonService {
         return Files.list(SAVELOCATION)
                 .filter(Files::isRegularFile)
                 .map(this::getStringAndFiletype)
+                .filter(val -> val[1] != null)
                 .filter(val -> val[2].equals(fileType) )
-                .map(element -> element)
                 .collect(Collectors.toList());
     }
 
@@ -40,7 +40,6 @@ public class FileSystemRdfSkeletonImpl implements RdfSkeletonService {
                 .filter(Files::isRegularFile)
                 .map(this::getStringAndFiletype)
                 .filter(val -> val[0] != null)
-                .map(element -> element)
                 .collect(Collectors.toList());
     }
     
