@@ -1,3 +1,5 @@
+var listData = {};
+
 function RdfSkeletonListDialog(func){
     this._createDialog();
     this.func = func;
@@ -23,7 +25,7 @@ RdfSkeletonListDialog.prototype._constructFooter = function(footer) {
     var self = this;
     
     $('<button></button>').addClass('button').html("&nbsp;&nbsp;Load&nbsp;&nbsp;").click(function() {
-        $.post("command/rdf-extension/load-rdf-skeleton",  {projectId : $( "select :selected" ).val()},function(data){
+        $.post("command/rdf-extension/load-rdf-skeleton",  {projectId : listData[$( "select :selected" ).attr('id')].project},function(data){
             self.func(data);
             DialogSystem.dismissUntil(self._level - 1);
         });
@@ -43,9 +45,9 @@ RdfSkeletonListDialog.prototype._constructBody = function(body) {
    var container = $('<div id="body" style="display:block;">');
     var html = $('<div style="float:left;">');
     $.post("command/rdf-extension/list-rdf-skeletons",function(data){
-       console.log(data);
        var list = $('<select multiple width="300" style="width: 300px;">');
         var data = data.list
+        listData = data;
         for (var i = 0; i < data.length; i++){
            var element = data[i];
            var option = $('<option id='+ i + '>' + element.name + '</option>');

@@ -33,7 +33,10 @@ public class ListRdfSkeletonsCommand extends Command{
                     writer.value(l[1]);                    
                     writer.key("skeleton");
                     writer.value(l[0]);
+                    writer.key("project");
+                    writer.value(l[3]);
                     writer.endObject();
+                    
                 }
             }else {
                 List<String[]> list = rdfSkeletonService.listModels(req.getParameter("fileType"));
@@ -43,6 +46,8 @@ public class ListRdfSkeletonsCommand extends Command{
                     writer.value(l[1]);
                     writer.key("skeleton");
                     writer.value(l[0]);
+                    writer.key("project");
+                    writer.value(l[3]);
                     writer.endObject();
                 }
             }
