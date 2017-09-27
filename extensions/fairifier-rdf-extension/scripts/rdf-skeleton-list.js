@@ -60,10 +60,10 @@ RdfSkeletonListDialog.prototype._constructBody = function(body) {
                $("<h2>prefixes</h2>").appendTo(".preview")
                var prefList = $("<ul>");
                for (var x = 0; x < skeleton.prefixes.length; x++){
-                   $("<li>" + skeleton.prefixes[x].name + 
-                           " - <a href='" + skeleton.prefixes[x].uri + "'>"  
-                           + skeleton.prefixes[x].uri + 
-                           "</a></li>").appendTo(prefList);
+                   $("<li>").html(skeleton.prefixes[x].name + ' - ')
+                   .append($("<a>").html(skeleton.prefixes[x].uri))
+                   .attr("href", skeleton.prefixes[x].uri)
+                   .appendTo(prefList);
                }
                $("</ul>").appendTo(prefList);
                prefList.appendTo(".preview");
@@ -71,10 +71,10 @@ RdfSkeletonListDialog.prototype._constructBody = function(body) {
                var propList = $("<ul>");
                for (var z = 0; z < skeleton.rootNodes.length; z++){
                    for (var y = 0 ; y < skeleton.rootNodes[z].links.length; y++){
-                       $("<li>" + skeleton.rootNodes[z].links[y].target.columnName + 
-                               " - <a href=" + skeleton.rootNodes[z].links[y].uri + ">" + 
-                               skeleton.rootNodes[z].links[y].uri + 
-                               "</a></li>").appendTo(propList);
+                       $("<li>").html(skeleton.rootNodes[z].links[y].target.columnName + ' - ')
+                           .append($("<a>").html(skeleton.rootNodes[z].links[y].uri))
+                           .attr("href",  skeleton.rootNodes[z].links[y].uri)
+                           .appendTo(propList);
                    }
                }
                $("</ul>").appendTo(propList);

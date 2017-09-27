@@ -27,27 +27,27 @@ public class ListRdfSkeletonsCommand extends Command{
         
             if (req.getParameter("fileType") == null) {
                 List<String[]> list = rdfSkeletonService.listModels();
-                for(String[] l : list) {
+                for(String[] element : list) {
                     writer.object();
                     writer.key("name");
-                    writer.value(l[1]);                    
+                    writer.value(element[1]);                    
                     writer.key("skeleton");
-                    writer.value(l[0]);
+                    writer.value(element[0]);
                     writer.key("project");
-                    writer.value(l[3]);
+                    writer.value(element[3]);
                     writer.endObject();
                     
                 }
             }else {
                 List<String[]> list = rdfSkeletonService.listModels(req.getParameter("fileType"));
-                for(String[] l : list) {
+                for(String[] element : list) {
                     writer.object();
                     writer.key("name");
-                    writer.value(l[1]);
+                    writer.value(element[1]);
                     writer.key("skeleton");
-                    writer.value(l[0]);
+                    writer.value(element[0]);
                     writer.key("project");
-                    writer.value(l[3]);
+                    writer.value(element[3]);
                     writer.endObject();
                 }
             }
