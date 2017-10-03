@@ -27,8 +27,12 @@ RdfSkeletonListDialog.prototype._constructFooter = function(footer) {
     var self = this;
     
     $('<button></button>').addClass('button').html("&nbsp;&nbsp;Load&nbsp;&nbsp;").click(function() {
-        $.post("command/rdf-extension/load-rdf-skeleton",  {project: self._project,schema: JSON.stringify(self._schema) ,projectId : listData[$( "select :selected" ).attr('id')].project},function(data){
-            self.func(data);
+        $.post("command/rdf-extension/load-rdf-skeleton",  {
+                project: self._project,
+                schema: JSON.stringify(self._schema),
+                projectId : listData[$( "select :selected" ).attr('id')].project
+            },function(data){
+                self.func(data);
         });
     }).appendTo(footer);
     
