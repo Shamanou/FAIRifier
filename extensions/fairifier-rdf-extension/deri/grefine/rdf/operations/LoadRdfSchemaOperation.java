@@ -18,6 +18,8 @@ import com.google.refine.operations.OperationRegistry;
 import com.google.refine.util.ParsingUtilities;
 import com.google.refine.util.Pool;
 
+import deri.grefine.rdf.operations.SaveRdfSchemaOperation.RdfSchemaChange;
+
 public class LoadRdfSchemaOperation extends AbstractOperation {
 
     final protected RdfSchema _schema;
@@ -55,83 +57,9 @@ public class LoadRdfSchemaOperation extends AbstractOperation {
             long historyEntryID) throws Exception {
         String description = "Load RDF schema skeleton";
         
-        Change change = new RdfSchemaChange(_schema);
+        RdfSchemaChange change = new SaveRdfSchemaOperation.RdfSchemaChange(_schema);
         
         return new HistoryEntry(historyEntryID, project, description,
                 LoadRdfSchemaOperation.this, change);
-    }
-
-    static public class RdfSchemaChange implements Change {
-        final protected RdfSchema _newSchema;
-        protected RdfSchema _oldSchema;
-        
-        public RdfSchemaChange(RdfSchema schema) {
-            _newSchema = schema;
-        }
-        
-        public void apply(Project project) {
-            synchronized (project) {
-                _oldSchema = (RdfSchema) project.overlayModels.get("rdfSchema");
-                project.overlayModels.put("rdfSchema", _newSchema);
-            }
-        }
-        
-        public void revert(Project project) {
-            synchronized (project) {
-                if (_oldSchema == null) {
-                    project.overlayModels.remove("rdfSchema");
-                } else {
-                    project.overlayModels.put("rdfSchema", _oldSchema);
-                }
-            }
-        }
-        
-        public void save(Writer writer, Properties options) throws IOException {
-            writer.write("newSchema=");
-            writeRdfSchema(_newSchema, writer);
-            writer.write('\n');
-            writer.write("oldSchema=");
-            writeRdfSchema(_oldSchema, writer);
-            writer.write('\n');
-            writer.write("/ec/\n"); // end of change marker
-        }
-        
-        static public Change load(LineNumberReader reader, Pool pool)
-                throws Exception {
-            RdfSchema oldSchema = null;
-            RdfSchema newSchema = null;
-            
-            String line;
-            while ((line = reader.readLine()) != null && !"/ec/".equals(line)) {
-                int equal = line.indexOf('=');
-                CharSequence field = line.subSequence(0, equal);
-                String value = line.substring(equal + 1);
-                
-                if ("oldSchema".equals(field) && value.length() > 0) {
-                    oldSchema = RdfSchema.reconstruct(ParsingUtilities
-                            .evaluateJsonStringToObject(value));
-                } else if ("newSchema".equals(field) && value.length() > 0) {
-                    newSchema = RdfSchema.reconstruct(ParsingUtilities
-                            .evaluateJsonStringToObject(value));
-                }
-            }
-            
-            RdfSchemaChange change = new RdfSchemaChange(newSchema);
-            change._oldSchema = oldSchema;
-            
-            return change;
-        }
-        
-        static protected void writeRdfSchema(RdfSchema s, Writer writer)
-                throws IOException {
-            if (s != null) {
-                JSONWriter jsonWriter = new JSONWriter(writer);
-                try {
-                    s.write(jsonWriter, new Properties());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 }
