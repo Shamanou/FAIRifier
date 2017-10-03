@@ -39,14 +39,14 @@ public class LoadRdfSkeletonCommand extends Command{
             AbstractOperation op = new LoadRdfSchemaOperation(schema);
             Process process = op.createProcess(project, new Properties());
             
-            performProcessAndRespond(req, res, project, process);
+            performProcess(req, res, project, process);
             
         }catch(Exception e) {
             respondException(res, e);
         }
     }
     
-    static protected void performProcessAndRespond(
+    private void performProcess(
             HttpServletRequest request,
             HttpServletResponse response,
             Project project,

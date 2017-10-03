@@ -18,8 +18,6 @@ import com.google.refine.operations.OperationRegistry;
 import com.google.refine.util.ParsingUtilities;
 import com.google.refine.util.Pool;
 
-import deri.grefine.rdf.operations.SaveRdfSchemaOperation.RdfSchemaChange;
-
 public class LoadRdfSchemaOperation extends AbstractOperation {
 
     final protected RdfSchema _schema;
@@ -57,9 +55,7 @@ public class LoadRdfSchemaOperation extends AbstractOperation {
             long historyEntryID) throws Exception {
         String description = "Load RDF schema skeleton";
         
-        RdfSchemaChange change = new SaveRdfSchemaOperation.RdfSchemaChange(_schema);
-        
         return new HistoryEntry(historyEntryID, project, description,
-                LoadRdfSchemaOperation.this, change);
+                LoadRdfSchemaOperation.this, new SaveRdfSchemaOperation.RdfSchemaChange(_schema));
     }
 }
