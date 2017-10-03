@@ -26,28 +26,27 @@ public class ListRdfSkeletonsCommand extends Command{
             writer.array();
         
             if (req.getParameter("fileType") == null) {
-                List<String[]> list = rdfSkeletonService.listModels();
-                for(String[] element : list) {
+                List<RdfSkeletonTransformer> list = rdfSkeletonService.listModels();
+                for(RdfSkeletonTransformer element : list) {
                     writer.object();
                     writer.key("name");
-                    writer.value(element[1]);                    
+                    writer.value( element.getSkeletonMetadata().getTitle() );                    
                     writer.key("skeleton");
-                    writer.value(element[0]);
+                    writer.value( element.getModelAsJsonString() );
                     writer.key("project");
-                    writer.value(element[3]);
+                    writer.value( element.getSkeletonMetadata().getProjectId() );
                     writer.endObject();
-                    
                 }
             }else {
-                List<String[]> list = rdfSkeletonService.listModels(req.getParameter("fileType"));
-                for(String[] element : list) {
+                List<RdfSkeletonTransformer> list = rdfSkeletonService.listModels(req.getParameter("fileType"));
+                for(RdfSkeletonTransformer element : list) {
                     writer.object();
                     writer.key("name");
-                    writer.value(element[1]);
+                    writer.value( element.getSkeletonMetadata().getTitle() );                    
                     writer.key("skeleton");
-                    writer.value(element[0]);
+                    writer.value( element.getModelAsJsonString() );
                     writer.key("project");
-                    writer.value(element[3]);
+                    writer.value(  element.getSkeletonMetadata().getProjectId() );
                     writer.endObject();
                 }
             }
