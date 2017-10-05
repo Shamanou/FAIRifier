@@ -15,21 +15,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class RdfSkeletonJsonTransformerImpl implements RdfSkeletonTransformer {
 
     private static final ObjectMapper mapper = new ObjectMapper();
-    private Model model;
 
     @Override
     public Model read(Path path)
             throws IOException {
+        Model model = new Model();
         String projectId = path.getFileName().toString().split("\\.")[0];
-
-        this.model = new Model();
         String json = new String(Files.readAllBytes(path));
-        this.model.setJson(json);
+        model.setJson(json);
         Path metadataPath = Paths
                 .get(path.getParent().toString() + File.separator + projectId + ".metadata.skeleton.json");
         SkeletonMetadata metadata = mapper.readValue(metadataPath.toFile(), SkeletonMetadata.class);
-        this.model.setMetadata(metadata);
-        return this.model;
+        model.setMetadata(metadata);
+        return model;
     }
 
     @Override

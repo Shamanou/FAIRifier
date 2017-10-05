@@ -37,7 +37,7 @@ public class FileSystemRdfSkeletonImpl implements RdfSkeletonService {
     public void saveModel(String json, String fileType, String title, String projectId)
             throws IOException {
 
-        Path path = Paths.get(SAVELOCATION.toString() + File.separator + projectId + ".skeleton.json");
+        Path path = Paths.get(SAVELOCATION.toString(), projectId, ".skeleton.json");
         SkeletonMetadata metadata = new SkeletonMetadata();
         metadata.setFileName(path.toString());
         metadata.setFileType(fileType);
@@ -52,8 +52,7 @@ public class FileSystemRdfSkeletonImpl implements RdfSkeletonService {
     @Override
     public Model loadModel(String projectId)
             throws IOException {
-        return rdfSkeletonJsonTransformerImpl
-                .read(Paths.get(SAVELOCATION.toString() + File.separator + projectId + ".skeleton.json"));
+        return rdfSkeletonJsonTransformerImpl.read(Paths.get(SAVELOCATION.toString(), projectId, ".skeleton.json"));
     }
 
     private Model getStringAndFiletype(Path element) {
@@ -64,8 +63,8 @@ public class FileSystemRdfSkeletonImpl implements RdfSkeletonService {
                 SkeletonMetadata metadata = mapper.readValue(
                         new File(SAVELOCATION.toString() + File.separator + name + ".metadata.skeleton.json"),
                         SkeletonMetadata.class);
-                String json = new String(Files
-                        .readAllBytes(Paths.get(SAVELOCATION.toString() + File.separator + name + ".skeleton.json")));
+                String json = new String(
+                        Files.readAllBytes(Paths.get(SAVELOCATION.toString(), name, ".skeleton.json")));
 
                 model.setMetadata(metadata);
                 model.setJson(json);
