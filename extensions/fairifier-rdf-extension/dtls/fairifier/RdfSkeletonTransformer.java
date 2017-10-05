@@ -9,7 +9,6 @@ import java.nio.file.Path;
  * JSON blob and other formats.
  * 
  * @author Shamanou van Leeuwen
- * @since 5 Oktober 2017
  * @see http://openrefine.org/
  */
 public interface RdfSkeletonTransformer {
