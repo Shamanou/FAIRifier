@@ -33,7 +33,7 @@ public interface RdfSkeletonTransformer {
      * @param path
      *            - path to write to
      * @throws IOException
-     *             - thrown when there is file available
+     *             - thrown when there is no file available
      */
     public void write(Model model, Path path)
             throws IOException;
