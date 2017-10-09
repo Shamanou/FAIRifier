@@ -3,6 +3,8 @@ package org.dtls.fairifier;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
@@ -85,7 +87,8 @@ public class PostFairDataToFairDataPoint extends Command {
 
             String datasetPost = null;
             if (!dataset.getBoolean("_exists")) {
-                DatasetMetadata datasetMetadata = addPropertiesToDataset(dataset, uuid_dataset, fdp, catalog);
+                DatasetMetadata datasetMetadata = addPropertiesToDataset(dataset, uuid_dataset, fdp, catalog,
+                        uuid_catalog);
                 datasetPost = pushMetadataToFdp(uuid_dataset, datasetMetadata, "dataset", fdp.getString("baseUri"));
             }
 
@@ -136,7 +139,8 @@ public class PostFairDataToFairDataPoint extends Command {
         }
     }
 
-    private CatalogMetadata addPropertiesToCatalog(JSONObject catalog, String uuid_catalog, JSONObject fdp) {
+    private CatalogMetadata addPropertiesToCatalog(JSONObject catalog, String uuid_catalog, JSONObject fdp)
+            throws JSONException, InstantiationException, IllegalAccessException {
         String name = catalog.getString(TITLEPREDICATE).replace(" ", "_") + "_"
                 + catalog.getString(VERSIONPREDICATE).replace(" ", "_");
 
@@ -154,7 +158,9 @@ public class PostFairDataToFairDataPoint extends Command {
             catalogMetadata.setDescription(FACTORY.createLiteral(catalog.getString(DESCRIPTIONPREDICATE)));
         }
         if (catalog.has(LANGUAGEPREDICATE)) {
-            catalogMetadata.setLanguage(FACTORY.createIRI(catalog.getString(LANGUAGEPREDICATE)));
+            if (!catalog.getString(LANGUAGEPREDICATE).equals("[\"\"]")) {
+                catalogMetadata.setLanguage(FACTORY.createIRI(catalog.getString(LANGUAGEPREDICATE)));
+            }
         }
         if (catalog.has(HOMEPAGEPREDICATE)) {
             catalogMetadata.setHomepage(FACTORY.createIRI(catalog.getString(HOMEPAGEPREDICATE)));
@@ -163,7 +169,8 @@ public class PostFairDataToFairDataPoint extends Command {
     }
 
     private DatasetMetadata addPropertiesToDataset(JSONObject dataset, String uuid_dataset, JSONObject fdp,
-            JSONObject catalog) {
+            JSONObject catalog, String uuid_catalog)
+            throws JSONException, InstantiationException, IllegalAccessException {
 
         String name = dataset.getString(TITLEPREDICATE).replace(" ", "_") + "_"
                 + dataset.getString(VERSIONPREDICATE).replace(" ", "_");
@@ -173,10 +180,6 @@ public class PostFairDataToFairDataPoint extends Command {
         if (dataset.has(LANDINGPAGEPREDICATE)) {
             datasetMetadata.setLandingPage(FACTORY.createIRI(dataset.getString(LANDINGPAGEPREDICATE)));
         }
-        if (dataset.has(LANGUAGEPREDICATE)) {
-            datasetMetadata.setLanguage(FACTORY.createIRI(dataset.getString(LANGUAGEPREDICATE)));
-        }
-
         ArrayList<IRI> datasetThemes = new ArrayList<IRI>();
         for (int i = 0; i < dataset.getJSONArray(THEMEPREDICATE).length(); i++) {
             datasetThemes.add(FACTORY.createIRI(dataset.getJSONArray(THEMEPREDICATE).getString(i)));
@@ -194,7 +197,9 @@ public class PostFairDataToFairDataPoint extends Command {
             datasetMetadata.setContactPoint(FACTORY.createIRI(dataset.getString(CONTACTPOINTPREDICATE)));
         }
         if (dataset.has(LANGUAGEPREDICATE)) {
-            datasetMetadata.setLanguage(FACTORY.createIRI(dataset.getJSONArray(LANGUAGEPREDICATE).getString(0)));
+            if (!dataset.getString(LANGUAGEPREDICATE).equals("[\"\"]")) {
+                datasetMetadata.setLanguage(FACTORY.createIRI(dataset.getJSONArray(LANGUAGEPREDICATE).getString(0)));
+            }
         }
         if (dataset.has(DESCRIPTIONPREDICATE)) {
             datasetMetadata.setDescription(FACTORY.createLiteral(dataset.getString(DESCRIPTIONPREDICATE)));
@@ -209,13 +214,14 @@ public class PostFairDataToFairDataPoint extends Command {
                     + catalog.getString(VERSIONPREDICATE).replace(" ", "_");
 
             datasetMetadata.setParentURI(
-                    FACTORY.createIRI(fdp.getString("baseUri") + "/catalog/" + name + "_" + uuid_dataset));
+                    FACTORY.createIRI(fdp.getString("baseUri") + "/catalog/" + name + "_" + uuid_catalog));
         }
         return datasetMetadata;
     }
 
     private DistributionMetadata addPropertiesToDistribution(JSONObject distribution, String uuid_distribution,
-            String uuid_dataset, JSONObject fdp, JSONObject dataset, JSONObject uploadConfiguration, String data) {
+            String uuid_dataset, JSONObject fdp, JSONObject dataset, JSONObject uploadConfiguration, String data)
+            throws JSONException, InstantiationException, UnsupportedEncodingException, IllegalAccessException {
 
         String name = "FAIRdistribution_" + distribution.getString(TITLEPREDICATE).replace(" ", "_") + "_"
                 + distribution.getString(VERSIONPREDICATE).replace(" ", "_");
@@ -280,6 +286,8 @@ public class PostFairDataToFairDataPoint extends Command {
                 .replaceAll("\\<" + metadata.getUri().toString() + "\\>", "<>");
         String metadataId = baseUri + "/" + metadataType + "?id=" + metadata.getTitle().getLabel().replace(" ", "_")
                 + "_" + metadata.getVersion().getLabel().replace(" ", "_") + "_" + uuid;
-        return IOUtils.toString(HttpUtils.post(metadataId, metadataLayerStr, "text/turtle").getContent(), "UTF-8");
+
+        InputStream out = HttpUtils.post(metadataId, metadataLayerStr, "text/turtle").getContent();
+        return IOUtils.toString(out, "UTF-8");
     }
 }
