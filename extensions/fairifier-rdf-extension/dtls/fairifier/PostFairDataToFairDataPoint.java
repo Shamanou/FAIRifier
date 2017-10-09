@@ -79,126 +79,25 @@ public class PostFairDataToFairDataPoint extends Command {
 
             String catalogPost = null;
             if (!catalog.getBoolean("_exists")) {
-                String name = catalog.getString(TITLEPREDICATE).replace(" ", "_") + "_"
-                        + catalog.getString(VERSIONPREDICATE).replace(" ", "_");
-
-                CatalogMetadata catalogMetadata = getMetadata(CatalogMetadata.class, catalog,
-                        fdp.getString("baseUri") + "/catalog/" + name + "_" + uuid_catalog);
-
-                if (catalog.has(HOMEPAGEPREDICATE)) {
-                    catalogMetadata.setHomepage(FACTORY.createIRI(catalog.getString(HOMEPAGEPREDICATE)));
-                }
-                ArrayList<IRI> catalogThemes = new ArrayList<IRI>();
-                catalogThemes.add(FACTORY.createIRI(catalog.getString(THEMETAXONOMYPREDICATE)));
-                catalogMetadata.setThemeTaxonomys(catalogThemes);
-
-                if (catalog.has(DESCRIPTIONPREDICATE)) {
-                    catalogMetadata.setDescription(FACTORY.createLiteral(catalog.getString(DESCRIPTIONPREDICATE)));
-                }
-                if (catalog.has(LANGUAGEPREDICATE)) {
-                    catalogMetadata.setLanguage(FACTORY.createIRI(catalog.getString(LANGUAGEPREDICATE)));
-                }
-                if (catalog.has(HOMEPAGEPREDICATE)) {
-                    catalogMetadata.setHomepage(FACTORY.createIRI(catalog.getString(HOMEPAGEPREDICATE)));
-                }
+                CatalogMetadata catalogMetadata = addPropertiesToCatalog(catalog, uuid_catalog, fdp);
                 catalogPost = pushMetadataToFdp(uuid_catalog, catalogMetadata, "catalog", fdp.getString("baseUri"));
-
             }
 
             String datasetPost = null;
             if (!dataset.getBoolean("_exists")) {
-                String name = dataset.getString(TITLEPREDICATE).replace(" ", "_") + "_"
-                        + dataset.getString(VERSIONPREDICATE).replace(" ", "_");
-
-                DatasetMetadata datasetMetadata = getMetadata(DatasetMetadata.class, dataset,
-                        fdp.getString("baseUri") + "/dataset/" + name + "_" + uuid_dataset);
-                if (dataset.has(LANDINGPAGEPREDICATE)) {
-                    datasetMetadata.setLandingPage(FACTORY.createIRI(dataset.getString(LANDINGPAGEPREDICATE)));
-                }
-                if (dataset.has(LANGUAGEPREDICATE)) {
-                    datasetMetadata.setLanguage(FACTORY.createIRI(dataset.getString(LANGUAGEPREDICATE)));
-                }
-
-                ArrayList<IRI> datasetThemes = new ArrayList<IRI>();
-                for (int i = 0; i < dataset.getJSONArray(THEMEPREDICATE).length(); i++) {
-                    datasetThemes.add(FACTORY.createIRI(dataset.getJSONArray(THEMEPREDICATE).getString(i)));
-                }
-                datasetMetadata.setThemes(datasetThemes);
-
-                if (dataset.has(KEYWORDPREDICATE)) {
-                    ArrayList<Literal> keyWords = new ArrayList<Literal>();
-                    for (int i = 0; i < dataset.getJSONArray(KEYWORDPREDICATE).length(); i++) {
-                        keyWords.add(FACTORY.createLiteral(dataset.getJSONArray(KEYWORDPREDICATE).getString(i)));
-                    }
-                    datasetMetadata.setKeywords(keyWords);
-                }
-                if (dataset.has(CONTACTPOINTPREDICATE)) {
-                    datasetMetadata.setContactPoint(FACTORY.createIRI(dataset.getString(CONTACTPOINTPREDICATE)));
-                }
-                if (dataset.has(LANGUAGEPREDICATE)) {
-                    datasetMetadata
-                            .setLanguage(FACTORY.createIRI(dataset.getJSONArray(LANGUAGEPREDICATE).getString(0)));
-                }
-                if (dataset.has(DESCRIPTIONPREDICATE)) {
-                    datasetMetadata.setDescription(FACTORY.createLiteral(dataset.getString(DESCRIPTIONPREDICATE)));
-                }
-
-                name = dataset.getString(TITLEPREDICATE).replace(" ", "_") + "_"
-                        + dataset.getString(VERSIONPREDICATE).replace(" ", "_");
-                if (catalog.getBoolean("_exists")) {
-                    datasetMetadata.setParentURI(FACTORY.createIRI(catalog.getString(METADATAIDENTIFIERPREDICATE)));
-                } else {
-                    name = catalog.getString(TITLEPREDICATE).replace(" ", "_") + "_"
-                            + catalog.getString(VERSIONPREDICATE).replace(" ", "_");
-
-                    datasetMetadata.setParentURI(
-                            FACTORY.createIRI(fdp.getString("baseUri") + "/catalog/" + name + "_" + uuid_catalog));
-                }
+                DatasetMetadata datasetMetadata = addPropertiesToDataset(dataset, uuid_dataset, fdp, catalog);
                 datasetPost = pushMetadataToFdp(uuid_dataset, datasetMetadata, "dataset", fdp.getString("baseUri"));
             }
 
-            String name = "FAIRdistribution_" + distribution.getString(TITLEPREDICATE).replace(" ", "_") + "_"
-                    + distribution.getString(VERSIONPREDICATE).replace(" ", "_");
-            DistributionMetadata distributionMetadata = getMetadata(DistributionMetadata.class, distribution,
-                    fdp.getString("baseUri") + "/distribution/" + name + "_" + uuid_distribution);
-            distributionMetadata.setMediaType(FACTORY.createLiteral("text/turtle"));
-
             String data = new JSONObject(jb.toString()).getString("data");
-            distributionMetadata.setMediaType(FACTORY.createLiteral("text/turtle"));
-            distributionMetadata.setByteSize(FACTORY.createLiteral(data.getBytes("UTF-8").length));
-
-            if (fdp.getString("uploadtype").equals("ftp")) {
-                distributionMetadata.setDownloadURL(FACTORY.createIRI("ftp://" + uploadConfiguration.getString("host")
-                        + uploadConfiguration.getString("directory") + name + ".ttl"));
-            } else if (fdp.getString("uploadtype").equals("virtuoso")) {
-                distributionMetadata.setDownloadURL(FACTORY.createIRI(uploadConfiguration.getString("host")
-                        + uploadConfiguration.getString("directory") + name + ".ttl"));
-            }
-            if (dataset.getBoolean("_exists")) {
-                distributionMetadata.setParentURI(FACTORY.createIRI(dataset.getString(METADATAIDENTIFIERPREDICATE)));
-            } else {
-                name = dataset.getString(TITLEPREDICATE).replace(" ", "_") + "_"
-                        + dataset.getString(VERSIONPREDICATE).replace(" ", "_");
-
-                distributionMetadata.setParentURI(
-                        FACTORY.createIRI(fdp.getString("baseUri") + "/dataset/" + name + "_" + uuid_dataset));
-            }
-
-            if (distribution.has(LICENSEPREDICATE)) {
-                distributionMetadata.setLicense(FACTORY.createIRI(distribution.getString(LICENSEPREDICATE)));
-            }
-            if (distribution.has(DESCRIPTIONPREDICATE)) {
-                distributionMetadata
-                        .setDescription(FACTORY.createLiteral(distribution.getString(DESCRIPTIONPREDICATE)));
-            }
-
+            DistributionMetadata distributionMetadata = addPropertiesToDistribution(distribution, uuid_distribution,
+                    uuid_dataset, fdp, dataset, uploadConfiguration, data);
             String distributionPost = pushMetadataToFdp(uuid_distribution, distributionMetadata, "distribution",
                     fdp.getString("baseUri"));
-
             PushFairDataToResourceAdapter adapter = new PushFairDataToResourceAdapter();
             Resource r = null;
 
-            name = "FAIRdistribution_" + distribution.getString(TITLEPREDICATE).replace(" ", "_") + "_"
+            String name = "FAIRdistribution_" + distribution.getString(TITLEPREDICATE).replace(" ", "_") + "_"
                     + distribution.getString(VERSIONPREDICATE).replace(" ", "_");
 
             if (fdp.getString("uploadtype").equals("ftp")) {
@@ -235,6 +134,122 @@ public class PostFairDataToFairDataPoint extends Command {
         } catch (Exception ex) {
             respondException(res, ex);
         }
+    }
+
+    private CatalogMetadata addPropertiesToCatalog(JSONObject catalog, String uuid_catalog, JSONObject fdp) {
+        String name = catalog.getString(TITLEPREDICATE).replace(" ", "_") + "_"
+                + catalog.getString(VERSIONPREDICATE).replace(" ", "_");
+
+        CatalogMetadata catalogMetadata = getMetadata(CatalogMetadata.class, catalog,
+                fdp.getString("baseUri") + "/catalog/" + name + "_" + uuid_catalog);
+
+        if (catalog.has(HOMEPAGEPREDICATE)) {
+            catalogMetadata.setHomepage(FACTORY.createIRI(catalog.getString(HOMEPAGEPREDICATE)));
+        }
+        ArrayList<IRI> catalogThemes = new ArrayList<IRI>();
+        catalogThemes.add(FACTORY.createIRI(catalog.getString(THEMETAXONOMYPREDICATE)));
+        catalogMetadata.setThemeTaxonomys(catalogThemes);
+
+        if (catalog.has(DESCRIPTIONPREDICATE)) {
+            catalogMetadata.setDescription(FACTORY.createLiteral(catalog.getString(DESCRIPTIONPREDICATE)));
+        }
+        if (catalog.has(LANGUAGEPREDICATE)) {
+            catalogMetadata.setLanguage(FACTORY.createIRI(catalog.getString(LANGUAGEPREDICATE)));
+        }
+        if (catalog.has(HOMEPAGEPREDICATE)) {
+            catalogMetadata.setHomepage(FACTORY.createIRI(catalog.getString(HOMEPAGEPREDICATE)));
+        }
+        return catalogMetadata;
+    }
+
+    private DatasetMetadata addPropertiesToDataset(JSONObject dataset, String uuid_dataset, JSONObject fdp,
+            JSONObject catalog) {
+
+        String name = dataset.getString(TITLEPREDICATE).replace(" ", "_") + "_"
+                + dataset.getString(VERSIONPREDICATE).replace(" ", "_");
+
+        DatasetMetadata datasetMetadata = getMetadata(DatasetMetadata.class, dataset,
+                fdp.getString("baseUri") + "/dataset/" + name + "_" + uuid_dataset);
+        if (dataset.has(LANDINGPAGEPREDICATE)) {
+            datasetMetadata.setLandingPage(FACTORY.createIRI(dataset.getString(LANDINGPAGEPREDICATE)));
+        }
+        if (dataset.has(LANGUAGEPREDICATE)) {
+            datasetMetadata.setLanguage(FACTORY.createIRI(dataset.getString(LANGUAGEPREDICATE)));
+        }
+
+        ArrayList<IRI> datasetThemes = new ArrayList<IRI>();
+        for (int i = 0; i < dataset.getJSONArray(THEMEPREDICATE).length(); i++) {
+            datasetThemes.add(FACTORY.createIRI(dataset.getJSONArray(THEMEPREDICATE).getString(i)));
+        }
+        datasetMetadata.setThemes(datasetThemes);
+
+        if (dataset.has(KEYWORDPREDICATE)) {
+            ArrayList<Literal> keyWords = new ArrayList<Literal>();
+            for (int i = 0; i < dataset.getJSONArray(KEYWORDPREDICATE).length(); i++) {
+                keyWords.add(FACTORY.createLiteral(dataset.getJSONArray(KEYWORDPREDICATE).getString(i)));
+            }
+            datasetMetadata.setKeywords(keyWords);
+        }
+        if (dataset.has(CONTACTPOINTPREDICATE)) {
+            datasetMetadata.setContactPoint(FACTORY.createIRI(dataset.getString(CONTACTPOINTPREDICATE)));
+        }
+        if (dataset.has(LANGUAGEPREDICATE)) {
+            datasetMetadata.setLanguage(FACTORY.createIRI(dataset.getJSONArray(LANGUAGEPREDICATE).getString(0)));
+        }
+        if (dataset.has(DESCRIPTIONPREDICATE)) {
+            datasetMetadata.setDescription(FACTORY.createLiteral(dataset.getString(DESCRIPTIONPREDICATE)));
+        }
+
+        name = dataset.getString(TITLEPREDICATE).replace(" ", "_") + "_"
+                + dataset.getString(VERSIONPREDICATE).replace(" ", "_");
+        if (catalog.getBoolean("_exists")) {
+            datasetMetadata.setParentURI(FACTORY.createIRI(catalog.getString(METADATAIDENTIFIERPREDICATE)));
+        } else {
+            name = catalog.getString(TITLEPREDICATE).replace(" ", "_") + "_"
+                    + catalog.getString(VERSIONPREDICATE).replace(" ", "_");
+
+            datasetMetadata.setParentURI(
+                    FACTORY.createIRI(fdp.getString("baseUri") + "/catalog/" + name + "_" + uuid_dataset));
+        }
+        return datasetMetadata;
+    }
+
+    private DistributionMetadata addPropertiesToDistribution(JSONObject distribution, String uuid_distribution,
+            String uuid_dataset, JSONObject fdp, JSONObject dataset, JSONObject uploadConfiguration, String data) {
+
+        String name = "FAIRdistribution_" + distribution.getString(TITLEPREDICATE).replace(" ", "_") + "_"
+                + distribution.getString(VERSIONPREDICATE).replace(" ", "_");
+        DistributionMetadata distributionMetadata = getMetadata(DistributionMetadata.class, distribution,
+                fdp.getString("baseUri") + "/distribution/" + name + "_" + uuid_distribution);
+        distributionMetadata.setMediaType(FACTORY.createLiteral("text/turtle"));
+
+        distributionMetadata.setMediaType(FACTORY.createLiteral("text/turtle"));
+        distributionMetadata.setByteSize(FACTORY.createLiteral(data.getBytes("UTF-8").length));
+
+        if (fdp.getString("uploadtype").equals("ftp")) {
+            distributionMetadata.setDownloadURL(FACTORY.createIRI("ftp://" + uploadConfiguration.getString("host")
+                    + uploadConfiguration.getString("directory") + name + ".ttl"));
+        } else if (fdp.getString("uploadtype").equals("virtuoso")) {
+            distributionMetadata.setDownloadURL(FACTORY.createIRI(uploadConfiguration.getString("host")
+                    + uploadConfiguration.getString("directory") + name + ".ttl"));
+        }
+        if (dataset.getBoolean("_exists")) {
+            distributionMetadata.setParentURI(FACTORY.createIRI(dataset.getString(METADATAIDENTIFIERPREDICATE)));
+        } else {
+            name = dataset.getString(TITLEPREDICATE).replace(" ", "_") + "_"
+                    + dataset.getString(VERSIONPREDICATE).replace(" ", "_");
+
+            distributionMetadata.setParentURI(
+                    FACTORY.createIRI(fdp.getString("baseUri") + "/dataset/" + name + "_" + uuid_dataset));
+        }
+
+        if (distribution.has(LICENSEPREDICATE)) {
+            distributionMetadata.setLicense(FACTORY.createIRI(distribution.getString(LICENSEPREDICATE)));
+        }
+        if (distribution.has(DESCRIPTIONPREDICATE)) {
+            distributionMetadata.setDescription(FACTORY.createLiteral(distribution.getString(DESCRIPTIONPREDICATE)));
+        }
+        return distributionMetadata;
     }
 
     private <T extends Metadata> T getMetadata(Class<T> type, JSONObject args, String uri)
