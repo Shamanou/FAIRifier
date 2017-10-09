@@ -232,9 +232,7 @@ public class PostFairDataToFairDataPoint extends Command {
             writer.value(distributionPost);
             writer.endObject();
 
-        } catch (
-
-        Exception ex) {
+        } catch (Exception ex) {
             respondException(res, ex);
         }
     }
