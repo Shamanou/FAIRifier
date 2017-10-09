@@ -23,14 +23,13 @@ import org.json.JSONWriter;
 
 import com.google.refine.commands.Command;
 
-import nl.dtl.fairmetadata4j.io.*;
+import nl.dtl.fairmetadata4j.io.MetadataException;
+import nl.dtl.fairmetadata4j.model.Agent;
 import nl.dtl.fairmetadata4j.model.CatalogMetadata;
 import nl.dtl.fairmetadata4j.model.DatasetMetadata;
-import nl.dtl.fairmetadata4j.model.Agent;
-import nl.dtl.fairmetadata4j.model.Metadata;
-
 import nl.dtl.fairmetadata4j.model.DistributionMetadata;
-import nl.dtl.fairmetadata4j.utils.*;
+import nl.dtl.fairmetadata4j.model.Metadata;
+import nl.dtl.fairmetadata4j.utils.MetadataUtils;
 
 /**
  * 
