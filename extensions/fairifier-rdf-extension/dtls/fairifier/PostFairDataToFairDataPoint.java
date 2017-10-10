@@ -158,7 +158,7 @@ public class PostFairDataToFairDataPoint extends Command {
             catalogMetadata.setDescription(FACTORY.createLiteral(catalog.getString(DESCRIPTIONPREDICATE)));
         }
         if (catalog.has(LANGUAGEPREDICATE)) {
-            if (!catalog.getString(LANGUAGEPREDICATE).equals("[\"\"]")) {
+            if (catalog.getJSONArray(LANGUAGEPREDICATE) != null) {
                 catalogMetadata.setLanguage(FACTORY.createIRI(catalog.getString(LANGUAGEPREDICATE)));
             }
         }
@@ -197,7 +197,7 @@ public class PostFairDataToFairDataPoint extends Command {
             datasetMetadata.setContactPoint(FACTORY.createIRI(dataset.getString(CONTACTPOINTPREDICATE)));
         }
         if (dataset.has(LANGUAGEPREDICATE)) {
-            if (!dataset.getString(LANGUAGEPREDICATE).equals("[\"\"]")) {
+            if (dataset.getJSONArray(LANGUAGEPREDICATE) != null) {
                 datasetMetadata.setLanguage(FACTORY.createIRI(dataset.getJSONArray(LANGUAGEPREDICATE).getString(0)));
             }
         }
