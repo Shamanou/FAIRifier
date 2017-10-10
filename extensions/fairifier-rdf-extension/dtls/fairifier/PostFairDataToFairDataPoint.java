@@ -157,12 +157,12 @@ public class PostFairDataToFairDataPoint extends Command {
         if (catalog.has(DESCRIPTIONPREDICATE)) {
             catalogMetadata.setDescription(FACTORY.createLiteral(catalog.getString(DESCRIPTIONPREDICATE)));
         }
-        if (catalog.has(LANGUAGEPREDICATE)) {
-            if (catalog.getJSONArray(LANGUAGEPREDICATE) != null) {
-                catalogMetadata.setLanguage(FACTORY.createIRI(catalog.getString(LANGUAGEPREDICATE)));
-            }
+        if (catalog.has(LANGUAGEPREDICATE) && (catalog.getJSONArray(LANGUAGEPREDICATE) != null)) {
+            catalogMetadata.setLanguage(FACTORY.createIRI(catalog.getString(LANGUAGEPREDICATE)));
         }
-        if (catalog.has(HOMEPAGEPREDICATE)) {
+        if (catalog.has(HOMEPAGEPREDICATE))
+
+        {
             catalogMetadata.setHomepage(FACTORY.createIRI(catalog.getString(HOMEPAGEPREDICATE)));
         }
         return catalogMetadata;
@@ -196,12 +196,12 @@ public class PostFairDataToFairDataPoint extends Command {
         if (dataset.has(CONTACTPOINTPREDICATE)) {
             datasetMetadata.setContactPoint(FACTORY.createIRI(dataset.getString(CONTACTPOINTPREDICATE)));
         }
-        if (dataset.has(LANGUAGEPREDICATE)) {
-            if (dataset.getJSONArray(LANGUAGEPREDICATE) != null) {
-                datasetMetadata.setLanguage(FACTORY.createIRI(dataset.getJSONArray(LANGUAGEPREDICATE).getString(0)));
-            }
+        if (dataset.has(LANGUAGEPREDICATE) && (dataset.getJSONArray(LANGUAGEPREDICATE) != null)) {
+            datasetMetadata.setLanguage(FACTORY.createIRI(dataset.getJSONArray(LANGUAGEPREDICATE).getString(0)));
         }
-        if (dataset.has(DESCRIPTIONPREDICATE)) {
+        if (dataset.has(DESCRIPTIONPREDICATE))
+
+        {
             datasetMetadata.setDescription(FACTORY.createLiteral(dataset.getString(DESCRIPTIONPREDICATE)));
         }
 
