@@ -84,5 +84,6 @@
 	<classpathentry kind="lib" path="extensions/fairifier-rdf-extension/lib/rdf4j-sail-inferencer-2.1.6.jar"/>
 	<classpathentry kind="lib" path="extensions/fairifier-rdf-extension/lib/rdf4j-sail-memory-2.1.6.jar"/>
 	<classpathentry kind="lib" path="extensions/fairifier-rdf-extension/lib/rdf4j-util-2.1.6.jar"/>
+	<classpathentry kind="lib" path="extensions/fairifier-rdf-extension/lib/eclipse-rdf4j-2.1.6-onejar.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

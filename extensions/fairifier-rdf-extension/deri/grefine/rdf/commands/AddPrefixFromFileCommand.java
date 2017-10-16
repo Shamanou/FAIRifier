@@ -56,6 +56,14 @@ public class AddPrefixFromFileCommand extends RdfCommand {
                         format = "N3";
                     } else if (format.equals("application/n-triples")) {
                         format = "NTRIPLE";
+                    } else if (format.equals("application/n-quads")) {
+                        format = "NQUADS";
+                    } else if (format.equals("application/rdf+json")) {
+                        format = "RDFJSON";
+                    } else if (format.equals("application/trig")) {
+                        format = "TRIG";
+                    } else if (format.equals("application/trix")) {
+                        format = "TRIX";
                     }
                 } else {
                     filename = item.getName();
@@ -74,8 +82,18 @@ public class AddPrefixFromFileCommand extends RdfCommand {
                 rdfFormat = RDFFormat.N3;
             } else if (format.equals("NTRIPLE")) {
                 rdfFormat = RDFFormat.NTRIPLES;
-            } else {
+            } else if (format.equals("NQUADS")) {
+                rdfFormat = RDFFormat.NQUADS;
+            } else if (format.equals("RDF/XML")) {
                 rdfFormat = RDFFormat.RDFXML;
+            } else if (format.equals("RDFJSON")) {
+                rdfFormat = RDFFormat.RDFJSON;
+            } else if (format.equals("TRIX")) {
+                rdfFormat = RDFFormat.TRIX;
+            } else if (format.equals("TRIG")) {
+                rdfFormat = RDFFormat.TRIG;
+            } else {
+                rdfFormat = RDFFormat.JSONLD;
             }
             con.add(in, "", rdfFormat);
             con.close();
@@ -91,7 +109,9 @@ public class AddPrefixFromFileCommand extends RdfCommand {
             writer.value("ok");
             writer.endObject();
 
-        } catch (Exception e) {
+        } catch (
+
+        Exception e) {
             respondException(response, e);
         }
 

@@ -55,7 +55,7 @@ NewPrefixWidget.prototype.show = function(msg,def_prefix,onDone){
                     console.log(format);
                     if(!format['RDFFormat']){
                         dismissBusy();
-                        alert('file format could not be detected, only turtle, rdfxml and ntripple are supported')
+                        alert('file format could not be detected, turtle, rdfxml, ntripple, trig, trix, rdfjson, jsonld and nquads are supported')
                         return;
                     }else{
                           $.ajax({
