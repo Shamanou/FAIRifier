@@ -111,7 +111,7 @@ RdfSchemaAlignmentDialog.prototype._constructBody = function(body) {
             self._nodeUIs = [];
             self._renderBody(body);
             DialogSystem.dismissUntil(self._level);
-        }, self._schema, theProject.id);
+        } ,RdfSchemaAlignment._defaultNamespace, self._schema, theProject.id);
     });
 
     elmts._save_skeleton.click(function(e){
@@ -149,8 +149,7 @@ RdfSchemaAlignmentDialog.prototype._constructBody = function(body) {
                     }
                 );
             }
-            
-            
+                        
             Refine.postProcess(
                     "rdf-extension",
                     "save-rdf-schema",
