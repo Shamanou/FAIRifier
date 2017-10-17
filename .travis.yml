@@ -4,4 +4,4 @@ jdk:
   - oraclejdk7
   - openjdk7
   
-script: ./refine test
+script: ./refine build
