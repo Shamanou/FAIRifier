@@ -19,6 +19,7 @@ import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.RDFParser;
 import org.eclipse.rdf4j.rio.jsonld.JSONLDParser;
 import org.eclipse.rdf4j.rio.nquads.NQuadsParser;
@@ -109,8 +110,9 @@ public class DetectFileFormatCommand extends Command {
         }
 
         if ((url != null) && !url.trim().equals("") && !url.trim().equals("url")) {
+
             try {
-                format = getFormatFromUrl(parsers, url, in);
+                format = getFormatFromUrl(url, in);
             } catch (IOException e) {
                 respondException(res, e);
             }
@@ -147,19 +149,15 @@ public class DetectFileFormatCommand extends Command {
         return format;
     }
 
-    private String getFormatFromUrl(RDFParser[] parsers, String url, InputStream[] in)
+    private String getFormatFromUrl(String url, InputStream[] i)
             throws IOException, MalformedURLException {
         StringBuffer response = new StringBuffer();
         URL obj = new URL(url);
-
-        for (RDFParser parser : parsers) {
-            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-            con.addRequestProperty("Accept", parser.getRDFFormat().getDefaultMIMEType());
-            con.connect();
-            if (con.getResponseCode() == 200) {
-                return parser.getRDFFormat().getDefaultMIMEType();
-            }
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        con.connect();
+        if (con.getResponseCode() == 200) {
+            return con.getContentType();
         }
-        return "application/rdf+xml";
+        return RDFFormat.RDFXML.getDefaultMIMEType();
     }
 }
