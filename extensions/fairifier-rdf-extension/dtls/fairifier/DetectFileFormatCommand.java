@@ -81,8 +81,7 @@ public class DetectFileFormatCommand extends Command {
         FileItemFactory factory = new DiskFileItemFactory();
 
         // Create a new file upload handler
-        ServletFileUpload upload = new ServletFileUpload(factory);
-        List<FileItem> items = null;
+        final ServletFileUpload upload = new ServletFileUpload(factory);
         String baseuri = null;
         String filename = null;
         InputStream[] in = new InputStream[parsers.length];
@@ -90,8 +89,8 @@ public class DetectFileFormatCommand extends Command {
         String url = null;
 
         try {
-            items = upload.parseRequest(req);
-            for (FileItem item : items) {
+            List<FileItem> items = upload.parseRequest(req);
+            for (final FileItem item : items) {
                 if (item.getFieldName().equals("baseuri")) {
                     baseuri = item.getString();
                 } else if (item.getFieldName().equals("file_source")) {
@@ -101,7 +100,6 @@ public class DetectFileFormatCommand extends Command {
                     for (int i = 0; i < in.length; i++) {
                         StringWriter writer = new StringWriter();
                         in[i] = new BufferedInputStream(item.getInputStream());
-
                     }
                 }
             }

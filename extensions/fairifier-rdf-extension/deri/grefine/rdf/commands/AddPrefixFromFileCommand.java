@@ -45,7 +45,7 @@ public class AddPrefixFromFileCommand extends RdfCommand {
         ServletFileUpload upload = new ServletFileUpload(factory);
 
         String uri = null, prefix = null, projectId = null, filename = "";
-        Optional<RDFFormat> format = null;
+        Optional<RDFFormat> format;
         InputStream in = null;
         List<FileItem> items = null;
         try {
