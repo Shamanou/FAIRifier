@@ -32,17 +32,17 @@ import org.json.JSONWriter;
 
 public class AddPrefixFromFileCommand extends RdfCommand {
 
-    public AddPrefixFromFileCommand(ApplicationContext ctxt) {
+    public AddPrefixFromFileCommand(final ApplicationContext ctxt) {
         super(ctxt);
     }
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        FileItemFactory factory = new DiskFileItemFactory();
+        final FileItemFactory factory = new DiskFileItemFactory();
 
         // Create a new file upload handler
-        ServletFileUpload upload = new ServletFileUpload(factory);
+        final ServletFileUpload upload = new ServletFileUpload(factory);
 
         String uri = null, prefix = null, projectId = null, filename = "";
         Optional<RDFFormat> format;
@@ -72,7 +72,7 @@ public class AddPrefixFromFileCommand extends RdfCommand {
             }
         }
 
-        Repository repository = new SailRepository(new ForwardChainingRDFSInferencer(new MemoryStore()));
+        final Repository repository = new SailRepository(new ForwardChainingRDFSInferencer(new MemoryStore()));
         repository.initialize();
         try (RepositoryConnection con = repository.getConnection()) {
             con.add(in, "", format.get());
