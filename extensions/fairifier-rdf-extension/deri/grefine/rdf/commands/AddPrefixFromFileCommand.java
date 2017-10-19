@@ -44,7 +44,7 @@ public class AddPrefixFromFileCommand extends RdfCommand {
         // Create a new file upload handler
         final ServletFileUpload upload = new ServletFileUpload(factory);
 
-        String uri = null, prefix = null, projectId = null, filename = "";
+        String uri = null, prefix = null, projectId = null;
         Optional<RDFFormat> format = null;
         InputStream in = null;
         List<FileItem> items = null;
@@ -63,7 +63,6 @@ public class AddPrefixFromFileCommand extends RdfCommand {
             } else if (item.getFieldName().equals("file_format")) {
                 format = Rio.getParserFormatForMIMEType(item.getString());
             } else {
-                filename = item.getName();
                 try {
                     in = item.getInputStream();
                 } catch (IOException e) {
