@@ -3,14 +3,12 @@ package org.dtls.fairifier;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +21,10 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.http.HttpHeaders;
 import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFHandlerException;
+import org.eclipse.rdf4j.rio.RDFParseException;
 import org.eclipse.rdf4j.rio.RDFParser;
+import org.eclipse.rdf4j.rio.RDFParserRegistry;
 import org.eclipse.rdf4j.rio.jsonld.JSONLDParser;
 import org.eclipse.rdf4j.rio.nquads.NQuadsParser;
 import org.eclipse.rdf4j.rio.ntriples.NTriplesParser;
@@ -32,6 +33,7 @@ import org.eclipse.rdf4j.rio.rdfxml.RDFXMLParser;
 import org.eclipse.rdf4j.rio.trig.TriGParser;
 import org.eclipse.rdf4j.rio.trix.TriXParser;
 import org.eclipse.rdf4j.rio.turtle.TurtleParser;
+import org.json.JSONException;
 import org.json.JSONWriter;
 
 import com.google.refine.commands.Command;
@@ -51,18 +53,19 @@ import com.google.refine.commands.Command;
  */
 public class DetectFileFormatCommand extends Command {
 
-    private final static ArrayList<RDFParser> parsers = new ArrayList<RDFParser>() {
+    private final static ArrayList<RDFParser> PARSERS = new ArrayList<RDFParser>();
 
-        {
-            add(new TurtleParser());
-            add(new NTriplesParser());
-            add(new RDFXMLParser());
-            add(new JSONLDParser());
-            add(new NQuadsParser());
-            add(new RDFJSONParser());
-            add(new TriXParser());
-            add(new TriGParser());
-        }
+    static {
+
+        PARSERS.add(new TurtleParser());
+        PARSERS.add(new NTriplesParser());
+        PARSERS.add(new RDFXMLParser());
+        PARSERS.add(new JSONLDParser());
+        PARSERS.add(new NQuadsParser());
+        PARSERS.add(new RDFJSONParser());
+        PARSERS.add(new TriXParser());
+        PARSERS.add(new TriGParser());
+
     };
 
     /**
@@ -89,7 +92,7 @@ public class DetectFileFormatCommand extends Command {
         // Create a new file upload handler
         final ServletFileUpload upload = new ServletFileUpload(factory);
         String baseuri = null;
-        InputStream[] in = new InputStream[parsers.size()];
+        FileItem fileContent = null;
         String format = null;
         String url = null;
 
@@ -101,10 +104,7 @@ public class DetectFileFormatCommand extends Command {
                 } else if (item.getFieldName().equals("file_source")) {
                     url = item.getString();
                 } else if (item.getFieldName().equals("file_upload")) {
-                    for (int i = 0; i < in.length; i++) {
-                        StringWriter writer = new StringWriter();
-                        in[i] = new BufferedInputStream(item.getInputStream());
-                    }
+                    fileContent = item;
                 }
             }
         } catch (FileUploadException ex) {
@@ -114,12 +114,12 @@ public class DetectFileFormatCommand extends Command {
         if ((url != null) && !url.trim().equals("") && !url.trim().equals("url")) {
 
             try {
-                format = getFormatFromUrl(parsers, url, in);
+                format = getFormatFromUrl(url);
             } catch (IOException e) {
                 respondException(res, e);
             }
         } else {
-            format = parseFullFile(parsers, in, baseuri);
+            format = parseFullFile(fileContent, baseuri);
         }
         try {
             res.setCharacterEncoding("UTF-8");
@@ -129,34 +129,39 @@ public class DetectFileFormatCommand extends Command {
             writer.key("RDFFormat");
             writer.value(format);
             writer.endObject();
-        } catch (Exception e) {
+        } catch (JSONException e) {
             respondException(res, e);
         }
     }
 
-    private String parseFullFile(ArrayList<RDFParser> parsers, InputStream[] in, String baseuri) {
+    private String parseFullFile(FileItem file, String baseuri) {
         String format = null;
-        for (int i = 0; i < parsers.size(); i++) {
+        for (RDFParser parser : PARSERS) {
             try {
                 if (baseuri == null) {
                     baseuri = "";
                 }
-                parsers.get(i).parse(in[i], baseuri);
-                format = parsers.get(i).getRDFFormat().getDefaultMIMEType();
+                parser.parse(new BufferedInputStream(file.getInputStream()), baseuri);
+                format = parser.getRDFFormat().getDefaultMIMEType();
                 break;
-            } catch (Exception e) {
+            } catch (IOException e) {
+                continue;
+            } catch (RDFParseException e) {
+                continue;
+            } catch (RDFHandlerException e) {
                 continue;
             }
         }
         return format;
+
     }
 
-    private String getFormatFromUrl(ArrayList<RDFParser> parsers, String url, InputStream[] i)
+    private String getFormatFromUrl(String url)
             throws IOException, MalformedURLException {
         StringBuffer response = new StringBuffer();
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-        List<RDFFormat> rdfFormats = parsers.stream().map(val -> val.getRDFFormat()).collect(Collectors.toList());
+        Set<RDFFormat> rdfFormats = RDFParserRegistry.getInstance().getKeys();
         List<String> acceptHeaders = RDFFormat.getAcceptParams(rdfFormats, false, RDFFormat.RDFXML);
 
         for (String acceptHeader : acceptHeaders) {
