@@ -19,7 +19,9 @@ public abstract class Resource {
     }
 
     protected boolean hasModel() {
-        if (this.fairData == null) return false;
+        if (this.fairData == null) {
+            return false;
+        }
         return true;
     }
 
