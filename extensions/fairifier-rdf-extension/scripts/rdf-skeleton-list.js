@@ -33,7 +33,7 @@ RdfSkeletonListDialog.prototype._constructFooter = function(footer) {
         $.post("command/rdf-extension/load-rdf-skeleton",  {
                 project: self._project,
                 schema : self._schema,
-                projectId : listData[$( "select :selected" ).attr('id')].project,
+                projectId : listData[$( "select: selected" ).attr('id')].project
             },function(data){
                 self.func(data);
         });
