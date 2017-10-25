@@ -25,14 +25,20 @@ RdfSkeletonListDialog.prototype._createDialog = function() {
 };
 
 RdfSkeletonListDialog.prototype._constructFooter = function(footer) {
-  var self = this;
+  self = this;
 
-  $('<button></button>').addClass('button')
-          .html("&nbsp;&nbsp;Load&nbsp;&nbsp;").click(
-                  function() {
-                    self._schema['baseUri'] = self._baseuri;
-                    self._schema = JSON.stringify(self._schema);
-                    $.post("command/rdf-extension/load-rdf-skeleton", {
+  $('<button>').addClass('button').html("&nbsp;&nbsp;Load&nbsp;&nbsp;").click(
+          function() {
+            if (typeof self._schema !== 'undefined') {
+              self._schema['baseUri'] = self._baseuri;
+              self._schema = JSON.stringify(self._schema);
+            } else {
+              self._schema = {
+                'baseuri': self._baseuri
+              };
+            }
+            $.post("command/rdf-extension/load-rdf-skeleton",
+                    {
                       project: self._project,
                       schema: self._schema,
                       projectId: self.listData[$("select").find(":selected")
@@ -40,7 +46,7 @@ RdfSkeletonListDialog.prototype._constructFooter = function(footer) {
                     }, function(data) {
                       self.func(data);
                     });
-                  }).appendTo(footer);
+          }).appendTo(footer);
 
   $('<button></button>').addClass('button').text("Cancel").click(function() {
     DialogSystem.dismissUntil(self._level - 1);
@@ -48,10 +54,9 @@ RdfSkeletonListDialog.prototype._constructFooter = function(footer) {
 };
 
 RdfSkeletonListDialog.prototype._constructBody = function(body) {
-  var self = this;
-  $(
-          '<p>' + 'Select a RDF skeleton saved earlier to apply to your data.'
-                  + '</p>').appendTo(body);
+  self = this;
+  $('<p>').text("Select a RDF skeleton saved earlier to apply to your data.")
+          .appendTo(body);
 
   var container = $('<div id="body" style="display:block;">');
   var html = $('<div style="float:left;">');
@@ -94,6 +99,29 @@ RdfSkeletonListDialog.prototype._constructBody = function(body) {
     }
     $('</select>').appendTo(list);
     list.appendTo(html);
+    $("<br>").appendTo(html);
+    $("<input>", {
+      type: "radio",
+      name: "loadMode",
+      value: "overwrite",
+      id: "loadModeOverwrite"
+    }).appendTo(html);
+    $("<label>", {
+      'for': "loadModeOverwrite",
+      text: "Overwrite existing model",
+    }).appendTo(html);
+
+    $("<input>", {
+      type: "radio",
+      name: "loadMode",
+      value: "append",
+      id: "loadAppend",
+      checked: ""
+    }).appendTo(html);
+    $("<label>", {
+      'for': "loadAppend",
+      text: "Append to existing model",
+    }).appendTo(html);
   });
   $('</div>').appendTo(html);
   $(html).appendTo(container);
