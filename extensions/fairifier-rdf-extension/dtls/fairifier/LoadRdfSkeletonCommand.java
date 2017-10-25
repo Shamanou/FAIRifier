@@ -29,9 +29,9 @@ public class LoadRdfSkeletonCommand extends Command {
         res.setHeader("Content-Type", "application/json");
         JSONWriter writer = new JSONWriter(res.getWriter());
         try {
-            Project project = getProject(req); // this needs the project parameter, indicating the
-                                               // project on which the
-                                               // skeleton should be applied
+            // this needs the project parameter, indicating the project on which the skeleton should
+            // be applied
+            Project project = getProject(req);
 
             String jsonString = req.getParameter("schema");
             JSONObject json = ParsingUtilities.evaluateJsonStringToObject(jsonString);

@@ -5,9 +5,8 @@ function RdfSchemaAlignmentDialog(schema) {
   this._originalSchema = schema || {
     rootNodes: []
   };
-  this._schema = cloneDeep(this._originalSchema); // this is what can be
-  // munched
-  // on
+  // this is what can be munched on
+  this._schema = cloneDeep(this._originalSchema);
 
   if (!this._schema.rootNodes.length) {
     this._schema.rootNodes.push(RdfSchemaAlignment.createNewRootNode());
@@ -22,11 +21,8 @@ function RdfSchemaAlignmentDialog(schema) {
 
   // initialize vocabularyManager
   this._prefixesManager = new RdfPrefixesManager(this, this._schema.prefixes);
-
-  this
-          ._replaceBaseUri(RdfSchemaAlignment._defaultNamespace
-                  || window.location.protocol + "//" + window.location.host
-                  + "/", true);
+  var url = window.location.protocol + "//" + window.location.host + "/";
+  this._replaceBaseUri(RdfSchemaAlignment._defaultNamespace || url, true);
 };
 
 RdfSchemaAlignmentDialog.prototype._createDialog = function() {
@@ -72,8 +68,7 @@ RdfSchemaAlignmentDialog.prototype._constructFooter = function(footer) {
 RdfSchemaAlignmentDialog.prototype._constructBody = function(body) {
   var self = this;
   $(
-          '<p>'
-                  + 'The Semantic model below specifies how the RDF data that will get generated from your grid-shaped data. '
+          '<p>The Semantic model below specifies how the RDF data that will get generated from your grid-shaped data. '
                   + 'The cells in each record of your data will get placed into nodes within the model. Configure the model by specifying which column to substitute into which node.'
                   + '</p>').appendTo(body);
 
