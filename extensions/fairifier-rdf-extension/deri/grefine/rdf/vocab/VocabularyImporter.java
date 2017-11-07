@@ -1,6 +1,5 @@
 package org.deri.grefine.rdf.vocab;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -8,12 +7,15 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import org.apache.http.HttpHeaders;
 import org.apache.http.ProtocolException;
+import org.apache.tika.mime.MediaType;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.ValueFactory;
+import org.eclipse.rdf4j.model.impl.SimpleNamespace;
 import org.eclipse.rdf4j.model.impl.ValueFactoryImpl;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.QueryLanguage;
@@ -41,7 +43,6 @@ import org.eclipse.rdf4j.sail.inferencer.fc.ForwardChainingRDFSInferencer;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.google.common.net.MediaType;
 
 
 public class VocabularyImporter {
@@ -67,7 +68,7 @@ public class VocabularyImporter {
     public void importVocabulary(String name, String uri, String fetchUrl, List<RDFSClass> classes,
             List<RDFSProperty> properties) throws VocabularyImportException {
         try {
-            Repository repos = getModel(fetchUrl);
+            Repository repos = getModel(fetchUrl, name);
             getTerms(repos, name, classes, properties);
         } catch (IOException e) {
             throw new VocabularyImportException("Unable to import vocabulary from " + fetchUrl, e);
@@ -111,7 +112,7 @@ public class VocabularyImporter {
             + "FILTER regex(str(?resource), \"^";
     private static final String PROPERTIES_QUERY_P2 = "\")}";
 
-    private Repository getModel(String url) throws VocabularyImportException {
+    private Repository getModel(String url, String name) throws VocabularyImportException {
         try {
             final Repository repository =
                     new SailRepository(new ForwardChainingRDFSInferencer(new MemoryStore()));
@@ -119,7 +120,17 @@ public class VocabularyImporter {
             try (RepositoryConnection con = repository.getConnection()) {
                 final ValueFactory F = new ValueFactoryImpl();
                 Model model = getModelFromUrl(url);
-                con.add(model, F.createIRI(model.getNamespace("").get().getName()));
+                if (model.getNamespaces().contains(new SimpleNamespace(name, url))) {
+                    con.add(model, F.createIRI(model.getNamespace(name).get().getName()));
+                } else {
+                    try {
+                        con.add(model, F.createIRI(model.getNamespace("").get().getName()));
+                    } catch (NoSuchElementException ex) {
+                        // needed in case the base uri and location are equal, and the base uri is
+                        // not in a name space
+                        con.add(model, F.createIRI(url));
+                    }
+                }
                 con.close();
                 return repository;
             }
@@ -144,17 +155,21 @@ public class VocabularyImporter {
         List<String> acceptHeaders = RDFFormat.getAcceptParams(rdfFormats, false, RDFFormat.RDFXML);
 
         for (String acceptHeader : acceptHeaders) {
-            con.setRequestProperty(HttpHeaders.ACCEPT, acceptHeader);
+            if (!acceptHeader.split(";")[0].trim().equals(MediaType.TEXT_PLAIN.toString())) {
+                con.addRequestProperty(HttpHeaders.ACCEPT, acceptHeader);
+            }
         }
+
         con.connect();
+        // These response codes are required for at least the default ontologies
         if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
-            if (con.getContentType().equals(MediaType.PLAIN_TEXT_UTF_8.toString())) {
+            if (con.getContentType().split(";")[0].trim().equals(MediaType.TEXT_HTML.toString())
+                    || con.getContentType().split(";")[0].trim()
+                            .equals(MediaType.TEXT_PLAIN.toString())) {
+
                 for (RDFParser parser : PARSERS) {
                     try {
-                        if (url == null) {
-                            url = "";
-                        }
-                        parser.parse(new BufferedInputStream(con.getInputStream()), url);
+                        parser.parse(con.getInputStream(), url);
                         return parser;
                     } catch (IOException e) {
                         continue;
@@ -176,7 +191,11 @@ public class VocabularyImporter {
         String uri = null;
         try {
             RepositoryConnection con = repos.getConnection();
-            uri = "";
+            if (con.getNamespaces().asList().contains(name)) {
+                uri = con.getNamespace(name);
+            } else {
+                uri = "";
+            }
             try {
                 TupleQuery query = con.prepareTupleQuery(QueryLanguage.SPARQL,
                         CLASSES_QUERY_P1 + uri + CLASSES_QUERY_P2);
