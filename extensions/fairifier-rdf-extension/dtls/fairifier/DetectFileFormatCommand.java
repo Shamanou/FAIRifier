@@ -9,11 +9,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
+import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
@@ -35,7 +34,7 @@ import org.eclipse.rdf4j.rio.trix.TriXParser;
 import org.eclipse.rdf4j.rio.turtle.TurtleParser;
 import org.json.JSONException;
 import org.json.JSONWriter;
-
+import com.google.common.net.MediaType;
 import com.google.refine.commands.Command;
 
 /**
@@ -47,8 +46,8 @@ import com.google.refine.commands.Command;
  */
 
 /**
- * A command which detects the file format, should be configured in the
- * controller and called from the javascript front-end.
+ * A command which detects the file format, should be configured in the controller and called from
+ * the javascript front-end.
  * 
  */
 public class DetectFileFormatCommand extends Command {
@@ -69,17 +68,14 @@ public class DetectFileFormatCommand extends Command {
     };
 
     /**
-     * This method takes a request containing RDF and tries to iterate over
-     * different parsers to see which one is able to parse the data. If it is able
-     * to be parsed a format string is returned by passing it to the response object
-     * in JSON-format.
+     * This method takes a request containing RDF and tries to iterate over different parsers to see
+     * which one is able to parse the data. If it is able to be parsed a format string is returned
+     * by passing it to the response object in JSON-format.
      * 
      * URLs are parsed by checking the content-type of the HTTP response.
      * 
-     * @param req
-     *            a request object
-     * @param res
-     *            a response object
+     * @param req a request object
+     * @param res a response object
      * @see com.google.refine.commands.Command#doPost(javax.servlet.http.HttpServletRequest,
      *      javax.servlet.http.HttpServletResponse)
      */
@@ -156,11 +152,16 @@ public class DetectFileFormatCommand extends Command {
 
     }
 
-    private String getFormatFromUrl(String url)
-            throws IOException, MalformedURLException {
+    private String getFormatFromUrl(String url) throws IOException, MalformedURLException {
         StringBuffer response = new StringBuffer();
         URL obj = new URL(url);
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        HttpURLConnection con;
+
+        if (url.substring(0, 5).toLowerCase().equals("https")) {
+            con = (HttpsURLConnection) obj.openConnection();
+        } else {
+            con = (HttpURLConnection) obj.openConnection();
+        }
         Set<RDFFormat> rdfFormats = RDFParserRegistry.getInstance().getKeys();
         List<String> acceptHeaders = RDFFormat.getAcceptParams(rdfFormats, false, RDFFormat.RDFXML);
 
@@ -168,8 +169,29 @@ public class DetectFileFormatCommand extends Command {
             con.setRequestProperty(HttpHeaders.ACCEPT, acceptHeader);
         }
         con.connect();
-        if (con.getResponseCode() == 200) {
-            return con.getContentType();
+        if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
+            if (con.getContentType().equals(MediaType.PLAIN_TEXT_UTF_8.toString())) {
+                String format = null;
+                for (RDFParser parser : PARSERS) {
+                    try {
+                        if (url == null) {
+                            url = "";
+                        }
+                        parser.parse(new BufferedInputStream(con.getInputStream()), url);
+                        format = parser.getRDFFormat().getDefaultMIMEType();
+                        break;
+                    } catch (IOException e) {
+                        continue;
+                    } catch (RDFParseException e) {
+                        continue;
+                    } catch (RDFHandlerException e) {
+                        continue;
+                    }
+                }
+                return format;
+            } else {
+                return con.getContentType();
+            }
         }
         return RDFFormat.RDFXML.getDefaultMIMEType();
     }
