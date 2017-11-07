@@ -3,13 +3,8 @@ package org.dtls.fairifier;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,12 +13,9 @@ import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.http.HttpHeaders;
-import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.RDFHandlerException;
 import org.eclipse.rdf4j.rio.RDFParseException;
 import org.eclipse.rdf4j.rio.RDFParser;
-import org.eclipse.rdf4j.rio.RDFParserRegistry;
 import org.eclipse.rdf4j.rio.jsonld.JSONLDParser;
 import org.eclipse.rdf4j.rio.nquads.NQuadsParser;
 import org.eclipse.rdf4j.rio.ntriples.NTriplesParser;
@@ -34,7 +26,6 @@ import org.eclipse.rdf4j.rio.trix.TriXParser;
 import org.eclipse.rdf4j.rio.turtle.TurtleParser;
 import org.json.JSONException;
 import org.json.JSONWriter;
-import com.google.common.net.MediaType;
 import com.google.refine.commands.Command;
 
 /**
@@ -106,17 +97,8 @@ public class DetectFileFormatCommand extends Command {
         } catch (FileUploadException ex) {
             respondException(res, ex);
         }
+        format = parseFullFile(fileContent, baseuri);
 
-        if ((url != null) && !url.trim().equals("") && !url.trim().equals("url")) {
-
-            try {
-                format = getFormatFromUrl(url);
-            } catch (IOException e) {
-                respondException(res, e);
-            }
-        } else {
-            format = parseFullFile(fileContent, baseuri);
-        }
         try {
             res.setCharacterEncoding("UTF-8");
             res.setHeader("Content-Type", "application/json");
@@ -150,49 +132,5 @@ public class DetectFileFormatCommand extends Command {
         }
         return format;
 
-    }
-
-    private String getFormatFromUrl(String url) throws IOException, MalformedURLException {
-        StringBuffer response = new StringBuffer();
-        URL obj = new URL(url);
-        HttpURLConnection con;
-
-        if (url.substring(0, 5).toLowerCase().equals("https")) {
-            con = (HttpsURLConnection) obj.openConnection();
-        } else {
-            con = (HttpURLConnection) obj.openConnection();
-        }
-        Set<RDFFormat> rdfFormats = RDFParserRegistry.getInstance().getKeys();
-        List<String> acceptHeaders = RDFFormat.getAcceptParams(rdfFormats, false, RDFFormat.RDFXML);
-
-        for (String acceptHeader : acceptHeaders) {
-            con.setRequestProperty(HttpHeaders.ACCEPT, acceptHeader);
-        }
-        con.connect();
-        if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
-            if (con.getContentType().equals(MediaType.PLAIN_TEXT_UTF_8.toString())) {
-                String format = null;
-                for (RDFParser parser : PARSERS) {
-                    try {
-                        if (url == null) {
-                            url = "";
-                        }
-                        parser.parse(new BufferedInputStream(con.getInputStream()), url);
-                        format = parser.getRDFFormat().getDefaultMIMEType();
-                        break;
-                    } catch (IOException e) {
-                        continue;
-                    } catch (RDFParseException e) {
-                        continue;
-                    } catch (RDFHandlerException e) {
-                        continue;
-                    }
-                }
-                return format;
-            } else {
-                return con.getContentType();
-            }
-        }
-        return RDFFormat.RDFXML.getDefaultMIMEType();
     }
 }
