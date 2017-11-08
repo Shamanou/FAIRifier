@@ -48,22 +48,6 @@ import org.slf4j.LoggerFactory;
 public class VocabularyImporter {
 
     private final static Logger logger = LoggerFactory.getLogger(VocabularyImporter.class);
-    private final static ArrayList<RDFParser> PARSERS = new ArrayList<RDFParser>();
-
-    static {
-
-        PARSERS.add(new TurtleParser());
-        PARSERS.add(new NTriplesParser());
-        PARSERS.add(new RDFXMLParser());
-        PARSERS.add(new JSONLDParser());
-        PARSERS.add(new NQuadsParser());
-        PARSERS.add(new RDFJSONParser());
-        PARSERS.add(new TriXParser());
-        PARSERS.add(new TriGParser());
-
-    };
-
-
 
     public void importVocabulary(String name, String uri, String fetchUrl, List<RDFSClass> classes,
             List<RDFSProperty> properties) throws VocabularyImportException {
@@ -144,6 +128,8 @@ public class VocabularyImporter {
         RDFParser parser = getParserFromUrl(url);
         HttpURLConnection httpConnection = (HttpURLConnection) new URL(url).openConnection();
         httpConnection.setRequestMethod("GET");
+        httpConnection.setRequestProperty(HttpHeaders.ACCEPT,
+                parser.getRDFFormat().getDefaultMIMEType());
         return Rio.parse(httpConnection.getInputStream(), "", parser.getRDFFormat());
     }
 
@@ -153,16 +139,29 @@ public class VocabularyImporter {
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         Set<RDFFormat> rdfFormats = RDFParserRegistry.getInstance().getKeys();
         List<String> acceptHeaders = RDFFormat.getAcceptParams(rdfFormats, false, RDFFormat.RDFXML);
+        String acceptHeaderStr = "";
 
         for (String acceptHeader : acceptHeaders) {
             if (!acceptHeader.split(";")[0].trim().equals(MediaType.TEXT_PLAIN.toString())) {
-                con.addRequestProperty(HttpHeaders.ACCEPT, acceptHeader);
+                acceptHeaderStr += acceptHeader + ",";
             }
         }
-
+        con.setRequestProperty(HttpHeaders.ACCEPT, acceptHeaderStr);
+        HttpURLConnection.setFollowRedirects(true);
         con.connect();
+
         // These response codes are required for at least the default ontologies
         if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
+            final ArrayList<RDFParser> PARSERS = new ArrayList<RDFParser>();
+            PARSERS.add(new TurtleParser());
+            PARSERS.add(new NTriplesParser());
+            PARSERS.add(new RDFXMLParser());
+            PARSERS.add(new JSONLDParser());
+            PARSERS.add(new NQuadsParser());
+            PARSERS.add(new RDFJSONParser());
+            PARSERS.add(new TriXParser());
+            PARSERS.add(new TriGParser());
+
             if (con.getContentType().split(";")[0].trim().equals(MediaType.TEXT_HTML.toString())
                     || con.getContentType().split(";")[0].trim()
                             .equals(MediaType.TEXT_PLAIN.toString())) {
