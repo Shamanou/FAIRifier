@@ -150,7 +150,6 @@ public class VocabularyImporter {
         HttpURLConnection.setFollowRedirects(true);
         con.connect();
 
-        // These response codes are required for at least the default ontologies
         if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
             final ArrayList<RDFParser> PARSERS = new ArrayList<RDFParser>();
             PARSERS.add(new TurtleParser());
