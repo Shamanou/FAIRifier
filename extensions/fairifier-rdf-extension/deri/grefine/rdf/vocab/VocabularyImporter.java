@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 import org.apache.http.HttpHeaders;
 import org.apache.http.ProtocolException;
@@ -48,27 +49,6 @@ import org.slf4j.LoggerFactory;
 public class VocabularyImporter {
 
     private final static Logger logger = LoggerFactory.getLogger(VocabularyImporter.class);
-
-    public void importVocabulary(String name, String uri, String fetchUrl, List<RDFSClass> classes,
-            List<RDFSProperty> properties) throws VocabularyImportException {
-        try {
-            Repository repos = getModel(fetchUrl, name);
-            getTerms(repos, name, classes, properties);
-        } catch (IOException e) {
-            throw new VocabularyImportException("Unable to import vocabulary from " + fetchUrl, e);
-        }
-    }
-
-    public void importVocabulary(String name, String uri, Repository repository,
-            List<RDFSClass> classes, List<RDFSProperty> properties)
-            throws VocabularyImportException {
-        try {
-            getTerms(repository, name, classes, properties);
-        } catch (IOException e) {
-            throw new VocabularyImportException("Unable to import vocabulary from " + uri, e);
-        }
-    }
-
     private static final String PREFIXES = "PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#> "
             + "PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#> "
             + "PREFIX skos:<http://www.w3.org/2004/02/skos/core#> ";
@@ -95,6 +75,38 @@ public class VocabularyImporter {
             + "OPTIONAL {?resource skos:definition ?en_definition. FILTER langMatches( lang(?en_definition), \"EN\" )  } "
             + "FILTER regex(str(?resource), \"^";
     private static final String PROPERTIES_QUERY_P2 = "\")}";
+    private static final ArrayList<RDFParser> PARSERS = new ArrayList<RDFParser>();
+    static {
+        PARSERS.add(new TurtleParser());
+        PARSERS.add(new NTriplesParser());
+        PARSERS.add(new RDFXMLParser());
+        PARSERS.add(new JSONLDParser());
+        PARSERS.add(new NQuadsParser());
+        PARSERS.add(new RDFJSONParser());
+        PARSERS.add(new TriXParser());
+        PARSERS.add(new TriGParser());
+    }
+
+
+    public void importVocabulary(String name, String uri, String fetchUrl, List<RDFSClass> classes,
+            List<RDFSProperty> properties) throws VocabularyImportException {
+        try {
+            Repository repos = getModel(fetchUrl, name);
+            getTerms(repos, name, classes, properties);
+        } catch (IOException e) {
+            throw new VocabularyImportException("Unable to import vocabulary from " + fetchUrl, e);
+        }
+    }
+
+    public void importVocabulary(String name, String uri, Repository repository,
+            List<RDFSClass> classes, List<RDFSProperty> properties)
+            throws VocabularyImportException {
+        try {
+            getTerms(repository, name, classes, properties);
+        } catch (IOException e) {
+            throw new VocabularyImportException("Unable to import vocabulary from " + uri, e);
+        }
+    }
 
     private Repository getModel(String url, String name) throws VocabularyImportException {
         try {
@@ -139,46 +151,42 @@ public class VocabularyImporter {
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         Set<RDFFormat> rdfFormats = RDFParserRegistry.getInstance().getKeys();
         List<String> acceptHeaders = RDFFormat.getAcceptParams(rdfFormats, false, RDFFormat.RDFXML);
-        String acceptHeaderStr = "";
+        StringBuilder acceptHeaderStrBuilder = new StringBuilder();
+
 
         for (String acceptHeader : acceptHeaders) {
-            if (!acceptHeader.split(";")[0].trim().equals(MediaType.TEXT_PLAIN.toString())) {
-                acceptHeaderStr += acceptHeader + ",";
+            String acceptHeaderFirstPart = acceptHeader.split(";")[0].trim();
+            if (!acceptHeaderFirstPart.equals(MediaType.TEXT_PLAIN.toString())) {
+                acceptHeaderStrBuilder.append(acceptHeader);
+                acceptHeaderStrBuilder.append(",");
             }
         }
-        con.setRequestProperty(HttpHeaders.ACCEPT, acceptHeaderStr);
+        String acceptHeaderStr = acceptHeaderStrBuilder.toString();
+        con.setRequestProperty(HttpHeaders.ACCEPT,
+                acceptHeaderStr.substring(0, acceptHeaderStr.length() - 1));
         HttpURLConnection.setFollowRedirects(true);
         con.connect();
 
+        String firstContentTypeHeader = con.getContentType().split(";")[0].trim();
         if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
-            final ArrayList<RDFParser> PARSERS = new ArrayList<RDFParser>();
-            PARSERS.add(new TurtleParser());
-            PARSERS.add(new NTriplesParser());
-            PARSERS.add(new RDFXMLParser());
-            PARSERS.add(new JSONLDParser());
-            PARSERS.add(new NQuadsParser());
-            PARSERS.add(new RDFJSONParser());
-            PARSERS.add(new TriXParser());
-            PARSERS.add(new TriGParser());
-
-            if (con.getContentType().split(";")[0].trim().equals(MediaType.TEXT_HTML.toString())
-                    || con.getContentType().split(";")[0].trim()
-                            .equals(MediaType.TEXT_PLAIN.toString())) {
+            if (firstContentTypeHeader.equals(MediaType.TEXT_HTML.toString())
+                    || firstContentTypeHeader.equals(MediaType.TEXT_PLAIN.toString())) {
 
                 for (RDFParser parser : PARSERS) {
                     try {
                         parser.parse(con.getInputStream(), url);
                         return parser;
-                    } catch (IOException e) {
-                        continue;
-                    } catch (RDFParseException e) {
-                        continue;
-                    } catch (RDFHandlerException e) {
+                    } catch (IOException | RDFParseException | RDFHandlerException e) {
                         continue;
                     }
                 }
             } else {
-                return Rio.createParser(Rio.getParserFormatForMIMEType(con.getContentType()).get());
+                Optional<RDFFormat> rdfFormat =
+                        Rio.getParserFormatForMIMEType(con.getContentType());
+                if (rdfFormat.isPresent()) {
+                    return Rio.createParser(
+                            Rio.getParserFormatForMIMEType(con.getContentType()).get());
+                }
             }
         }
         return Rio.createParser(RDFFormat.RDFXML);
