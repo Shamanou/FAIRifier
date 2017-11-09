@@ -130,15 +130,41 @@ var test_facets = new function() {
   });
   action(test, 'type', {
     jquery: '("input[bind=\'uri\']")[0]',
+    text: 'http://purl.org/dc/terms/'
+  });
+  action(test, 'click', {
+    jquery: '("button.button:contains(\'OK\')")[1]'
+  });
+  wait(test, "forAjaxEnd");
+  wait(test, "forPageLoad", {
+    timeout: "50000"
+  });
+  // test github repository based ontology loading
+  action(test, 'click', {
+    link: 'add prefix'
+  });
+  action(test, 'click', {
+    jquery: '("button#advanced_options_button")[0]'
+  });
+  action(test, 'type', {
+    jquery: '("input[bind=\'prefix\']")[0]',
+    text: "fdp-ontology"
+  });
+  action(test, 'type', {
+    jquery: '("input[bind=\'uri\']")[0]',
     text: 'https://raw.githubusercontent.com/DTL-FAIRData/FDP-O/master/fdp-ontology.owl'
   });
   action(test, 'click', {
     jquery: '("button.button:contains(\'OK\')")[1]'
   });
   wait(test, "forAjaxEnd");
+  wait(test, "forPageLoad", {
+    timeout: "50000"
+  });
   action(test, "click", {
     jquery: '("button.button:contains(\'OK\')")[0]'
   });
+  
   this.test_uploading_ontology_from_web = test;
   
   // export to FAirDataPoint
