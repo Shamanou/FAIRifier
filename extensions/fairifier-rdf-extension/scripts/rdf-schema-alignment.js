@@ -124,6 +124,12 @@ RdfSchemaAlignmentDialog.prototype._constructBody = function(body) {
         });
       var prefixes = [];
       var new_prefixes = JSON.parse(rdfSkeleton['skeleton']).prefixes;
+      if ((new_prefixes != undefined) && (new_prefixes instanceof Array)) {
+        new_prefixes = JSON.parse(rdfSkeleton['skeleton']).prefixes;
+      } else {
+        new_prefixes = [];
+      }
+
       if (self._schema.prefixes != undefined) {
         prefixes = prefixes.concat(self._schema.prefixes).concat(new_prefixes);
       } else if (self._schema.prefixes.length == 0) {
