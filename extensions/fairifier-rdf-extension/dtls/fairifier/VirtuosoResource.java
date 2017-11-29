@@ -55,8 +55,7 @@ public class VirtuosoResource extends Resource {
             this.out = this.getModelString();
             HttpResponse res = HttpUtils.put(this.host + this.directory + this.filename, this.out,
                     this.username, this.password);
-            if ((res.getStatusLine().getStatusCode() < 200)
-                    || (res.getStatusLine().getStatusCode() > 300)) {
+            if (res.getStatusLine().getStatusCode() > 400) {
                 throw new HttpException("Pushing data to Virtuso failed");
             }
         }
