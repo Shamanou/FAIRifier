@@ -321,7 +321,7 @@ addFairDistribution = function(self) {
 			var ftp_elmts = DOM.bind(ftp_html);
 		}
 		if (conf.pushToVirtuoso.enabled && !($(".virtuosoRadio").length)) {
-			var virtuoso_html = $('<br><br><input type="radio" value="virtuoso" class="virtuosoRadio" bind="virtuoso"><span>push FAIRified data to triplestore</span><br>').appendTo(self._datasetDiv);
+			var virtuoso_html = $('<br><br><input type="radio" value="virtuoso" class="virtuosoRadio" bind="virtuoso" checked><span>push FAIRified data to triplestore</span><br>').appendTo(self._datasetDiv);
 			var virtuoso_elmts = DOM.bind(virtuoso_html);
 		}
 		var ftpshown = false;
